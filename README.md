@@ -9,3 +9,5 @@ Some possible project names:
 3.  "Let's Just Do Both!"
 4.  The Insane Asylum ("I Feel Like I've Walked into...")
 5.  Data (Our logo can be Data from Star Trek)
+
+<img src=http://tng.trekcore.com/hd/albums/1x13/datalore_hd_115.jpg>
