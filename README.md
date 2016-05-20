@@ -1,4 +1,4 @@
-# AJOC Captstone
+# AJOC Capstone
 
 Two capstones for the price of one!
 
