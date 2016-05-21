@@ -12,7 +12,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-router.get('/:appId', ensureAuthenticated, function (req, res) {
+router.get('/byApp/:appId', ensureAuthenticated, function (req, res) {
     Schema.find({App: req.params.appId})
     .then(function(schemas) {
         res.send(schemas);

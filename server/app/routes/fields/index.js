@@ -12,7 +12,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-router.get('/:schemaId', ensureAuthenticated, function (req, res) {
+router.get('/bySchema/:schemaId', ensureAuthenticated, function (req, res) {
     Field.find({Schema: req.params.schemaId})
     .then(function(fields) {
         res.send(fields);
