@@ -1,0 +1,9 @@
+<div class="container">
+	<select ng-model="apps[appIndex]" ng-options="app.name for app in apps track by app.id"></select>
+	<a ng-show="appIndex > 0" style="margin-left: 10px" href="#" ng-click="editApp()">
+    	<span class="glyphicon glyphicon-pencil"></span>
+    </a>
+    <a style="margin-left: 10px" href="#" ng-click="addApp()">
+    	<span class="glyphicon glyphicon-plus"></span>
+    </a
+</div>

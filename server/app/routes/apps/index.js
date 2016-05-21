@@ -14,10 +14,14 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 router.get('/', ensureAuthenticated, function (req, res) {
-    App.find({User: req.user})
+    App.find({User: req.user._id})
     .then(function(apps) {
         res.send(apps);
-    });
+    })
+    .catch(function(err) {
+        console.log("Err:", err);
+        res.status(501).send(err);
+    })
 });
 
 router.get('/:appId', ensureAuthenticated, function (req, res) {

@@ -5,23 +5,23 @@ app.factory('FieldFactory', function ($http) {
 
     return {
     	fetchBySchemaId: function(schemaId) {
-    		$http.get('/api/fields/bySchema/' + schemaId)
+    		return $http.get('/api/fields/bySchema/' + schemaId)
     		.then(parseData)
     	},
     	fetchById: function(id) {
-    		$http.get('/api/fields/' + id)
+    		return $http.get('/api/fields/' + id)
     		.then(parseData)
     	},
     	create: function(field) {
-    		$http.post('/api/fields', field)
+    		return $http.post('/api/fields', field)
     		.then(parseData)
     	},
     	update: function(field) {
-    		$http.put('/api/fields/' + field._id, field)
+    		return $http.put('/api/fields/' + field._id, field)
     		.then(parseData)
     	},
     	remove: function(id) {
-    		$http.delete('/api/fields/' + id)
+    		return $http.delete('/api/fields/' + id)
     		.then(parseData)
     	}
     }
