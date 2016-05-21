@@ -12,6 +12,7 @@ app.controller('IframeCtrl', function ($scope, $http) {
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/site', {url: url})
             .then(function(response) {
+                debugger;
                 document.getElementById('iframedisplay').src = response.data.publicDirectory;        
             })
             .catch(function(err) {
