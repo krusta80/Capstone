@@ -3,20 +3,65 @@
 	<a ng-show="appIndex > 0" style="margin-left: 10px" href="#" ng-click="editApp()">
     	<span class="glyphicon glyphicon-pencil"></span>
     </a>
-    <a style="margin-left: 10px" href="#" ng-click="addApp()">
+    <a style="margin-left: 10px" href="#" data-toggle="modal" data-target="#appModal">
     	<span class="glyphicon glyphicon-plus"></span>
     </a>
 
-    <div style="margin-top: 15px" class="panel">
+    <div style="margin-top: 15px" class="panel" ng-show="appIndex > 0">
     	<ul class="nav nav-tabs">
 		  <li ng-class="{active: activeSchema._id === schema._id}" ng-repeat="schema in schemas"><a data-toggle="tab" ui-sref="appBuilder.schema({id: schema._id})">{{schema.name}}</a></li>
-		  <li ng-class="{active: activeSchema === -1}"><a style="cursor:pointer" href="#" ng-click="createSchema()"><span class="glyphicon glyphicon-plus"></span></a></li>
+		  <li ng-class="{active: activeSchema === -1}"><a style="cursor:pointer" href="#" data-toggle="modal" data-target="#schemaModal"><span class="glyphicon glyphicon-plus"></span></a></li>
 		</ul>
     
 		<ui-view>
 			<h4 align=center>Select a schema from the tabs above (or click the + to add new).</h4>
 		</ui-view>
     </div>
+
+	<!-- App Modal -->
+	  <div class="modal fade" id="appModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Add App</h4>
+	        </div>
+	        <div class="modal-body">
+	          <div class="form-group">
+		        <label for="appName">App Name</label>
+		        <input type="text" ng-model="appName" class="form-control" id="appName" placeholder="Enter new app name">
+		      </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addApp()">Submit</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+	<!-- Schema Modal -->
+	  <div class="modal fade" id="schemaModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Add Schema</h4>
+	        </div>
+	        <div class="modal-body">
+	          <div class="form-group">
+		        <label for="schemaName">Schema Name</label>
+		        <input type="text" ng-model="schemaName" class="form-control" id="schemaName" placeholder="Enter new schema name">
+		      </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addSchema()">Submit</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
 </div>
 
 
