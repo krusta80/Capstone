@@ -1,6 +1,7 @@
 'use strict';
 var router = require('express').Router();
-var Field = require('../../../db/models/field');
+var mongoose = require('mongoose');
+var Field = mongoose.model('Field');
 module.exports = router;
 
 var ensureAuthenticated = function (req, res, next) {
