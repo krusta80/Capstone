@@ -32,6 +32,7 @@ router.get('/:appId', ensureAuthenticated, function (req, res) {
 });
 
 router.post('/', ensureAuthenticated, function (req, res) {
+    req.body.User = req.user;
     App.create(req.body)
     .then(function(app) {
         res.send(app);
