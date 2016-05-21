@@ -1,14 +1,15 @@
 <div class="container">
-	<select ng-change="loadApp(app)" ng-model="app" ng-options="app.name for app in apps track by app._id" value="-1">
-		<option value="">-- choose an app --</option>
-	</select>
-	<a ng-show="appId !== -1" style="margin-left: 10px" href="#" ng-click="editApp()">
-    	<span class="glyphicon glyphicon-pencil"></span>
-    </a>
-    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#appModal">
-    	<span class="glyphicon glyphicon-plus"></span>
-    </a>
-
+	<div class="pull-right">
+		<select ng-change="loadApp(app)" ng-model="app" ng-options="app.name for app in apps track by app._id" value="-1">
+			<option value="">-- choose an app --</option>
+		</select>
+		<a ng-show="appId !== -1" style="margin-left: 10px" href="#" ng-click="editApp()">
+	    	<span class="glyphicon glyphicon-pencil"></span>
+	    </a>
+	    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#appModal">
+	    	<span class="glyphicon glyphicon-plus"></span>
+	    </a>
+	</div>
     <div style="margin-top: 15px" class="panel" ng-show="appId !== -1">
     	<ul class="nav nav-tabs">
 		  <li ng-class="{active: activeSchema._id === schema._id}" ng-repeat="schema in schemas"><a href="#" ng-click="loadSchema(schema)">{{schema.name}}</a></li>
