@@ -93,7 +93,7 @@ app.controller('AppBuilderCtrl', function(apps, AppFactory, SchemaFactory, $scop
     };
 });
 
-app.controller('SchemaCtrl', function(schema, fields, types, AppFactory, SchemaFactory, $scope) {
+app.controller('SchemaCtrl', function(schema, fields, types, AppFactory, SchemaFactory, FieldFactory, $scope) {
     if(!$scope.selectedApp)
         AppFactory.fetchById(schema.App)
         .then(function(app) {
@@ -109,16 +109,82 @@ app.controller('SchemaCtrl', function(schema, fields, types, AppFactory, SchemaF
     $scope.schema = schema;
     $scope.fields = fields;
 
+    if($scope.fields.length > 0)
+        $scope.selectedField = $scope.fields.length - 1;
+
     $scope.addField = function() {
-        if(!isNaN($scope.selectedField) && !$scope.fields[selectedField]._id)
+        if(!isNaN($scope.selectedField) && (!$scope.fields[$scope.selectedField]._id || $scope.fieldForm.$dirty))
             return;
-        $scope.fields.push({name: "new_field_" + Math.random().toString(10).slice(3,8), select: true});
+        $scope.fields.push({
+            name: "new_field_" + Math.random().toString(10).slice(3,8), 
+            Schema: schema,
+            select: true
+        });
         $scope.selectedField = $scope.fields.length - 1;
         $scope.buildEnumString();
+    };
+
+    $scope.setSelected = function(ind) {
+        console.log("dirty:", $scope.fieldForm.$dirty);
+        if(!isNaN($scope.selectedField) && (!$scope.fields[$scope.selectedField]._id || $scope.fieldForm.$dirty))
+            return;
+        $scope.selectedField = ind;
     };
 
     $scope.buildEnumString = function() {
         if($scope.fields[$scope.selectedField].enum)
             $scope.fields[$scope.selectedField].enumString = $scope.fields[$scope.selectedField].enum.join(",");
+    };
+
+    $scope.saveField = function() {
+        if($scope.fieldForm.$pristine)
+            return;
+        if($scope.fields[$scope.selectedField]._id)
+            FieldFactory.update($scope.fields[$scope.selectedField])
+            .then(function(field) {
+                $scope.fields[$scope.selectedField] = field;
+                $scope.fieldForm.$setPristine();
+                $scope.reportSuccess();
+            })
+        else
+            FieldFactory.create($scope.fields[$scope.selectedField])
+            .then(function(field) {
+                $scope.fields[$scope.selectedField] = field;
+                $scope.fieldForm.$setPristine();
+                $scope.reportSuccess();
+            })
+    };
+
+    $scope.removeField = function() {
+        if($scope.fields[$scope.selectedField]._id)
+            FieldFactory.remove($scope.fields[$scope.selectedField]._id)
+            .then(function(field) {
+                $scope.fields.splice($scope.selectedField,1);
+                if($scope.fields.length === $scope.selectedField) {
+                    if($scope.selectedField > 0)
+                        $scope.selectedField--;
+                    else
+                        delete $scope.selectedField;
+                }
+                $scope.fieldForm.$setPristine();
+            })
+        else {
+            $scope.fields.splice($scope.selectedField,1);
+            if($scope.fields.length === $scope.selectedField) {
+                if($scope.selectedField > 0)
+                    $scope.selectedField--;
+                else
+                    delete $scope.selectedField;
+            }
+            $scope.fieldForm.$setPristine();
+        }
+    };
+
+    $scope.reportSuccess = function() {
+        $scope.success = true;
+        setTimeout(function() {
+            $scope.success = false;
+            $scope.$apply();
+        }.bind(this), 2000);
     };
 });

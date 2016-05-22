@@ -47,7 +47,7 @@ router.put('/:fieldId', ensureAuthenticated, function (req, res) {
         return field.save();
     })
     .then(function(field) {
-        req.send(field);
+        res.send(field);
     });
 });
 
