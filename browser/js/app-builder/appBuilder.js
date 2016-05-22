@@ -18,6 +18,9 @@ app.config(function ($stateProvider) {
             },
             fields: function(FieldFactory, $stateParams) {
                 return FieldFactory.fetchBySchemaId($stateParams.id);
+            },
+            types: function(FieldFactory) {
+                return FieldFactory.getTypes();
             }
         },
         controller: 'SchemaCtrl'
@@ -90,7 +93,7 @@ app.controller('AppBuilderCtrl', function(apps, AppFactory, SchemaFactory, $scop
     };
 });
 
-app.controller('SchemaCtrl', function(schema, fields, AppFactory, SchemaFactory, $scope) {
+app.controller('SchemaCtrl', function(schema, fields, types, AppFactory, SchemaFactory, $scope) {
     if(!$scope.selectedApp)
         AppFactory.fetchById(schema.App)
         .then(function(app) {
@@ -102,13 +105,14 @@ app.controller('SchemaCtrl', function(schema, fields, AppFactory, SchemaFactory,
             $scope.loadApp();
         });
     
+    $scope.types = types;
     $scope.schema = schema;
     $scope.fields = fields;
 
     $scope.addField = function() {
         if(!isNaN($scope.selectedField) && !$scope.fields[selectedField]._id)
             return;
-        $scope.fields.push({name: "new_field_" + Math.random().toString(10).slice(3,8)});
+        $scope.fields.push({name: "new_field_" + Math.random().toString(10).slice(3,8), select: true});
         $scope.selectedField = $scope.fields.length - 1;
         $scope.buildEnumString();
     };

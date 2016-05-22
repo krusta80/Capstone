@@ -19,6 +19,10 @@ router.get('/bySchema/:schemaId', ensureAuthenticated, function (req, res) {
     });
 });
 
+router.get('/fieldTypes', ensureAuthenticated, function(req, res) {
+    res.send(Field.schema.path('type').enumValues);
+});
+
 router.get('/:fieldId', ensureAuthenticated, function (req, res) {
     Field.findById(req.params.fieldId)
     .then(function(field) {
