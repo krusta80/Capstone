@@ -15,6 +15,9 @@ app.config(function ($stateProvider) {
         resolve: {
             schema: function(SchemaFactory, $stateParams) {
                 return SchemaFactory.fetchById($stateParams.id);
+            },
+            fields: function(FieldFactory, $stateParams) {
+                return FieldFactory.fetchBySchemaId($stateParams.id);
             }
         },
         controller: 'SchemaCtrl'
@@ -22,31 +25,40 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('AppBuilderCtrl', function(apps, AppFactory, SchemaFactory, $scope, $state) {
-	$scope.appId = -1;
-    $scope.apps = apps;
+	$scope.apps = apps;
     $scope.activeSchema = -1;
-    
-    $scope.loadApp = function(app) {
-        if(app)
-            SchemaFactory.fetchByAppId(app._id)
+    $scope.fromChild = false;
+
+    $scope.loadApp = function() {
+        if($scope.selectedApp)
+            SchemaFactory.fetchByAppId($scope.selectedApp._id)
             .then(function(schemas) {
-                $scope.appId = app._id;
                 $scope.schemas = schemas;
                 if(!$scope.schemas.length) {
                     $scope.activeSchema = undefined;
                     $state.go('appBuilder');
                 }
-                else
-                    $scope.loadSchema(schemas[0]);
+                else {
+                    if($scope.fromChild)
+                        $scope.loadSchema($scope.activeSchema);
+                    else
+                        $scope.loadSchema(schemas[0]);
+                    $scope.fromChild = false;
+                }
             })
         else {
-            $scope.appId = -1;
             $scope.schemas = [];
-            $scope.activeSchema = undefined;
+            $scope.activeSchema = -1;
             $state.go('appBuilder');
-        }
-        
+        }  
     };
+
+    $scope.loadSchemas = function(app) {
+         return SchemaFactory.fetchByAppId(app._id)
+        .then(function(schemas) {
+            $scope.schemas = schemas;
+         });   
+    }
 
     $scope.addApp = function() {
         AppFactory.create({name: $scope.appName})
@@ -59,7 +71,7 @@ app.controller('AppBuilderCtrl', function(apps, AppFactory, SchemaFactory, $scop
     };
 
     $scope.addSchema = function() {
-        SchemaFactory.create({name: $scope.schemaName, App: $scope.appId})
+        SchemaFactory.create({name: $scope.schemaName, App: $scope.selectedApp._id})
         .then(function(schema) {
             $scope.schemas.push(schema);
             $scope.schemaIndex = $scope.schemas.length - 1;
@@ -71,8 +83,38 @@ app.controller('AppBuilderCtrl', function(apps, AppFactory, SchemaFactory, $scop
         $scope.activeSchema = schema;
         $state.go('appBuilder.schema', {id: schema._id});
     };
+
+    $scope.switchApp = function(app) {
+        $scope.selectedApp = app;
+        $scope.fromChild = true;
+    };
 });
 
-app.controller('SchemaCtrl', function(schema, AppFactory, SchemaFactory, $scope) {
+app.controller('SchemaCtrl', function(schema, fields, AppFactory, SchemaFactory, $scope) {
+    if(!$scope.selectedApp)
+        AppFactory.fetchById(schema.App)
+        .then(function(app) {
+            $scope.switchApp(app);
+            $scope.loadSchema(schema);
+            return $scope.loadSchemas(app);
+        })
+        .then(function() {
+            $scope.loadApp();
+        });
+    
     $scope.schema = schema;
+    $scope.fields = fields;
+
+    $scope.addField = function() {
+        if(!isNaN($scope.selectedField) && !$scope.fields[selectedField]._id)
+            return;
+        $scope.fields.push({name: "new_field_" + Math.random().toString(10).slice(3,8)});
+        $scope.selectedField = $scope.fields.length - 1;
+        $scope.buildEnumString();
+    };
+
+    $scope.buildEnumString = function() {
+        if($scope.fields[$scope.selectedField].enum)
+            $scope.fields[$scope.selectedField].enumString = $scope.fields[$scope.selectedField].enum.join(",");
+    };
 });

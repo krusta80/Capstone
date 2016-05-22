@@ -1,23 +1,23 @@
 <div class="container">
 	<div class="pull-right">
-		<select ng-change="loadApp(app)" ng-model="app" ng-options="app.name for app in apps track by app._id" value="-1">
+		<select ng-change="loadApp()" ng-model="selectedApp" ng-options="app.name for app in apps track by app._id">
 			<option value="">-- choose an app --</option>
 		</select>
-		<a ng-show="appId !== -1" style="margin-left: 10px" href="#" ng-click="editApp()">
+		<a ng-show="selectedApp" style="margin-left: 10px" href="#" ng-click="editApp()">
 	    	<span class="glyphicon glyphicon-pencil"></span>
 	    </a>
 	    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#appModal">
 	    	<span class="glyphicon glyphicon-plus"></span>
 	    </a>
 	</div>
-    <div style="margin-top: 15px" class="panel" ng-show="appId !== -1">
-    	<ul class="nav nav-tabs">
+    <div style="margin-top: 15px">
+    	<ul class="nav nav-tabs" ng-show="selectedApp">
 		  <li ng-class="{active: activeSchema._id === schema._id}" ng-repeat="schema in schemas"><a href="#" ng-click="loadSchema(schema)">{{schema.name}}</a></li>
 		  <li ng-class="{active: !activeSchema || activeSchema._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#schemaModal"><span class="glyphicon glyphicon-plus"></span></a></li>
 		</ul>
     
 		<ui-view>
-			<h4 align=center>Select a schema from the tabs above (or click the + to add new).</h4>
+			<h4 align=center ng-show="selectedApp">Select a schema from the tabs above (or click the + to add new).</h4>
 		</ui-view>
     </div>
 
