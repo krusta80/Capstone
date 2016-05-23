@@ -52,21 +52,17 @@ router.post('/download', function (req, res, next) {
 // proxy mode
 router.get('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.query.url);
-  http.get(proxyurl, (response) => {
-    var str = '';
-    console.log('response status code', response.statusCode);
 
+  request(req.query.url, function(error, response, html) {
+    if (error) {
+      next(error);
+      return;
+    }
+    html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
 
-    response.on('data',function(chunk) {
-      str += chunk;
-    });
-    response.on('end', function() {
-      console.log('response sent');
-      res.send(str);
-    });
-  }).on('error', (e) => {
-    console.log(`Got error`, e);
-    next(e);
+    res.send(html);
+
   });
 });
 
