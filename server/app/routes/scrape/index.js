@@ -4,7 +4,12 @@ var scraper = require('website-scraper');
 var app = require('../../index.js');
 var path = require('path');
 var url = require('url');
+var http = require('http');
+var request = require('request');
 
+
+
+// webscraper mode
 function getSiteDirname (siteUrl) {
     var urlObj = url.parse(siteUrl);
     var domain = urlObj.host;
@@ -12,7 +17,7 @@ function getSiteDirname (siteUrl) {
 }
 
 var directory, staticDirectory;
-router.post('/site', function (req, res, next) {
+router.post('/download', function (req, res, next) {
 
     var url = req.body.url;
     console.log('scraping site', url, 'what is app?', app);
@@ -42,6 +47,27 @@ router.post('/site', function (req, res, next) {
         console.log('scrape was a success to directory: ', staticDirectory);
         res.json({publicDirectory: staticDirectory});
     }, next)
+});
+
+// proxy mode
+router.get('/proxy', function(req, res, next) {
+  var proxyurl = url.parse(req.query.url);
+  http.get(proxyurl, (response) => {
+    var str = '';
+    console.log('response status code', response.statusCode);
+
+
+    response.on('data',function(chunk) {
+      str += chunk;
+    });
+    response.on('end', function() {
+      console.log('response sent');
+      res.send(str);
+    });
+  }).on('error', (e) => {
+    console.log(`Got error`, e);
+    next(e);
+  });
 });
 
 module.exports = router;
