@@ -4,8 +4,7 @@ var mongoose = require('mongoose');
 var schemaSchema = new mongoose.Schema({
     name: {
         type: String, 
-        required: true,
-        unique: true
+        required: true
     },
     App: {
         type: mongoose.Schema.Types.ObjectId, 

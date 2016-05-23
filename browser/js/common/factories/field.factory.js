@@ -23,6 +23,10 @@ app.factory('FieldFactory', function ($http) {
     	remove: function(id) {
     		return $http.delete('/api/fields/' + id)
     		.then(parseData)
-    	}
+    	},
+        getTypes: function() {
+            return $http.get('/api/fields/fieldTypes')
+            .then(parseData)
+        }
     }
 });
