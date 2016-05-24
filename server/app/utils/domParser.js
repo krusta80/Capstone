@@ -29,7 +29,14 @@ var SCRIPT =
           if (classNames) {
             selector += "." + $.trim(classNames).replace(/\s/gi, ".");
           }
-          var rtn = {name: selector, data: $(this).text()};
+          var data = $(this).text();
+          var link;
+          var firstChild = $($(this).children()[0]);
+          if (firstChild.prop('tagName')==='IMG')
+            data = firstChild.attr('src');
+          if (firstChild.prop('tagName')==='A')
+            link = firstChild.attr('href');
+          var rtn = {name: selector, data: data, link: link};
           window.parent.messenger.set(rtn);
           //alert(selector);
       });
@@ -42,7 +49,7 @@ var SELECTOR =
 function inject(html){
   var $ = cheerio.load(html);
   //Grab text and image elements
-  var elements = $('span, p, a, h3, img');
+  var elements = $('span,a, p, h3, img');
   elements.each(function(elem){
     $(this).wrap(SELECTOR);
   });
