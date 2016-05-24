@@ -51,9 +51,10 @@ router.post('/download', function (req, res, next) {
 
 // proxy mode
 router.get('/proxy', function(req, res, next) {
-  var proxyurl = url.parse(req.query.url);
+  var proxyurl = url.parse(req.query.proxyurl);
+  console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
 
-  request(req.query.url, function(error, response, html) {
+  request(req.query.proxyurl, function(error, response, html) {
     if (error) {
       next(error);
       return;
@@ -61,6 +62,24 @@ router.get('/proxy', function(req, res, next) {
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
 
+    res.send(html);
+
+  });
+});
+
+router.post('/proxy', function(req, res, next) {
+  var proxyurl = url.parse(req.body.proxyurl);
+  console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
+
+  request(req.body.proxyurl, function(error, response, html) {
+    if (error) {
+      next(error);
+      return;
+    }
+    html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
+    html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
     res.send(html);
 
   });
