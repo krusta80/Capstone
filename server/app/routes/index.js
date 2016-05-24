@@ -3,6 +3,7 @@ var router = require('express').Router();
 module.exports = router;
 
 router.use('/members', require('./members'));
+router.use('/scrape', require('./scrape'));
 router.use('/apps', require('./apps'));
 router.use('/schemas', require('./schemas'));
 router.use('/fields', require('./fields'));
