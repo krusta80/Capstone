@@ -7,15 +7,49 @@ var STYLE =
   }
 </style>`;
 
+var SCRIPT =
+`<script type="text/javascript">
+  $(function() {
+        $(".elem-highlight").on("click", function(e) {
+          e.preventDefault();
+          var selector = $(this)
+            .parents()
+            .map(function() { return this.tagName; })
+            .get()
+            .reverse()
+            .concat([this.nodeName])
+            .join(">");
+
+          var id = $(this).attr("id");
+          if (id) {
+            selector += "#"+ id;
+          }
+
+          var classNames = $(this).attr("class");
+          if (classNames) {
+            selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+          }
+
+          alert(selector);
+      });
+    });
+</script>`;
+
+var SELECTOR =
+`<div class="elem-highlight"></div>`;
+
 function inject(html){
   var $ = cheerio.load(html);
   //Grab text and image elements
   var elements = $('span, img, a, h3, img');
   elements.each(function(elem){
-    $(this).addClass('elem-highlight');
+    $(this).wrap(SELECTOR);
   });
   //inject css
   $('head').append(STYLE);
+  $('body').append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>');
+  $('body').append(SCRIPT);
+
   return $.html();
 }
 
