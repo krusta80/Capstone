@@ -29,8 +29,9 @@ var SCRIPT =
           if (classNames) {
             selector += "." + $.trim(classNames).replace(/\s/gi, ".");
           }
-
-          alert(selector);
+          var rtn = {name: selector, data: $(this).text()};
+          window.parent.messenger.set(rtn);
+          //alert(selector);
       });
     });
 </script>`;
@@ -41,7 +42,7 @@ var SELECTOR =
 function inject(html){
   var $ = cheerio.load(html);
   //Grab text and image elements
-  var elements = $('span, img, a, h3, img');
+  var elements = $('span, p, a, h3, img');
   elements.each(function(elem){
     $(this).wrap(SELECTOR);
   });
@@ -52,5 +53,4 @@ function inject(html){
 
   return $.html();
 }
-
 module.exports = inject;
