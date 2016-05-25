@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
     $scope.loaded = false;
     $scope.url ='http://msnbc.com';
 
@@ -29,8 +29,12 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger) {
                     $scope.$apply();
                     var iframecontents = $('#iframedisplay').contents()[0];
                     $(iframecontents).find('*').on('click', function(ev) {
-                        $scope.selector = Messenger.get();
-                        $scope.$apply();
+                        //$scope.selector = Messenger.get();
+                        var selector = Messenger.get();
+                        if (selector){
+                          $rootScope.$broadcast('extract', selector);
+                          $scope.$evalAsync();
+                        }
                         //ev.stopPropagation();
                         //ev.preventDefault();
                     });

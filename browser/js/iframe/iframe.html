@@ -4,18 +4,19 @@
     <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com"></input>
     <button class="btn btn-primary">Submit</button>
   </form>
-  <label class="form-group">Selector</label>
+  <!-- <label class="form-group">Selector</label>
   <input type="text" class="form-control" ng-model="selector.name" readonly />
   <label class="form-group">Link</label>
   <input type="text" class="form-control" ng-model="selector.link" readonly />
   <label class="form-group">Data</label>
-  <input type="text" class="form-control" ng-model="selector.data" readonly />
+  <input type="text" class="form-control" ng-model="selector.data" readonly /> -->
 
   <div>
-    <h3>This is the rendering engine: </h3>
+    <!-- <h3>This is the rendering engine: </h3> -->
     <div class="iframeContainer">
       <iframe name="myFrame" id="iframedisplay" src=""></iframe>
       <div class="overlay" ng-hide="loaded"></div>
     </div>
   </div>
+  <extractor-grid></extractor-grid>
 </div>

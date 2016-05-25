@@ -26,7 +26,7 @@ module.exports =
             data = firstChild.attr('src');
           if (firstChild.prop('tagName')==='A')
             link = firstChild.attr('href');
-          var rtn = {name: selector, data: data, link: link};
+          var rtn = {selector: selector, data: data, link: link};
           window.parent.messenger.set(rtn);
           //alert(selector);
       });

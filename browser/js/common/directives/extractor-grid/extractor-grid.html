@@ -1,0 +1,16 @@
+<input type="text" ng-model="newField.name" placeholder="Add a field"/>
+<button class="btn btn-success" ng-click="addField()">+Add</button>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th ng-click="setActive(field)" class="grid-col" ng-class="{'active-col': activeField === field}" ng-repeat="field in fields">{{field}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in getGrid() track by $index">
+                <td ng-repeat="col in row track by $index">{{col.data}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
