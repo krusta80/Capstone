@@ -8,19 +8,22 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger) {
     $scope.loaded = false;
+
     $scope.searchthis = function(url) {
         document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;
-                setTimeout(function() {
-                    $scope.loaded = true; 
-                    $scope.$apply(); 
-                    var iframecontents = $('#iframedisplay').contents()[0];
-                    // $(iframecontents).find('body').on('click', function(ev) {
-                    //     ev.stopPropagation();
-                    //     ev.preventDefault();
-                    // });   
-                }, 0)
+        setTimeout(function() {
+            $scope.loaded = true;
+            $scope.$apply();
+            var iframecontents = $('#iframedisplay').contents()[0];
 
+            $(iframecontents).find('*').on('click', function(ev) {
+                $scope.selector = Messenger.get();
+                $scope.$apply();
+                //ev.stopPropagation();
+                //ev.preventDefault();
+            });
+        }, 0);
     };
 });

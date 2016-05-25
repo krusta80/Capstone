@@ -7,7 +7,7 @@ var url = require('url');
 var http = require('http');
 var request = require('request');
 var cheerio = require('cheerio');
-
+var parseDOM = require('../../utils/domParser');
 
 
 // webscraper mode
@@ -101,9 +101,8 @@ router.post('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.body.proxyurl);
   console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
 
-  request(req.body.proxyurl, function(error, response, html) {
-    if (error) { next(error); }
-
+  request(req.body.proxyurl, function(error, response, html) {    if (error) { next(error); }
+    html = parseDOM(html);
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
