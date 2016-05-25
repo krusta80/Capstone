@@ -10,6 +10,7 @@ app.config(function ($stateProvider) {
 
 app.controller('IframeCtrl', function ($scope, $http, Messenger) {
     $scope.loaded = false;
+    $scope.url ='http://msnbc.com';
 
     $scope.searchthis = function(url) {
         // document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;

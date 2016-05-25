@@ -6,7 +6,7 @@ var path = require('path');
 var url = require('url');
 var http = require('http');
 var request = require('request');
-var parseDOM = require('../../utils/domParser');
+var parseDOM = require('../../utils/extractor/domParser');
 
 
 
