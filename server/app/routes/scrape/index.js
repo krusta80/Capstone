@@ -6,6 +6,7 @@ var path = require('path');
 var url = require('url');
 var http = require('http');
 var request = require('request');
+var parseDOM = require('../../utils/domParser');
 
 
 
@@ -76,6 +77,7 @@ router.post('/proxy', function(req, res, next) {
       next(error);
       return;
     }
+    html = parseDOM(html);
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
