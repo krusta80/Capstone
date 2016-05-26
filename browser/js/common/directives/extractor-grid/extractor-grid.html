@@ -4,12 +4,16 @@
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th ng-click="setActive(field)" class="grid-col" ng-class="{'active-col': activeField === field}" ng-repeat="field in fields">{{field}}</th>
+                <th ng-repeat="field in getGrid()[0].data">Field {{$index + 1}}</th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="row in getGrid() track by $index">
-                <td ng-repeat="col in row track by $index">{{col.data}}</td>
+                <td ng-repeat="col in row.data track by $index">
+                  <img ng-if="col.type === 'image'" height="50" width="50" src="{{col.data}}"/>
+                  <span ng-if="col.type === 'content'">{{col.data}}</span>
+                  <a ng-if="col.type === 'link'" href="{{col.data}}" target="blank">{{col.data}}</a>
+                </td>
             </tr>
         </tbody>
     </table>

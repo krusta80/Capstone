@@ -17,7 +17,8 @@ function inject(html){
   //Grab text and image elements
   var elements = $('span,a, p, h3, img');
   elements.each(function(elem){
-    $(this).wrap(SELECTOR);
+    if ($(this).text() || $(this).attr('src') || $(this).attr('href') )
+      $(this).wrap(SELECTOR);
   });
   //inject css
   $('head').append(STYLE);
