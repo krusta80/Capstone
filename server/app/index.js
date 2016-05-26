@@ -12,6 +12,9 @@ require('./configure')(app);
 // /api so they are isolated from our GET /* wildcard.
 app.use('/api', require('./routes'));
 
+// Custom routes will be accessed via AJAX and should be prepended with
+// /projectApi so they are isolated from our GET /* wildcard.
+app.use('/projectApi', require('../projects'));
 
 /*
  This middleware will catch any URLs resembling a file extension
