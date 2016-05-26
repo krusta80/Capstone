@@ -22,7 +22,7 @@ describe('scraper download works', function () {
 describe('proxy scraper works', function () {
   it('GET /scrape/proxy', function (done) {
     agent
-      .get('/api/scrape/proxy?url=http://www.google.com')
+      .get('/api/scrape/proxy?proxyurl=http://www.google.com')
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);

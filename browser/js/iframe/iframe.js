@@ -43,6 +43,5 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
             .catch(function(err) {
                 console.log('there was an error');
             });
-
     };
 });

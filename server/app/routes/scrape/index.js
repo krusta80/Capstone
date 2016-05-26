@@ -1,4 +1,4 @@
-'use strict';
+
 var router = require('express').Router();
 var scraper = require('website-scraper');
 var app = require('../../index.js');
@@ -6,8 +6,8 @@ var path = require('path');
 var url = require('url');
 var http = require('http');
 var request = require('request');
+var cheerio = require('cheerio');
 var parseDOM = require('../../utils/extractor/domParser');
-
 
 
 // webscraper mode
@@ -47,24 +47,53 @@ router.post('/download', function (req, res, next) {
     }).then(function(result) {
         console.log('scrape was a success to directory: ', staticDirectory);
         res.json({publicDirectory: staticDirectory});
-    }, next)
+    }, next);
 });
+
+function convertToUrl(url, obj) {
+  var str = '';
+  console.log('whats the obj', obj);
+  for (var key in obj) {
+      if (str === '') {
+          str += "&";
+      }
+      str += key + "=" + obj[key];
+  }
+  return str;
+}
 
 // proxy mode
 router.get('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.query.proxyurl);
-  console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
-
-  request(req.query.proxyurl, function(error, response, html) {
-    if (error) {
-      next(error);
-      return;
+  var keys = Object.keys(req.query);
+  var newurl = keys.reduce(function(url, key) {
+    if (key === "proxyurl") {
+      return url += req.query[key];
+    } else {
+      var obj = {};
+      obj[key] = req.query[key];
+      return url += convertToUrl(url, obj);
     }
+  }, '');
+
+  request(newurl, function(error, response, html) {
+    if (error) { next(error); }
+
+    // prepends the the sources to have the base url
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
+    html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
 
-    res.send(html);
-
+    // cheerio to modify all a tags with the proxy
+    var $ = cheerio.load(html);
+    var x = $('a');
+    for (var i = 0; i < x.length; i++) {
+      console.log('x', x[i]);
+      var href = x[i].attribs.href;
+      x[i].attribs.href =  '/api/scrape/proxy?proxyurl=' + href;
+    }
+    res.send($.html());
   });
 });
 
@@ -72,11 +101,7 @@ router.post('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.body.proxyurl);
   console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
 
-  request(req.body.proxyurl, function(error, response, html) {
-    if (error) {
-      next(error);
-      return;
-    }
+  request(req.body.proxyurl, function(error, response, html) {    if (error) { next(error); }
     html = parseDOM(html);
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
