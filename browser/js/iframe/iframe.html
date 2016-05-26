@@ -4,7 +4,10 @@
     <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com"></input>
     <button class="btn btn-primary">Submit</button>
   </form>
-  <button ng-class="{'btn-warning': getRepeating()}" ng-click="setRepeating()" class="btn btn-success">Repeating</button>
+  <div class="btn-group" role="group">
+    <button ng-class="{'btn-warning': getRepeating()}" ng-click="setRepeating()" class="btn btn-success">Repeating</button>
+    <button ng-click="resetGrid()" class="btn btn-danger">Reset</button>
+  </div>
   <div>
     <!-- <h3>This is the rendering engine: </h3> -->
     <div class="iframeContainer">

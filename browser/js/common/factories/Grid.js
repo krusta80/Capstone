@@ -12,9 +12,18 @@ app.factory('Grid', function(){
     else{
       var diff = newRow.data.length - longest;
       for (var j = 0; j<grid.grid.length; j++){
-        for(var k =0; k<diff; k++)
+        for(var k =0; k<diff; k++){
           grid.grid[j].data.push({data: ''});
+        }
       }
+    }
+  }
+
+  function makeFields(row){
+    if (row.data.length > grid.fieldNames.length){
+      var diff = row.data.length - grid.fieldNames.length;
+      for(var i =0; i< diff; i++)
+        grid.fieldNames.push('Field ' + (grid.fieldNames.length + 1));
     }
   }
   function GridRow(data){
@@ -23,6 +32,7 @@ app.factory('Grid', function(){
   }
   function Grid(){
     this.grid = [];
+    this.fieldNames = [];
   }
 
   return {
@@ -31,10 +41,12 @@ app.factory('Grid', function(){
       },
       resetGrid: function(){
         grid.grid.splice(0, grid.grid.length);
+        grid.fieldNames.splice(0, grid.fieldNames.length);
       },
       addRow: function(data){
         //normalize row length
         var newRow = new GridRow(data);
+        makeFields(newRow);
         var normalized = grid.grid.every(function(row){
           return row.data.length === newRow.data.length;
         });
@@ -48,14 +60,21 @@ app.factory('Grid', function(){
       addRows: function(dataArr, selector){
         for(var i = 0; i< dataArr.data.length; i++){
           var data = dataArr.data[i];
-          console.log(data);
-          grid.grid.push(new GridRow({data:data, selector: selector}));
+          var newRow = new GridRow({data:data, selector: selector});
+          makeFields(newRow);
+          grid.grid.push(newRow);
 
         }
 
       },
       getGrid: function(){
         return grid.grid;
+      },
+      getFields: function(){
+        return grid.fieldNames;
+      },
+      setFieldName: function(idx, name){
+        grid.fieldNames[idx] = name;
       }
   };
 });

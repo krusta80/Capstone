@@ -8,12 +8,13 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Grid) {
     $scope.loaded = false;
     $scope.url ='http://msnbc.com';
 
     $scope.getRepeating = Messenger.isMultiple;
     $scope.setRepeating = Messenger.setMultiple;
+    $scope.resetGrid = Grid.resetGrid;
 
     $scope.searchthis = function(url) {
         // document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;

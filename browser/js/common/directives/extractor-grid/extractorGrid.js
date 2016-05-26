@@ -14,12 +14,9 @@ app.directive('extractorGrid', function(){
           Grid.addRow(data);
       });
       $scope.getGrid = Grid.getGrid;
-      $scope.getLongestRow = function(){
-        var rows = Grid.getGrid();
-        return rows.indexOf(rows.sort(function(a,b){
-          return a.length - b.length;
-        })[0]);
-      };
+      $scope.getFields = Grid.getFields;
+      $scope.setFieldName = Grid.setFieldName;
+
 
     }
   };
