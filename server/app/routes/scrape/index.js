@@ -1,4 +1,4 @@
-'use strict';
+
 var router = require('express').Router();
 var scraper = require('website-scraper');
 var app = require('../../index.js');
@@ -7,7 +7,7 @@ var url = require('url');
 var http = require('http');
 var request = require('request');
 var cheerio = require('cheerio');
-var parseDOM = require('../../utils/domParser');
+var parseDOM = require('../../utils/extractor/domParser');
 
 
 // webscraper mode
@@ -47,7 +47,7 @@ router.post('/download', function (req, res, next) {
     }).then(function(result) {
         console.log('scrape was a success to directory: ', staticDirectory);
         res.json({publicDirectory: staticDirectory});
-    }, next)
+    }, next);
 });
 
 function convertToUrl(url, obj) {
@@ -67,14 +67,14 @@ router.get('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.query.proxyurl);
   var keys = Object.keys(req.query);
   var newurl = keys.reduce(function(url, key) {
-    if (key === "proxyurl") { 
+    if (key === "proxyurl") {
       return url += req.query[key];
     } else {
       var obj = {};
       obj[key] = req.query[key];
       return url += convertToUrl(url, obj);
     }
-  }, '')
+  }, '');
 
   request(newurl, function(error, response, html) {
     if (error) { next(error); }
