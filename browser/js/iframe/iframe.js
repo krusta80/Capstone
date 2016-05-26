@@ -8,22 +8,40 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
     $scope.loaded = false;
+    $scope.url ='http://msnbc.com';
 
     $scope.searchthis = function(url) {
-        document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;
-        setTimeout(function() {
-            $scope.loaded = true;
-            $scope.$apply();
-            var iframecontents = $('#iframedisplay').contents()[0];
+        // document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;
 
-            $(iframecontents).find('*').on('click', function(ev) {
-                $scope.selector = Messenger.get();
-                $scope.$apply();
-                //ev.stopPropagation();
-                //ev.preventDefault();
+        // this is the downloaded version...
+
+        $http.post('/api/scrape/proxy', {proxyurl: url})
+            .then(function(response) {
+                var iframe = document.getElementById('iframedisplay');
+                iframe.contentWindow.document.open();
+                iframe.contentWindow.document.write(response.data);
+                iframe.contentWindow.document.close();
+
+                setTimeout(function() {
+                    $scope.loaded = true;
+                    $scope.$apply();
+                    var iframecontents = $('#iframedisplay').contents()[0];
+                    $(iframecontents).find('*').on('click', function(ev) {
+                        //$scope.selector = Messenger.get();
+                        var selector = Messenger.get();
+                        if (selector){
+                          $rootScope.$broadcast('extract', selector);
+                          $scope.$evalAsync();
+                        }
+                        //ev.stopPropagation();
+                        //ev.preventDefault();
+                    });
+                }, 0);
+            })
+            .catch(function(err) {
+                console.log('there was an error');
             });
-        }, 0);
     };
 });
