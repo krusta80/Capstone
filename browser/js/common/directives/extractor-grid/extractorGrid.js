@@ -7,7 +7,6 @@ app.directive('extractorGrid', function(){
       $scope.rowCount = 0;
       $rootScope.$on('extract', function(evt, data){
           Grid.addRow(data);
-          console.log(Grid.getGrid());
       });
       $scope.getGrid = Grid.getGrid;
       $scope.getLongestRow = function(){

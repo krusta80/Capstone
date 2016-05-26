@@ -46,7 +46,6 @@ app.factory('Grid', function(){
 
         }
         grid.grid.push(new GridRow(data));
-        console.log(grid.grid);
 
       },
       getGrid: function(){
