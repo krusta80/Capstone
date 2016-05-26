@@ -1,5 +1,5 @@
 app.factory('Messenger', function($rootScope){
-  var msg;
+  var msg, repeating = false;
   return {
     set: function(val){
       msg = val;
@@ -8,6 +8,12 @@ app.factory('Messenger', function($rootScope){
       if (msg)
         return msg;
       return;
+    },
+    isMultiple: function(){
+      return repeating;
+    },
+    setMultiple: function(){
+      repeating = !repeating;
     }
   };
 });
