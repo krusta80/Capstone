@@ -53,6 +53,7 @@ app.factory('Grid', function(){
         if (!normalized){
           normalize(newRow);
         }
+        console.log(grid);
         grid.grid.push(newRow);
 
 
