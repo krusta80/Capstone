@@ -5,3 +5,5 @@ require('./user');
 require('./app');
 require('./schema');
 require('./field');
+require('./page');
+require('./job');

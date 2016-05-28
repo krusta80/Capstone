@@ -2,13 +2,18 @@
     <table class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th ng-repeat="field in getGrid()[0].data">Field {{$index + 1}}</th>
+                <th ng-repeat="field in getFields()">
+                  <input type="text" ng-model="field.name" style="width: 75%;" ng-blur="setFieldName($index, field)" />
+                  <i class="glyphicon glyphicon-stats" ng-click="convertToNumber(field)"></i>
+                </th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="row in getGrid() track by $index">
+            <tr ng-repeat="row in getGrid() track by $index" ng-class="{success: $index + 1 === activeRow}" ng-click="setActiveRow($index+1)">
                 <td ng-repeat="col in row.data track by $index">
-                  <img ng-if="col.type === 'image'" height="50" width="50" src="{{col.data}}"/>
+                  <a ng-if="col.type === 'image'" href="{{col.data}}" target="blank">
+                    <img height="50" width="50" src="{{col.data}}"/>
+                  </a>
                   <span ng-if="col.type === 'content'">{{col.data}}</span>
                   <a ng-if="col.type === 'link'" href="{{col.data}}" target="blank">{{col.data}}</a>
                 </td>

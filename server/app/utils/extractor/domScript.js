@@ -19,9 +19,10 @@ module.exports =
           if (classNames) {
             selector += "." + $.trim(classNames).replace(/\s/gi, ".");
           }
+          function makeSubElems(elem){
           var data = [];
-          var subelems = $(this).find('a, span, h2, p, img');
-          subelems.each(function(elem){
+          var subelems = elem.find('a, span, h2, p, img');
+          subelems.each(function(){
             var tag = $(this).prop('tagName');
             if (tag==='A')
               data.push({type: 'link', data: $(this).attr('href')});
@@ -29,16 +30,22 @@ module.exports =
               data.push({type: 'image', data: $(this).attr('src')});
             if ($(this).text())
               data.push({type: 'content', data: $(this).text()});
-
-          });
-          // var data = $(this).text();
-          // var link;
-          // var firstChild = $($(this).children()[0]);
-          // if (firstChild.prop('tagName')==='IMG')
-          //   data = firstChild.attr('src');
-          // if (firstChild.prop('tagName')==='A')
-          //   link = firstChild.attr('href');
-          var rtn = {selector: selector, data: data};
+            });
+            return data;
+          }
+          var rtn;
+          if (!window.parent.messenger.isMultiple()){
+            var idx = $(selector).index(this);
+            rtn = {selector: selector, data: makeSubElems($(this)), index: idx, multiple: false};
+          }
+          else{
+            var siblings = $(selector);
+            var data = [];
+            siblings.each(function(){
+              data.push(makeSubElems($(this)));
+            });
+            rtn = {selector: selector, data: data, multiple: true};
+          }
           window.parent.messenger.set(rtn);
           //alert(selector);
       });
