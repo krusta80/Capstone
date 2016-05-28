@@ -23,7 +23,7 @@ app.factory('Grid', function($http){
     if (row.data.length > grid.fields.length){
       var diff = row.data.length - grid.fields.length;
       for(var i =0; i< diff; i++)
-        grid.fields.push({type: 'text', name: 'Field ' + (grid.fields.length + 1)});
+        grid.fields.push({type: 'text', name: 'Field ' + (grid.fields.length + 1), convert: false});
     }
   }
   function GridRow(data){
@@ -69,6 +69,13 @@ app.factory('Grid', function($http){
 
         }
 
+      },
+      convertToNumber: function(field){
+        var colIdx = grid.fields.indexOf(field);
+        for(var i =0; i < grid.grid.length; i++){
+          grid.grid[i].data[colIdx].data = grid.grid[i].data[colIdx].data.replace(/\D/ig, "");
+        }
+        grid.fields[colIdx].convert = true;
       },
       replaceRow: function(index, data){
         var newRow = new GridRow(data);

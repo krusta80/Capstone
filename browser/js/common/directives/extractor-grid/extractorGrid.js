@@ -17,6 +17,9 @@ app.directive('extractorGrid', function(){
             Grid.addRow(data);
         }
       });
+      $scope.convertToNumber = function(field){
+        Grid.convertToNumber(field);
+      };
       $scope.setActiveRow = function(index){
         if ($scope.activeRow===index)
           $scope.activeRow = null;

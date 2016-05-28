@@ -7,7 +7,8 @@ var rowCellSchema = mongoose.Schema({
 
 var fieldSchema = mongoose.Schema({
   name: String,
-  type: String
+  type: String,
+  convert: Boolean
 });
 
 var pageRowSchema = mongoose.Schema({
