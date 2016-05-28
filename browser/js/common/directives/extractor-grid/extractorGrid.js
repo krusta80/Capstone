@@ -10,9 +10,20 @@ app.directive('extractorGrid', function(){
           Grid.resetGrid();
           Grid.addRows(data,data.selector);
         }
-        else
-          Grid.addRow(data);
+        else{
+          if ($scope.activeRow)
+            Grid.replaceRow($scope.activeRow -1, data);
+          else
+            Grid.addRow(data);
+        }
       });
+      $scope.setActiveRow = function(index){
+        if ($scope.activeRow===index)
+          $scope.activeRow = null;
+        else {
+          $scope.activeRow = index;
+        }
+      };
       $scope.getGrid = Grid.getGrid;
       $scope.getFields = Grid.getFields;
       $scope.setFieldName = Grid.setFieldName;

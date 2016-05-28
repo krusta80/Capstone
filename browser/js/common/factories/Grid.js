@@ -70,6 +70,12 @@ app.factory('Grid', function($http){
         }
 
       },
+      replaceRow: function(index, data){
+        var newRow = new GridRow(data);
+        makeFields(newRow);
+        normalize(newRow);
+        grid.grid[index] = new GridRow(data);
+      },
       getGrid: function(){
         return grid.grid;
       },
