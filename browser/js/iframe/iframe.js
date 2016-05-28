@@ -11,16 +11,23 @@ app.config(function ($stateProvider) {
 app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Grid) {
     $scope.loaded = false;
     $scope.url ='http://msnbc.com';
-
+    $scope.saved = false;
     $scope.getRepeating = Messenger.isMultiple;
     $scope.setRepeating = Messenger.setMultiple;
     $scope.resetGrid = Grid.resetGrid;
-
+    $scope.saveGrid = function(){
+      Grid.saveGrid()
+      .then(function(){
+        Grid.resetGrid();
+        $scope.saved = true; //TO DO:use toasts
+      });
+    };
     $scope.searchthis = function(url) {
         // document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;
 
         // this is the downloaded version...
-
+        Grid.resetGrid();
+        Grid.setUrl(url);
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
                 var iframe = document.getElementById('iframedisplay');

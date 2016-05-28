@@ -1,4 +1,4 @@
-app.factory('Grid', function(){
+app.factory('Grid', function($http){
   var grid;
 
   function normalize(newRow){
@@ -20,19 +20,21 @@ app.factory('Grid', function(){
   }
 
   function makeFields(row){
-    if (row.data.length > grid.fieldNames.length){
-      var diff = row.data.length - grid.fieldNames.length;
+    if (row.data.length > grid.fields.length){
+      var diff = row.data.length - grid.fields.length;
       for(var i =0; i< diff; i++)
-        grid.fieldNames.push('Field ' + (grid.fieldNames.length + 1));
+        grid.fields.push({type: 'text', name: 'Field ' + (grid.fields.length + 1), convert: false});
     }
   }
   function GridRow(data){
     this.selector = data.selector;
     this.data = data.data;
+    this.index = data.index;
   }
   function Grid(){
     this.grid = [];
-    this.fieldNames = [];
+    this.fields = [];
+    this.url = null;
   }
 
   return {
@@ -41,7 +43,7 @@ app.factory('Grid', function(){
       },
       resetGrid: function(){
         grid.grid.splice(0, grid.grid.length);
-        grid.fieldNames.splice(0, grid.fieldNames.length);
+        grid.fields.splice(0, grid.fields.length);
       },
       addRow: function(data){
         //normalize row length
@@ -53,6 +55,7 @@ app.factory('Grid', function(){
         if (!normalized){
           normalize(newRow);
         }
+        console.log(grid);
         grid.grid.push(newRow);
 
 
@@ -67,14 +70,33 @@ app.factory('Grid', function(){
         }
 
       },
+      convertToNumber: function(field){
+        var colIdx = grid.fields.indexOf(field);
+        for(var i =0; i < grid.grid.length; i++){
+          grid.grid[i].data[colIdx].data = grid.grid[i].data[colIdx].data.replace(/\D/ig, "");
+        }
+        grid.fields[colIdx].convert = true;
+      },
+      replaceRow: function(index, data){
+        var newRow = new GridRow(data);
+        makeFields(newRow);
+        normalize(newRow);
+        grid.grid[index] = new GridRow(data);
+      },
       getGrid: function(){
         return grid.grid;
       },
       getFields: function(){
-        return grid.fieldNames;
+        return grid.fields;
       },
       setFieldName: function(idx, name){
-        grid.fieldNames[idx] = name;
+        grid.fields[idx].name = name;
+      },
+      saveGrid: function(){
+        return $http.post('/api/pages', grid);
+      },
+      setUrl: function(url){
+        grid.url = url;
       }
   };
 });
