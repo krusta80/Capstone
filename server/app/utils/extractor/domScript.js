@@ -34,8 +34,10 @@ module.exports =
             return data;
           }
           var rtn;
-          if (!window.parent.messenger.isMultiple())
-            rtn = {selector: selector, data: makeSubElems($(this)), multiple: false};
+          if (!window.parent.messenger.isMultiple()){
+            var idx = $(selector).index(this);
+            rtn = {selector: selector, data: makeSubElems($(this)), index: idx, multiple: false};
+          }
           else{
             var siblings = $(selector);
             var data = [];

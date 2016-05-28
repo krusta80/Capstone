@@ -19,8 +19,8 @@ module.exports = {
 	Schema: require('./models/schema'),
 	Field: require('./models/field'),
 	User: require('./models/user'),
-	Job: require('./models/job'),
-	Page: require('./models/page')
+	Page: require('./models/page'),
+	Job: require('./models/job')
 };
 
 // Modifying startDbPromise to return the db object to have an access to it when  .then on startDbPromise

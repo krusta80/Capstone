@@ -3,7 +3,7 @@
         <thead>
             <tr>
                 <th ng-repeat="field in getFields()">
-                  <input type="text" ng-model="field" ng-blur="setFieldName($index, field)" />
+                  <input type="text" ng-model="field.name" ng-blur="setFieldName($index, field)" />
                 </th>
             </tr>
         </thead>

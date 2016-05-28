@@ -11,21 +11,19 @@ var fieldSchema = mongoose.Schema({
 });
 
 var pageRowSchema = mongoose.Schema({
-  rowData: [rowCellSchema],
+  data: [rowCellSchema],
   selector: String,
   index: Number
 });
 var pageSchema = mongoose.Schema({
-  fields: [String],
-  data: [pageRowSchema],
+  fields: [fieldSchema],
+  grid: [pageRowSchema],
   created: {
     type: Date,
     default: Date.now
   },
-  user: {type: mongoose.Schema.Types.ObjectID, ref: 'User'}
+  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  url: String
 });
 
-pageSchema.statics.newPage = function(grid){
-  
-};
 mongoose.model('Page', pageSchema);
