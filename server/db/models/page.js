@@ -16,9 +16,19 @@ var pageRowSchema = mongoose.Schema({
   selector: String,
   index: Number
 });
+
+var gridSchema = mongoose.Schema({
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  rows: [pageRowSchema]
+});
+
 var pageSchema = mongoose.Schema({
   fields: [fieldSchema],
-  grid: [pageRowSchema],
+  grid: [pageRowSchema], //most recent grid
+  gridHist: gridSchema,
   created: {
     type: Date,
     default: Date.now
@@ -27,4 +37,16 @@ var pageSchema = mongoose.Schema({
   url: String
 });
 
+pageSchema.statics.createOrUpdate = function(newPage){
+  return this.findById(newPage)
+  .then(function(page){
+    if (page){
+      page.grid = newPage.grid;
+      return page.save();
+    }else{
+      return mongoose.model('Page').create(newPage);
+    }
+  });
+};
+mongoose.model('Grid', gridSchema);
 mongoose.model('Page', pageSchema);

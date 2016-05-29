@@ -3,8 +3,9 @@
         <thead>
             <tr>
                 <th ng-repeat="field in getFields()">
-                  <input type="text" ng-model="field.name" style="width: 75%;" ng-blur="setFieldName($index, field)" />
-                  <i class="glyphicon glyphicon-stats" ng-click="convertToNumber(field)"></i>
+                  <input type="text" ng-model="field.name" style="width: 75%;" ng-blur="setFieldName($index, field.name)" />
+                  <span ng-click="removeCol($index)" class="pull-right col-action">X</span>
+                  <i class="glyphicon glyphicon-stats col-action" ng-click="convertToNumber(field)"></i>
                 </th>
             </tr>
         </thead>
