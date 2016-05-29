@@ -31,15 +31,19 @@ app.factory('Grid', function($http){
     this.data = data.data;
     this.index = data.index;
   }
-  function Grid(){
-    this.grid = [];
-    this.fields = [];
-    this.url = null;
-  }
+  // function Grid(){
+  //   this.grid = [];
+  //   this.fields = [];
+  //   this.url = null;
+  // }
 
   return {
       initGrid: function(){
-          grid = new Grid();
+        return $http.get('/api/pages/new')
+        .then(function(res){
+          grid = res.data;
+        });
+
       },
       resetGrid: function(){
         grid.grid.splice(0, grid.grid.length);
@@ -76,6 +80,13 @@ app.factory('Grid', function($http){
           grid.grid[i].data[colIdx].data = grid.grid[i].data[colIdx].data.replace(/\D/ig, "");
         }
         grid.fields[colIdx].convert = true;
+      },
+      removeCol: function(index){
+        grid.fields.splice(index,1);
+        grid.grid.forEach(function(row){
+          row.data.splice(index, 1);
+        });
+
       },
       replaceRow: function(index, data){
         var newRow = new GridRow(data);

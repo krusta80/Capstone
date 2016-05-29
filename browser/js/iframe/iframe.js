@@ -3,7 +3,12 @@ app.config(function ($stateProvider) {
     $stateProvider.state('iframe', {
         url: '/iframe',
         templateUrl: 'js/iframe/iframe.html',
-        controller: 'IframeCtrl'
+        controller: 'IframeCtrl',
+        resolve: {
+          grid: function(Grid){
+            return Grid.initGrid();
+          }
+        }
     });
 
 });
@@ -14,11 +19,11 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Gri
     $scope.saved = false;
     $scope.getRepeating = Messenger.isMultiple;
     $scope.setRepeating = Messenger.setMultiple;
+
     $scope.resetGrid = Grid.resetGrid;
     $scope.saveGrid = function(){
       Grid.saveGrid()
       .then(function(){
-        Grid.resetGrid();
         $scope.saved = true; //TO DO:use toasts
       });
     };
