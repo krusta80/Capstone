@@ -1,5 +1,6 @@
 'use strict';
 var mongoose = require('mongoose');
+var ScraperElement = mongoose.model('ScraperElement').schema;
 
 var pageSchema = new mongoose.Schema({
     title: {
