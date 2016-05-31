@@ -1,12 +1,38 @@
+'use strict';
 var mongoose = require('mongoose');
 
 var jobSchema = mongoose.Schema({
-  pages: [mongoose.model('Page').schema],
-  created:{
-    type: Date,
-    default: Date.now
-  },
-  user: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  	title: {
+  		type: String, 
+		required: true
+  	},
+ 	description: {
+	    type: String
+	},
+	user: {
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'User'
+	},
+  	pages: [Page],
+  	active: {
+        type: Boolean,
+        required: true,
+        default: false 
+    },
+    frequency: {
+    	type: Number
+    },
+    lastRun: {
+    	type: Date
+    },
+  	createdDate: {
+        type: Date,
+        default: Date.now
+    },
+    modifiedDate: {
+        type: Date,
+        default: Date.now
+    }
 });
 
-mongoose.model('Job', jobSchema);
+module.exports = mongoose.model('Job', jobSchema);

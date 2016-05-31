@@ -1,25 +1,27 @@
 'use strict';
 var mongoose = require('mongoose');
 
-var pageSchema = new mongoose.Schema({
-    title: {
+var scraperElementSchema = new mongoose.Schema({
+    name: {
         type: String, 
         required: true
     },
     description: {
         type: String
     },
-    url: {
+    domSelector: {
         type: String,
         required: true
     },
-    active: {
-        type: Boolean,
-        required: true,
-        default: false 
+    selectorIndex: {
+        type: Number,
+        min: 0
     },
-    targetElements: {
-        type: [ScraperElement]
+    fields: {
+        type: String        //  this is a JSON representation of a map of columns / fields
+    },
+    lastScrapedTS: {
+        type: Date
     },
     createdDate: {
         type: Date,
@@ -31,4 +33,4 @@ var pageSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Page', pageSchema);
+module.exports = mongoose.model('ScraperElement', scraperElementSchema);
