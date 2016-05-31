@@ -1,24 +1,26 @@
 'use strict';
 var mongoose = require('mongoose');
 var Page = mongoose.model('Page').schema;
+var Scraper = require('../../app/utils/scraperBasic');
+var Promise = require('bluebird');
 
 var jobSchema = mongoose.Schema({
   title: {
-    type: String, 
+    type: String,
 		required: true
   },
  	description: {
 	    type: String
 	},
 	user: {
-		type: mongoose.Schema.Types.ObjectId, 
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User'
 	},
   pages: [Page],
   active: {
     type: Boolean,
     required: true,
-    default: false 
+    default: false
   },
   frequency: {
     type: Number
@@ -36,4 +38,11 @@ var jobSchema = mongoose.Schema({
   }
 });
 
+jobSchema.methods.runJob = function(){
+  var instance = this, results = {};
+  return Promise.map(instance.pages, function(page){
+    var scraper = new Scraper(page.url);
+  });
+
+};
 module.exports = mongoose.model('Job', jobSchema);

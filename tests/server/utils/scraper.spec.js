@@ -2,7 +2,7 @@ var expect = require('chai').expect,
   Scraper = require('../../../server/app/utils/scraper');
 
 describe('basic functionality', function(){
-  this.timeout(20000);
+  this.timeout(60000);
   xit('gets first 3 pages of results from google using lib', function(done){
     var scraper = new Scraper("https://www.google.com", "div.g h3.r" );
     scraper.go(null,[
@@ -15,6 +15,14 @@ describe('basic functionality', function(){
     })
     .catch(function(err){
       console.log(err);
+    });
+  });
+  it('gets stories from msnbc', function(done){
+    var scraper = new Scraper('http://msnbc.com', 'div');
+    scraper.go(30000)
+    .then(function(data){
+      console.log(data);
+      done();
     });
   });
   //these next two might fail the first time, b/c of the way heroku hosts the apps

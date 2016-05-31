@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var scraperElementSchema = new mongoose.Schema({
     name: {
-        type: String, 
+        type: String,
         required: true
     },
     description: {
