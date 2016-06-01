@@ -3,17 +3,12 @@ app.factory('Messenger', function($rootScope){
   return {
     set: function(val){
       msg = val;
+      $rootScope.$broadcast('extract', msg);
     },
     get: function(){
       if (msg)
         return msg;
       return;
-    },
-    isMultiple: function(){
-      return repeating;
-    },
-    setMultiple: function(){
-      repeating = !repeating;
     }
   };
 });

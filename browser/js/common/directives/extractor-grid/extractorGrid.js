@@ -2,10 +2,13 @@ app.directive('extractorGrid', function(){
   return {
     templateUrl: '/js/common/directives/extractor-grid/extractor-grid.html',
     controller: function($scope, $rootScope, Grid){
+      debugger;
       Grid.initGrid();
 
       $scope.rowCount = 0;
       $rootScope.$on('extract', function(evt, data){
+        console.log('extrac broadcast fired with data: ', data);
+
         if (data.multiple){
           Grid.resetGrid();
           Grid.addRows(data,data.selector);

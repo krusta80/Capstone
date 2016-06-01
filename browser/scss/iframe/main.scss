@@ -1,20 +1,26 @@
 #iframedisplay {
-  width: 100%;
-  height: 37vw;
+  width: 100vw;
+  height: calc(100vh - 317px);
   position: relative;
-
 }
 
 .iframeContainer {
   position: relative;
 
   .overlay {
-    background-color: black;
-    opacity: 0.4;
+    background-color: rgba(0,0,0,0.4);
     position: absolute;
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
+
+    .centered {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      margin-top: -22.75px;
+      margin-left: -68.425px;
+    }
   }
 }
