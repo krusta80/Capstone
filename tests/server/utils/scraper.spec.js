@@ -1,8 +1,8 @@
 var expect = require('chai').expect,
   Scraper = require('../../../server/app/utils/scraper');
 
-describe('basic functionality', function(){
-  this.timeout(60000);
+xdescribe('basic functionality', function(){
+  this.timeout(20000);
   xit('gets first 3 pages of results from google using lib', function(done){
     var scraper = new Scraper("https://www.google.com", "div.g h3.r" );
     scraper.go(null,[
@@ -18,8 +18,8 @@ describe('basic functionality', function(){
     });
   });
   it('gets stories from msnbc', function(done){
-    var scraper = new Scraper('http://msnbc.com', 'div');
-    scraper.go(30000)
+    var scraper = new Scraper('http://www.msnbc.com', 'h2.featured-slider__teaser__title');
+    scraper.go(10000)
     .then(function(data){
       console.log(data);
       done();

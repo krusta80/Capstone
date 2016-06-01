@@ -1,5 +1,5 @@
 var mongoose = require('mongoose'),
-  pageData = require('./page');
+  pageData = require('./testPage');
 require('../../../server/db/models');
 var Page = mongoose.model('Page'),
   ScraperElement = mongoose.model('ScraperElement'),
@@ -17,7 +17,7 @@ function connect(){
 }
 
 function seed(){
-    connect()
+    return connect()
     .then(function(){
       return conn.connection.db.dropDatabase();
     })

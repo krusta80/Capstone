@@ -5,11 +5,14 @@ var Scraper = require('../../../server/app/utils/scraperBasic'),
   Page = mongoose.model('Page'),
   ScraperElementHist = mongoose.model('ScraperElementHist');
 
-  xdescribe('basic functionality', function(){
-    this.timeout(30000);
+  describe('basic functionality', function(){
+    this.timeout(50000);
     var page;
-    before(function(){
-      return seed();
+    before(function(done){
+      return seed()
+      .then(function(){
+        done();
+      });
     });
     it('verify seed', function(){
       return Page.find()
@@ -20,16 +23,12 @@ var Scraper = require('../../../server/app/utils/scraperBasic'),
     });
     it('performs basic scraping operation', function(done){
       var scraper = new Scraper(page);
-      scraper.go(30000)
+      scraper.go(10000)
       .then(function(){
         return ScraperElementHist.find();
       })
       .then(function(elements){
         expect(elements.length).to.equal(2);
-        done();
-      })
-      .catch(function(err){
-        console.log(err);
         done();
       });
     });

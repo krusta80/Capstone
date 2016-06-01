@@ -10,41 +10,42 @@ function Scraper(page){
       //may need to add path to phantomjs
 }
 
-function evaluate(horseman, scraperElement){
-  return horseman.evaluate(function(element){
-    var fields = JSON.parse(element.fields);
-    var fieldHist = Object.keys(fields).reduce(function(acc, fieldName){
-      var fieldVal = fields[fieldName];
-      var elem = $(element.domSelector)[element.selectorIndex];
-      var elemVal;
-      var targetElem = $(elem).find(fieldVal.type + ':first');
-      if (fieldVal.attr === 'text')
-        elemVal = targetElem.text();
-      else
-        elemVal = targetElem.attr(fieldVal.attr);
-      acc[fieldName] = {index: fieldName[field].index, value: elemValue};
+function evaluate(horseman, targetElements){
+  return horseman.evaluate(function(elements){
+    return elements.reduce(function(acc, element){
+      var fields = JSON.parse(element.fields);
+      var fieldHist = Object.keys(fields).reduce(function(acc, fieldName){
+        var fieldVal = fields[fieldName];
+        var elem = $(element.domSelector)[element.selectorIndex];
+        var elemVal;
+        var targetElem = $(elem).find(fieldVal.type + ':first');
+        if (fieldVal.attr === 'text')
+          elemVal = targetElem.text();
+        else
+          elemVal = targetElem.attr(fieldVal.attr);
+        acc[fieldName] = {index: fieldVal.index, value: elemVal};
+        return acc;
+      }, {});
+      acc.push({
+        scraperElement: element._id,
+        fields: JSON.stringify(fieldHist)
+      });
       return acc;
-    }, {});
-    return fieldHist;
-    }, scraperElement);
+    },[]);
+  }, targetElements);
 }
 
 function execute(horseman, page){
-  return Promise.map(page.targetElements, function(scraperElement){
-    console.log(scraperElement);
-    return evaluate(horseman, scraperElement)
-    .then(function(fieldHist){
-      mongoose.model('ScraperElementHist').create({
-        scraperElement: scraperElement._id,
-        fields: JSON.stringify(fieldHist)
+  return evaluate(horseman, page.targetElements)
+  .then(function(fieldHists){
+    console.log(fieldHists);
+      return mongoose.model('ScraperElementHist').insertMany(fieldHists);
         //TO DO: Populate additional fields
-      });
-    });
+
   })
   .catch(function(err){
     console.log(err);
   });
-
 }
 
 Scraper.prototype.go = function(timeout, actions){
@@ -64,9 +65,6 @@ Scraper.prototype.go = function(timeout, actions){
   })
   .then(function(){
     horseman.close();
-  })
-  .catch(function(err){
-    console.log(err);
   });
 };
 
