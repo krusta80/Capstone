@@ -14,7 +14,10 @@ var jobSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'User'
 	},
-  pages: [Page],
+  pages: [{
+		type: mongoose.Schema.Types.ObjectId, 
+		ref: 'Page'
+	}],
   active: {
     type: Boolean,
     required: true,
