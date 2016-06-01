@@ -7,7 +7,10 @@ router.use('/scrape', require('./scrape'));
 router.use('/apps', require('./apps'));
 router.use('/schemas', require('./schemas'));
 router.use('/fields', require('./fields'));
+router.use('/scraperElements', require('./scraperElements'));
 router.use('/pages', require('./pages'));
+router.use('/jobs', require('./jobs'));
+router.use('/projects', require('./projects'));
 
 // Make sure this is after all of
 // the registered routes!
