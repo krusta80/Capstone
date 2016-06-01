@@ -1,13 +1,17 @@
 app.factory('Messenger', function($rootScope){
-  var msg, repeating = false;
+  var hoverValue, clickValue, repeating = false;
   return {
-    set: function(val){
-      msg = val;
-      $rootScope.$broadcast('extract', msg);
+    hover: function(val){
+      hoverValue = val;
+      $rootScope.$broadcast('hover', hoverValue);
+    },
+    click: function(val) {
+      clickValue = val;
+      $rootScope.$broadcast('extract',clickValue);
     },
     get: function(){
-      if (msg)
-        return msg;
+      if (clickValue)
+        return clickValue;
       return;
     }
   };

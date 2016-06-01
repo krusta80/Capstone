@@ -3,7 +3,7 @@ app.directive('scraperPopup', function(){
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
     controller: function($scope, $rootScope, Messenger){
       $scope.activated = true;
-      $rootScope.$on('extract', function(evt, data){
+      $rootScope.$on('hover', function(evt, data){
         $scope.data = data;
         $scope.$apply();
       });
@@ -11,3 +11,4 @@ app.directive('scraperPopup', function(){
     }
   };
 });
+

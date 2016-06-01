@@ -8,7 +8,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Grid) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
     $scope.loaded = false;
     $scope.loading = false;
     $scope.url ='http://msnbc.com';

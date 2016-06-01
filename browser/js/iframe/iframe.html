@@ -4,27 +4,23 @@
     <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com"></input>
     <button class="btn btn-primary">Submit</button>
   </form>
-  <div class="btn-group" role="group">
-    <button ng-class="{'btn-warning': getRepeating()}" ng-click="setRepeating()" class="btn btn-success">Repeating</button>
-    <button ng-click="" class="btn btn-danger">Reset</button>
-    <button class="btn btn-default" ng-click="">Save page</button>
-    
-    <span class="text-success" ng-show="saved">Page Saved!</span>
-  </div>
 </div>
-  <div>
-  <!-- <h3>This is the rendering engine: </h3> -->
-    <div class="iframeContainer">
-      <iframe name="myFrame" id="iframedisplay" src=""></iframe>
-      <div class="overlay" ng-hide="loaded">
-        <button class="btn btn-lg btn-warning centered" ng-show="loading">
-            <span class="glyphicon glyphicon-refresh spinning"></span> Loading...    
-        </button>
-      </div>
-
-      <scraper-popup></scraper-popup>
-      
+<div>
+<!-- <h3>This is the rendering engine: </h3> -->
+  <div class="iframeContainer">
+    <iframe name="myFrame" id="iframedisplay" src=""></iframe>
+    <div class="overlay" ng-hide="loaded">
+      <button class="btn btn-lg btn-warning centered" ng-show="loading">
+          <span class="glyphicon glyphicon-refresh spinning"></span> Loading...    
+      </button>
     </div>
 
-    <extractor-grid></extractor-grid>
+    <scraper-popup></scraper-popup>
+    
+  </div>
+
+  <scraped-element></scraped-element>
 </div>
+
+
+

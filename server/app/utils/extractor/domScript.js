@@ -6,7 +6,8 @@ module.exports =
         $('body').off('mouseenter').on('mouseenter', '*', function(ev) {
           $('body').find('*').removeClass('__activate');
           $(this).addClass('__activate');
-          dataCompiler(ev.currentTarget);
+          window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+          
         });
       }
 
@@ -19,6 +20,8 @@ module.exports =
       $('body').on('click','*', function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
+        $(this).addClass('__clickActivate');
+        window.parent.messenger.click(dataCompiler(ev.currentTarget)); // sets to the window messenger object
       });
 
       // data stuff
@@ -32,7 +35,8 @@ module.exports =
         var obj = {};
         obj['attributes'] = getAttributes(element);
         $.extend(obj, getContent(element), getSelectorPath(element));
-        window.parent.messenger.set(obj); // sets to the window messenger object
+        
+        return obj;
       }
 
       function getAttributes(element) {
@@ -52,8 +56,7 @@ module.exports =
         var additionalTargets = [];
         var children = $(element).find('*');
         var innerHTML = "";
-        console.log(children.length);
-        if (children.length >= 6) {
+        if (children.length >= 5) {
           content['content'] = "Too many elements - narrow your search";
           return content;
         }

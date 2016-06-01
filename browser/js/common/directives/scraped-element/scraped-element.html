@@ -1,0 +1,39 @@
+<div ng-show="scrapedElementData.data.length > 0">
+    <div class="btn-group" role="group">
+        <button ng-class="{'btn-warning': getRepeating()}" ng-click="setRepeating()" class="btn btn-success">Repeating</button>
+        <button ng-click="setReset()" class="btn btn-danger">Reset</button>
+        <button class="btn btn-default" ng-click="">Save page</button>
+
+        <span class="text-success" ng-show="saved">Page Saved!</span>
+    </div>
+
+    <div class="tablecontainer">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td>
+                            Content
+                        </td>
+                        <td ng-repeat="i in getNumber(scrapedElementData.maxAdditionalFields) track by $index">
+                            target{{$index+1}}
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in scrapedElementData.data">
+                        <td>
+                            {{item.content}}
+                        </td>
+                        <td ng-repeat="target in item.additionalTargets">
+                          <div ng-repeat="(key,value) in target">
+                              {{value}}
+                          </div>
+                            
+                        </td>    
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,16 @@
 #iframedisplay {
-  width: 100vw;
-  height: calc(100vh - 317px);
+  width: 98vw;
+  height: calc(100vh - 375px);
   position: relative;
+  margin: 0 auto;
 }
 
 .iframeContainer {
   position: relative;
+  width: 98vw;
+  height: calc(100vh - 375px);
+  position: relative;
+  margin: 0 auto;
 
   .overlay {
     background-color: rgba(0,0,0,0.4);

@@ -6,6 +6,9 @@ var STYLE =
   .__activate {
     border: 1px solid red !important;
   }
+  .__clickActivate {
+    border: 1px solid orange !important;
+  }
 </style>`;
 
 
