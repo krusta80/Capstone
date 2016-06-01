@@ -65,12 +65,13 @@ module.exports =
               var obj = {};
               obj[target] = children[i].textContent;
               additionalTargets.push(obj);  
+              
             }
-            innerHTML += children[i].textContent;
-          }  
+          }
+          innerHTML += element.textContent; 
         } else {
           // no children
-          innerHTML += element.innerHTML;
+          innerHTML += element.textContent;
         }
         content['content'] = innerHTML;
         content['additionalTargets'] = additionalTargets;

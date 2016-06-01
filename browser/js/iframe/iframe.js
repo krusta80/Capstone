@@ -13,22 +13,8 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Gri
     $scope.loading = false;
     $scope.url ='http://msnbc.com';
     $scope.saved = false;
-    $scope.getRepeating = Messenger.isMultiple;
-    $scope.setRepeating = Messenger.setMultiple;
-    $scope.resetGrid = Grid.resetGrid;
-    $scope.saveGrid = function(){
-      Grid.saveGrid()
-      .then(function(){
-        Grid.resetGrid();
-        $scope.saved = true; //TO DO:use toasts
-      });
-    };
-    $scope.searchthis = function(url) {
-        // document.getElementById('iframedisplay').src = "/api/scrape/proxy?proxyurl=" + url;
 
-        // this is the downloaded version...
-        Grid.resetGrid();
-        Grid.setUrl(url);
+    $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
                 $scope.loading = true;
@@ -39,13 +25,11 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, Gri
                 iframe.contentWindow.document.close();
 
                 setTimeout(function() {
-                
-
                     var iframenode = $('#iframedisplay')[0];
                     iframenode.onload = function(ev) {
                         $scope.loaded = true; // this is for the overlay
                         $scope.loading = false; // this is to set the loader
-                        $scope.$apply();                        
+                        $scope.$apply();
 
                         // var iframecontents = $('#iframedisplay').contents()[0];
                         
