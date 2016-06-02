@@ -45,8 +45,8 @@ var page = {
 
 var scraperElement3 ={
   name: 'element1',
-  domSelector: '"HTML>BODY>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>UL>LI>DIV>DIV>DIV',
-  selectorIndex: 10,
+  domSelector: 'HTML>BODY>DIV>DIV>DIV>DIV>UL>LI',
+  selectorIndex: 1,
   fields: JSON.stringify({
     link: {
       index: 0,
@@ -63,8 +63,8 @@ var scraperElement3 ={
 
 var scraperElement4 ={
   name: 'element1',
-  domSelector: 'HTML>BODY>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>UL>LI>DIV>DIV>DIV',
-  selectorIndex: 15,
+  domSelector: 'HTML>BODY>DIV>DIV>DIV>DIV>UL>LI',
+  selectorIndex: 2,
   fields: JSON.stringify({
     link: {
       index: 0,
@@ -82,8 +82,8 @@ var scraperElement4 ={
 
 var page2 = {
   title: 'amazon',
-  url: "https://www.amazon.com/s/ref=nb_sb_ss_c_0_3?url=se…d-keywords=shirts+for+men&sprefix=shi%2Caps%2C155",
+  url: "https://www.amazon.com/b/ref=br_pdt_mgUpt?_encoding=UTF8&node=2858778011",
   targetElements: [scraperElement3, scraperElement4]
 
 };
-module.exports = [page];
+module.exports = [page, page2];
