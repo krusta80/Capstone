@@ -38,6 +38,16 @@ router.get('/:id', ensureAuthenticated, function (req, res) {
     });
 });
 
+router.post('/:id/run', function(req,res,next){
+  Job.findById(req.params.id).populate('pages')
+  .then(function(job){
+    return job.runJob();
+  })
+  .then(function(result){
+    res.json(result);
+  },next);
+});
+
 router.post('/', ensureAuthenticated, function (req, res) {
     Job.create(req.body)
     .then(function(job) {
