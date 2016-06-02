@@ -32,7 +32,7 @@ router.get('/byProject/:projectId', ensureAuthenticated, function (req, res) {
 });
 
 router.get('/:id', ensureAuthenticated, function (req, res) {
-    Job.findById(req.params.id)
+    Job.findById(req.params.id).populate('pages')
     .then(function(job) {
         res.send(job);
     });
