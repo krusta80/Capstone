@@ -11,6 +11,13 @@ app.directive('scrapedElement', function($rootScope, ScraperElementFactory){
       scope.setReset = function() {
         ScraperElementFactory.reset();
       };
+
+      scope.isSelector = function(key) {
+        return key != "selector"
+      };
+      scope.removeItem = function(obj) {
+        ScraperElementFactory.remove(obj);
+      };
       $rootScope.$on('extract', function(event,value) {
         ScraperElementFactory.add(value);
         scope.$apply();

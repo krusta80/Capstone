@@ -33,7 +33,7 @@ module.exports =
 
       function dataCompiler(element) {
         var obj = {};
-        obj['attributes'] = getAttributes(element);
+        obj = getAttributes(element);
         $.extend(obj, getContent(element), getSelectorPath(element));
         
         return obj;
@@ -66,8 +66,8 @@ module.exports =
             if (children[i].innerHTML) {
               var target = 'target' + (i+1);
               var obj = {};
-              obj[target] = children[i].textContent;
-              additionalTargets.push(obj);  
+              content[target] = children[i].textContent;
+              // additionalTargets.push(obj);  
               
             }
           }
@@ -77,7 +77,7 @@ module.exports =
           innerHTML += element.textContent;
         }
         content['content'] = innerHTML;
-        content['additionalTargets'] = additionalTargets;
+        // content['additionalTargets'] = additionalTargets;
         return content;
       }
 

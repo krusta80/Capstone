@@ -13,8 +13,9 @@ app.factory('ScraperElementFactory', function($http){
     cachedData['maxAdditionalFields'] = 0;
   };
 
-  scrapedFieldObj.remove = function() {
-
+  scrapedFieldObj.remove = function(dataObj) {
+    var index = cachedData.data.indexOf(dataObj);
+    cachedData.data.splice(index,1);
   };
 
   scrapedFieldObj.add = function(dataObj) {
