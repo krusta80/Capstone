@@ -43,8 +43,8 @@ router.post('/:id/run', function(req,res,next){
   .then(function(job){
     return job.runJob();
   })
-  .then(function(){
-    res.sendStatus(200);
+  .then(function(result){
+    res.json(result);
   },next);
 });
 

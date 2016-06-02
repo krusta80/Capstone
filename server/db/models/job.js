@@ -41,12 +41,20 @@ var jobSchema = mongoose.Schema({
   }
 });
 
+function Results(id){
+  this.pages = {};
+  this.jobId = id;
+}
 jobSchema.methods.runJob = function(){
+  var results = new Results(this._id);
   var instance = this;
   return Promise.map(instance.pages, function(page){
+    results.pages[page._id] = null;
     var scraper = new Scraper(page);
-    return scraper.go(10000);
-
+    return scraper.go(10000, results);
+  })
+  .then(function(){
+    return results;
   });
 
 };

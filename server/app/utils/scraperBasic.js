@@ -36,16 +36,17 @@ function evaluate(horseman, targetElements){
   }, targetElements);
 }
 
-function execute(horseman, page){
+function execute(horseman, page, results){
   return evaluate(horseman, page.targetElements)
   .then(function(fieldHists){
-    console.log(fieldHists);
+    var nSucceeded = fieldHists.filter(i=>i.fields !== JSON.stringify({}));
+    results.pages[page._id] = {numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
       return mongoose.model('ScraperElementHist').insertMany(fieldHists);
         //TO DO: Populate additional fields
   });
 }
 
-Scraper.prototype.go = function(timeout, actions){
+Scraper.prototype.go = function(timeout,results, actions){
   var page = this.page;
   var horseman = this.horseman;
   actions = actions || [];
@@ -58,7 +59,7 @@ Scraper.prototype.go = function(timeout, actions){
   });
   return horseman.wait(timeout || 2000)
   .then(function(){
-      return execute(horseman, page);
+      return execute(horseman, page, results);
   })
   .then(function(){
     horseman.close();

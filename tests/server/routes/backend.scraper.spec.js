@@ -31,6 +31,7 @@ describe('backend scraper route tests', function(){
       agent
         .post('/api/jobs/' + job._id + '/run').expect(200)
         .end(function(err, res){
+          console.log(res.body);
           done();
         });
     })
