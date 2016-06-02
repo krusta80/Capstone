@@ -1,4 +1,4 @@
-'use strict';
+
 var Promise = require('bluebird');
 var path = require('path');
 var chalk = require('chalk');
@@ -14,6 +14,7 @@ mongoose.Promise = Promise;
 // Require our models -- these should register the model into mongoose
 // so the rest of the application can simply call mongoose.model('User')
 // anywhere the User model needs to be used.
+require('./models');
 module.exports = {
 	App: require('./models/app'),
 	Schema: require('./models/schema'),

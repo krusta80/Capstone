@@ -1,4 +1,4 @@
-'use strict';
+
 var mongoose = require('mongoose');
 var Page = mongoose.model('Page').schema;
 var Scraper = require('../../app/utils/scraperBasic');
@@ -17,7 +17,7 @@ var jobSchema = mongoose.Schema({
 		ref: 'User'
 	},
   pages: [{
-		type: mongoose.Schema.Types.ObjectId, 
+		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Page'
 	}],
   active: {
@@ -42,10 +42,12 @@ var jobSchema = mongoose.Schema({
 });
 
 jobSchema.methods.runJob = function(){
-  var instance = this, results = {};
+  var instance = this;
   return Promise.map(instance.pages, function(page){
-    var scraper = new Scraper(page.url);
+    var scraper = new Scraper(page);
+    return scraper.go(10000);
+
   });
 
 };
-module.exports = mongoose.model('Job', jobSchema);
+mongoose.model('Job', jobSchema);

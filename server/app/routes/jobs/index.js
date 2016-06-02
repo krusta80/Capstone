@@ -38,13 +38,13 @@ router.get('/:id', ensureAuthenticated, function (req, res) {
     });
 });
 
-router.post('/:id/run', ensureAuthenticated, function(req,res,next){
-  Job.find(req.params.id)
+router.post('/:id/run', function(req,res,next){
+  Job.findById(req.params.id).populate('pages')
   .then(function(job){
     return job.runJob();
   })
-  .then(function(result){
-    res.json(result);
+  .then(function(){
+    res.sendStatus(200);
   },next);
 });
 

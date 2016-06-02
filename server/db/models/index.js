@@ -9,3 +9,4 @@ require('./scraperElement');
 require('./page');
 require('./job');
 require('./scraperElementHist');
+require('./project');
