@@ -16,13 +16,14 @@ function evaluate(horseman, targetElements){
       var fields = JSON.parse(element.fields);
       var fieldHist = Object.keys(fields).reduce(function(acc, fieldName){
         var fieldVal = fields[fieldName];
-        var elem = $(element.domSelector)[element.selectorIndex];
+        var elem = document.querySelectorAll(element.domSelector);
+        if (!elem.length) return acc;
         var elemVal;
-        var targetElem = $(elem).find(fieldVal.type + ':first');
+        var targetElem = elem[element.selectorIndex].getElementsByTagName(fieldVal.type)[0];
         if (fieldVal.attr === 'text')
-          elemVal = targetElem.text();
+          elemVal = targetElem.innerText;
         else
-          elemVal = targetElem.attr(fieldVal.attr);
+          elemVal = targetElem.getAttribute(fieldVal.attr);
         acc[fieldName] = {index: fieldVal.index, value: elemVal};
         return acc;
       }, {});
@@ -41,10 +42,6 @@ function execute(horseman, page){
     console.log(fieldHists);
       return mongoose.model('ScraperElementHist').insertMany(fieldHists);
         //TO DO: Populate additional fields
-
-  })
-  .catch(function(err){
-    console.log(err);
   });
 }
 
@@ -65,6 +62,9 @@ Scraper.prototype.go = function(timeout, actions){
   })
   .then(function(){
     horseman.close();
+  })
+  .catch(function(err){
+    console.log(err);
   });
 };
 

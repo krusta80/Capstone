@@ -23,7 +23,7 @@ var Scraper = require('../../../server/app/utils/scraperBasic'),
     });
     it('performs basic scraping operation', function(done){
       var scraper = new Scraper(page);
-      scraper.go(10000)
+      scraper.go(5000)
       .then(function(){
         return ScraperElementHist.find();
       })

@@ -15,47 +15,75 @@ var scraperElement1 ={
     }
   })
 };
-// var scraperElement2 ={
-//   name: 'element2',
-//   domSelector: "div#product-pane",
-//   selectorIndex: 0,
-//   fields: JSON.stringify({
-//     link: {
-//       index: 0,
-//       attr: 'href',
-//       type: 'a'
-//     },
-//     content: {
-//       index: 1,
-//       attr: 'text',
-//       type: 'a'
-//     }
-//   })
-// };
-//
-// var scraperElement3 ={
-//   name: 'element3',
-//   domSelector: "div#product-pane",
-//   selectorIndex: 1,
-//   fields: JSON.stringify({
-//     link: {
-//       index: 0,
-//       attr: 'href',
-//       type: 'a'
-//     },
-//     content: {
-//       index: 1,
-//       attr: 'text',
-//       type: 'a'
-//     }
-//   })
-// };
-//
+var scraperElement2 ={
+  name: 'element2',
+  domSelector: 'HTML>BODY>DIV>MAIN>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>ASIDE>DIV>DIV>UL>LI',
+  selectorIndex: 2,
+  fields: JSON.stringify({
+    link: {
+      index: 0,
+      attr: 'href',
+      type: 'a'
+    },
+    content: {
+      index: 1,
+      attr: 'text',
+      type: 'a'
+    }
+  })
+};
+
+
+
 
 var page = {
-  title: 'test page',
+  title: 'msnbc',
   url: 'http://www.msnbc.com',
-  targetElements: [scraperElement1]
+  targetElements: [scraperElement1, scraperElement2]
 
 };
-module.exports = page;
+
+var scraperElement3 ={
+  name: 'element1',
+  domSelector: '"HTML>BODY>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>UL>LI>DIV>DIV>DIV',
+  selectorIndex: 10,
+  fields: JSON.stringify({
+    link: {
+      index: 0,
+      attr: 'href',
+      type: 'a'
+    },
+    content: {
+      index: 1,
+      attr: 'text',
+      type: 'a'
+    }
+  })
+};
+
+var scraperElement4 ={
+  name: 'element1',
+  domSelector: 'HTML>BODY>DIV>DIV>DIV>DIV>DIV>DIV>DIV>DIV>UL>LI>DIV>DIV>DIV',
+  selectorIndex: 15,
+  fields: JSON.stringify({
+    link: {
+      index: 0,
+      attr: 'href',
+      type: 'a'
+    },
+    content: {
+      index: 1,
+      attr: 'text',
+      type: 'a'
+    }
+  })
+};
+
+
+var page2 = {
+  title: 'amazon',
+  url: "https://www.amazon.com/s/ref=nb_sb_ss_c_0_3?url=se…d-keywords=shirts+for+men&sprefix=shi%2Caps%2C155",
+  targetElements: [scraperElement3, scraperElement4]
+
+};
+module.exports = [page, page2];
