@@ -10,7 +10,7 @@ function Scraper(url, selector){
 
 function evaluate(horseman, selector){
   return horseman.evaluate(function(sel){
-    var elems = ['a', 'span', 'img', 'h3']; //elems to include in the data row
+    var elems = ['a', 'span', 'img', 'h3', 'h2']; //elems to include in the data row
     var data = [];
     $(sel).each(function( item ){
       var row ={};
