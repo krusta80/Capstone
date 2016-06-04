@@ -32,33 +32,41 @@ module.exports =
       // send it on hover
 
       function dataCompiler(element) {
-        var obj = {};
-        obj = getAttributes(element);
-        $.extend(obj, getContent(element), getSelectorPath(element));
-        
-        return obj;
+        var output;
+        var attributes = getAttributes(element);
+        var content = getContent(element);
+        var selectorPath = getSelectorPath(element);
+
+        return {
+          selector: selectorPath.selector,
+          elements: content.concat(attributes)
+        }
       }
 
       function getAttributes(element) {
         // this compiles and gets all the attributes on given element
-        var attributes = {};
+        var attributes;
+        var output = [];
         $.each(element.attributes, function( index, attr ) {
           if (attr.value) {
+            attributes = {};
             attributes[attr.name] = attr.value;
+            output.push(attributes);
           }
         });
-        return attributes;
+        return output;
       }
 
       function getContent(element) {
         // gets the content from the element
         var content = {};
-        var additionalTargets = [];
+        var output = [];
         var children = $(element).find('*');
         var innerHTML = "";
         if (children.length >= 5) {
           content['content'] = "Too many elements - narrow your search";
-          return content;
+          output.push(content);
+          return output;
         }
         if (children.length > 0) {
           for (var i = 0; i < children.length; i++) {
@@ -66,9 +74,8 @@ module.exports =
             if (children[i].innerHTML) {
               var target = 'target' + (i+1);
               var obj = {};
-              content[target] = children[i].textContent;
-              // additionalTargets.push(obj);  
-              
+              obj[target] = children[i].textContent;
+              output.push(obj);
             }
           }
           innerHTML += element.textContent; 
@@ -77,8 +84,9 @@ module.exports =
           innerHTML += element.textContent;
         }
         content['content'] = innerHTML;
+        output.push(content);
         // content['additionalTargets'] = additionalTargets;
-        return content;
+        return output;
       }
 
       function getSelectorPath(element) {
@@ -90,6 +98,7 @@ module.exports =
         if (id) {
           selector += "#"+ id;
         }
+        // TODO : selector index here
 
         var classNames = $(element).attr("class");
         if (classNames) {

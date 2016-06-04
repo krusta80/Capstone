@@ -1,20 +1,17 @@
 <div class="scraperPopup absolute topleft" ng-show="data">
   <div class="underline bold">Information</div>
   <div>
-    <span class="bold">Selector: </span><span>{{data.selector|truncate:25}}</span>
+    <span class="bold">Selector: </span><span>{{data.selector|truncate:50}}</span>
   </div>
   <div>
-    <span class="bold">Content: </span><span>{{data.content}}</span>
+    <span class="bold">Content: </span><span>{{content.content}}</span>
   </div>
 
-  <div ng-repeat="(key, val) in data.attributes">
-    <span class="bold">{{key}}: </span><span>{{val}}</span>
-  </div>
-
-  <div class="bold underline" ng-show="data.additionalTargets">Additional Targets</div>
-  <div ng-repeat="targetObj in data.additionalTargets">
-    <div ng-repeat="(key, value) in targetObj">
+  <div ng-repeat="element in data.elements">
+    <div ng-repeat="(key, value) in element">
       <span class="bold">{{key}}: </span><span>{{value}}</span>  
     </div>
+    
   </div>
+
 </div>
