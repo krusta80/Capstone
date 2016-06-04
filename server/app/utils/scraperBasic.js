@@ -36,9 +36,39 @@ function evaluate(horseman, targetElements){
   }, targetElements);
 }
 
+
+function evaluateWithPages(horseman, data, targetElements, results, page){
+  data = data || [];
+  return new Promise(function(resolve, reject){
+    return evaluate(horseman, targetElements)
+    .then(function(newData){
+      data = data.concat(newData);
+      if (results.pageCount < page.maxPages){
+        results.pageCount++;
+        return horseman
+          .click(page.paginateSelector)
+          .wait(1000)
+          .then(function(){
+            return evaluateWithPages(horseman, data, targetElements, results, page);
+          });
+      }
+      return data;
+    })
+    .then(function(data){
+      return resolve(data);
+    });
+  });
+
+}
+
 function execute(horseman, page, results){
-  return evaluate(horseman, page.targetElements)
-  .then(function(fieldHists){
+  var p;
+  if (page.paginate)
+    p = evaluateWithPages(horseman, null, page.targetElements, results, page);
+  else
+    p = evaluate(horseman, page.targetElements);
+  return p.then(function(fieldHists){
+    console.log(fieldHists);
     var nSucceeded = fieldHists.filter(i=>i.fields !== JSON.stringify({}));
     results.pages[page._id] = {numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
       return mongoose.model('ScraperElementHist').insertMany(fieldHists);
@@ -59,7 +89,7 @@ Scraper.prototype.go = function(timeout,results){
   });
   return horseman.wait(timeout || 2000)
   .then(function(){
-      return execute(horseman, page, results);
+    return execute(horseman, page, results);
   })
   .then(function(){
     horseman.close();

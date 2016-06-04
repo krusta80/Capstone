@@ -8,7 +8,7 @@ var chai = require('chai').expect,
   Promise = require('bluebird');
 
 describe('run job with pre-actions', function(){
-  this.timeout(30000);
+  this.timeout(60000);
   var job;
   before(function(done){
     mongoose.connect('mongodb://localhost/fsg-app')

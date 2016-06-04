@@ -33,7 +33,10 @@ var page = {
   actions: JSON.stringify([
     {fn: 'type', params: ["input[name='field-keywords']", 'echo']},
     {fn: 'click', params: ["input[class='nav-input']"]}
-  ])
+  ]),
+  paginate: true,
+  paginateSelector: '#pagnNextLink',
+  maxPages: 3
 };
 
 module.exports = page;

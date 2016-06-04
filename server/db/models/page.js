@@ -35,7 +35,12 @@ var pageSchema = new mongoose.Schema({
       type:Boolean,
       default: false
     },
-    paginateSelector: String
+    paginateSelector: String,
+    maxPages: {
+      type: Number,
+      default: 1
+    }
+
 });
 
 module.exports = mongoose.model('Page', pageSchema);
