@@ -21,12 +21,15 @@ var mongoose = require('mongoose');
 var Promise = require('bluebird');
 var chalk = require('chalk');
 var connectToDb = require('./server/db');
-var User = mongoose.model('User');
+var User = mongoose.model('User'),
+  pageData = require('./tests/server/seeds/testPage'),
+  Page = mongoose.model('Page'),
+  Job = mongoose.model('Job');
 
 var wipeCollections = function () {
     var removeUsers = User.remove({});
     return Promise.all([
-        removeUsers
+        removeUsers, Page.remove({}), Job.remove({})
     ]);
 };
 
@@ -47,12 +50,16 @@ var seedUsers = function () {
 
 };
 
+var seedPages = function(){
+  return Page.create(pageData);
+};
+
 connectToDb
     .then(function () {
         return wipeCollections();
     })
     .then(function () {
-        return seedUsers();
+        return Promise.join(seedUsers(), seedPages());
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
