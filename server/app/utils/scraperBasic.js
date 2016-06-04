@@ -19,7 +19,7 @@ function evaluate(horseman, targetElements){
         var elem = document.querySelectorAll(element.domSelector);
         if (!elem.length) return acc;
         var elemVal;
-        var targetElem = elem[element.selectorIndex].getElementsByTagName(fieldVal.type)[0];
+        var targetElem = elem[element.selectorIndex].getElementsByTagName(fieldVal.type)[fieldVal.index];
         if (fieldVal.attr === 'text')
           elemVal = targetElem.innerText;
         else
@@ -46,14 +46,14 @@ function execute(horseman, page, results){
   });
 }
 
-Scraper.prototype.go = function(timeout,results, actions){
+Scraper.prototype.go = function(timeout,results){
   var page = this.page;
   var horseman = this.horseman;
-  actions = actions || [];
+  var actions = page.actions ? JSON.parse(page.actions) : [];
   actions.unshift({fn: 'open', params: [this.url]});
   actions.unshift({fn: 'userAgent', params: ["Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0"]});
-  if (actions.length > 2)
-    actions.push({fn: 'keyboardEvent', params:['keypress', 16777221]});
+  // if (actions.length > 2)
+  //   actions.push({fn: 'keyboardEvent', params:['keypress', 16777221]});
   actions.forEach(function(action){
     horseman = horseman[action.fn].apply(horseman, action.params);
   });
