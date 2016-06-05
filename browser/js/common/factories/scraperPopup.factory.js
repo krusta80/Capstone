@@ -21,8 +21,10 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
     var scraperElementSchema = {
       name: 'test',
       domSelector: cachedData.raw.selector,
+      selectorIndex: cachedData.raw.selectorIndex,
       fields: JSON.stringify(fieldsObj)
     };
+    console.log("toPost:",scraperElementSchema);
     return $http.post('/api/scraperelements', scraperElementSchema);
   };
 

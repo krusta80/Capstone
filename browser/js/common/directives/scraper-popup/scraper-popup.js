@@ -26,6 +26,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
       };
 
       $rootScope.$on('click', function(evt, data, coordinates){
+        console.log("data on click:", data);
         scope.popupactivated = true;
         scope.left = coordinates.x;
         scope.top = coordinates.y;

@@ -11,6 +11,7 @@ app.factory('Messenger', function($rootScope){
     },
     get: function(){
       if (clickValue)
+        console.log("clickValue", clickValue);
         return clickValue;
       return;
     }
