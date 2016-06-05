@@ -7,7 +7,6 @@ app.factory('Messenger', function($rootScope){
     },
     click: function(val, coordinates) {
       clickValue = val;
-      console.log('here is the click ');
       $rootScope.$broadcast('click',clickValue,coordinates);
     },
     get: function(){

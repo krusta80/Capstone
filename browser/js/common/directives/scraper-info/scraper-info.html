@@ -1,16 +1,14 @@
 <div class="scraperInfo absolute topleft" ng-show="data">
   <div class="underline bold">Information</div>
   <div>
-    <span class="bold">Selector: </span><span>{{data.selector}}</span>
+    <span class="bold">Selector: </span><span>{{scraperSelector}}</span>
   </div>
   <div>
-    <span class="bold">Content: </span><span>{{content.content}}</span>
+    <span class="bold">Content: </span><span>{{content.value}}</span>
   </div>
 
-  <div ng-repeat="element in data.elements">
-    <div ng-repeat="(key, value) in element">
-      <span class="bold">{{key}}: </span><span>{{value}}</span>  
-    </div>
+  <div ng-repeat="element in scraperElements">
+    <span class="bold">{{element.attributeName || element.name}}: </span><span>{{element.value}}</span>  
     
   </div>
 

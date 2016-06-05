@@ -4,11 +4,10 @@ app.directive('scraperInfo', function(){
     controller: function($scope, $rootScope, Messenger){
       $scope.activated = true;
       $rootScope.$on('hover', function(evt, data){
-        var contentIdx = data.elements.findIndex(function(element) {
-          return Object.keys(element)[0] === "content";
-        });
-        $scope.content = data.elements.splice(contentIdx, 1)[0];
         $scope.data = data;
+        $scope.content = _.find(data.elements, 'attr','content');
+        $scope.scraperSelector = data.selector;
+        $scope.scraperElements = data.elements.slice(0,data.elements.length-1);
         $scope.$apply();
       });
 

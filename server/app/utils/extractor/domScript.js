@@ -7,7 +7,6 @@ module.exports =
           $('body').find('*').removeClass('__activate');
           $(this).addClass('__activate');
           window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
-          
         });
       }
 
@@ -36,12 +35,25 @@ module.exports =
         var output;
         var attributes = getAttributes(element);
         var content = getContent(element);
+        var aggregate = attributes.concat(content);
+        aggregate = dataIndexer(aggregate);
         var selectorPath = getSelectorPath(element);
 
         return {
           selector: selectorPath.selector,
-          elements: content.concat(attributes)
+          elements: aggregate
         }
+      }
+
+      function dataIndexer(array) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].attr === "content") {
+            break;
+          }
+          array[i]['index'] = i;
+          array[i]['name'] = 'field' + i;
+        }
+        return array;
       }
 
       function getAttributes(element) {
@@ -51,7 +63,9 @@ module.exports =
         $.each(element.attributes, function( index, attr ) {
           if (attr.value) {
             attributes = {};
-            attributes[attr.name] = attr.value;
+            attributes['attr'] = 'attribute';
+            attributes['value'] = attr.value;
+            attributes['attributeName'] = attr.name;
             output.push(attributes);
           }
         });
@@ -73,9 +87,9 @@ module.exports =
           for (var i = 0; i < children.length; i++) {
             // allow user to choose from each one
             if (children[i].innerHTML) {
-              var target = 'target' + (i+1);
               var obj = {};
-              obj[target] = children[i].textContent;
+              obj['value'] = children[i].textContent;
+              obj['attr'] = 'text';
               output.push(obj);
             }
           }
@@ -84,7 +98,11 @@ module.exports =
           // no children
           innerHTML += element.textContent;
         }
-        content['content'] = innerHTML;
+        content = {
+          value: innerHTML,
+          index: -1,
+          attr: 'content'
+        };
         output.push(content);
         // content['additionalTargets'] = additionalTargets;
         return output;

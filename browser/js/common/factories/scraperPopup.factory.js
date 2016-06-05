@@ -7,15 +7,14 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
   scrapedFieldObj.save = function(savedAttributes, cache) {
     var fieldsObj = {};
     savedAttributes.forEach(function(attribute) {
-      
-      fieldsObj[attribute.key] = {
-        attr: attribute.key
+      var obj = {
+        attr: attribute['attr'],
+        index: attribute['index']
       };
-      var obj;
-      if (attribute.key.includes('target')) {
-        fieldsObj[attribute.key]['index'] = attribute.key[attribute.key.length-1] - 1;
-        fieldsObj[attribute.key]['type'] = 'subelement';
-        console.log('fields obj made!', fieldsObj);
+      if (attribute.attr === 'content') {
+        fieldsObj[attribute.attr] = obj;
+      } else {
+        fieldsObj[attribute.name] = obj;  
       }
     });
 
@@ -25,8 +24,6 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
       fields: JSON.stringify(fieldsObj)
     };
     console.log('final schema: ', scraperElementSchema);
-
-
     return $http.post('/api/scraperelements', scraperElementSchema);
   };
 
@@ -46,7 +43,7 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
   };
 
   scrapedFieldObj.add = function(rawData) {
-    var contentObj = _.filter(rawData.elements, 'key', 'content');
+    var contentObj = _.filter(rawData.elements, 'attr', 'content');
     if (contentObj.value === "Too many elements - narrow your search") { return; }
     cachedData['raw'] = rawData;
     cachedData['data'] = scrapedFieldObj.transform(rawData.elements);
@@ -59,21 +56,14 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
 
   // utility methods
   scrapedFieldObj.transform = function(arrayOfObj) {
-    var obj;
-    var array = [];
     for (var i = 0; i < arrayOfObj.length; i++) {
-      obj = {};
-      obj['key'] = Object.keys(arrayOfObj[i])[0];
-      obj['value'] = arrayOfObj[i][obj['key']];
-      if(Object.keys(arrayOfObj[i])[0] === 'content') {
-        obj['selected'] = true;
+      if(arrayOfObj[i].attr === 'content') {
+        arrayOfObj[i]['selected'] = true;
       } else {
-        obj['selected'] = false;  
+        arrayOfObj[i]['selected'] = false;  
       }
-      
-      array.push(obj);
     }
-    return array;
+    return arrayOfObj;
   }
 
   scrapedFieldObj.getContent = function(arrayOfObj) {
