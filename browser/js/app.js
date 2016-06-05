@@ -1,5 +1,5 @@
 'use strict';
-window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch']);
+window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
@@ -14,6 +14,7 @@ app.config(function ($urlRouterProvider, $locationProvider) {
 
 // This app.run is for controlling access to specific states.
 app.run(function ($rootScope, AuthService, $state, $window, Messenger) {
+    // this is setting messenger factory to the window object
     $window.messenger = Messenger;
     // The given state requires an authenticated user.
     var destinationStateRequiresAuth = function (state) {
@@ -53,3 +54,26 @@ app.run(function ($rootScope, AuthService, $state, $window, Messenger) {
     });
 
 });
+
+angular.module('filters', []).
+    filter('truncate', function () {
+        return function (text, length, end) {
+            if (typeof text === "undefined") {
+                return "";
+            }
+            if (isNaN(length))
+                length = 10;
+
+            if (end === undefined)
+                end = "...";
+
+            if (text.length <= length || text.length - end.length <= length) {
+                return text;
+            }
+            else {
+                return String(text).substring(0, length-end.length) + end;
+            }
+
+        };
+    });
+

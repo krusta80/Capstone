@@ -42,11 +42,14 @@ app.factory('Grid', function($http){
           grid = new Grid();
       },
       resetGrid: function(){
+        console.log('resetGrid fired');
         grid.grid.splice(0, grid.grid.length);
         grid.fields.splice(0, grid.fields.length);
+        
       },
       addRow: function(data){
         //normalize row length
+        console.log('addRow fired');
         var newRow = new GridRow(data);
         makeFields(newRow);
         var normalized = grid.grid.every(function(row){
@@ -61,6 +64,7 @@ app.factory('Grid', function($http){
 
       },
       addRows: function(dataArr, selector){
+        console.log('addRows fired');
         for(var i = 0; i< dataArr.data.length; i++){
           var data = dataArr.data[i];
           var newRow = new GridRow({data:data, selector: selector});
@@ -71,6 +75,7 @@ app.factory('Grid', function($http){
 
       },
       convertToNumber: function(field){
+        console.log('convertToNumber fired');
         var colIdx = grid.fields.indexOf(field);
         for(var i =0; i < grid.grid.length; i++){
           grid.grid[i].data[colIdx].data = grid.grid[i].data[colIdx].data.replace(/\D/ig, "");
@@ -78,24 +83,30 @@ app.factory('Grid', function($http){
         grid.fields[colIdx].convert = true;
       },
       replaceRow: function(index, data){
+        console.log('replace row fired');
         var newRow = new GridRow(data);
         makeFields(newRow);
         normalize(newRow);
         grid.grid[index] = new GridRow(data);
       },
       getGrid: function(){
+        console.log('getGrid fired');
         return grid.grid;
       },
       getFields: function(){
+        console.log('getFields fired');
         return grid.fields;
       },
       setFieldName: function(idx, name){
+        console.log('setFieldName fired');
         grid.fields[idx].name = name;
       },
       saveGrid: function(){
+        console.log('saveGrid fired');
         return $http.post('/api/pages', grid);
       },
       setUrl: function(url){
+        console.log('setUrl fired');
         grid.url = url;
       }
   };
