@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-  Scraper = require('../../../server/app/utils/scraper');
+  Scraper = require('../../../server/app/utils/scraper_old');
 
 xdescribe('basic functionality', function(){
   this.timeout(20000);

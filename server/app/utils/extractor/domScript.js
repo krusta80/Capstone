@@ -94,7 +94,7 @@ module.exports =
               output.push(obj);
             }
           }
-          innerHTML += element.textContent; 
+          innerHTML += element.textContent;
         } else {
           // no children
           innerHTML += element.textContent;
