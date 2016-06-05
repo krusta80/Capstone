@@ -19,7 +19,6 @@ describe('run job with pre-actions', function(){
       return ScraperElem.find();
     })
     .then(function(scraperElements){
-      scraperElements.forEach(i=>i.selectorIndex = 0);
       return Page.create({
         title: 'test page',
         url: 'http://www.msnbc.com',
