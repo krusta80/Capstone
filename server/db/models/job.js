@@ -39,6 +39,7 @@ var jobSchema = mongoose.Schema({
 function Results(id){
   this.pages = {};
   this.jobId = id;
+  this.pageCount = 1;
 }
 jobSchema.methods.runJob = function(){
   var results = new Results(this._id);
