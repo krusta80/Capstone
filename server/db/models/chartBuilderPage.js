@@ -8,9 +8,9 @@ var chartBuilderPageSchema = mongoose.Schema({
 	yElem: {type: mongoose.Schema.Types.ObjectId, ref: 'ScraperElement'},
 	ySubElem: {type: String},
 	weight: {type: mongoose.Schema.Types.ObjectId, ref: 'ScraperElement'},
-	WeightSubElem: {type: String},
-	Grouping: {type: mongoose.Schema.Types.ObjectId, ref: 'ScraperElement'},
-	GroupingSubElem: {type: String},
+	weightSubElem: {type: String},
+	grouping: {type: mongoose.Schema.Types.ObjectId, ref: 'ScraperElement'},
+	groupingSubElem: {type: String},
 	modifiedDate: {type: Date, default: Date.now},
 	createdDate: {type: Date, default: Date.now}
 });
