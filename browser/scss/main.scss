@@ -15,9 +15,39 @@ body {
 }
 
 #main {
-  padding-top: 60px;
+  padding-top: 15px;
   margin: 0 auto;
 }
+
+.absolute {
+  position: absolute;
+}
+.topleft {
+  top: 0;
+  left: 0;
+}
+.bold {
+  font-weight: 700;
+}
+.underline {
+  text-decoration: underline;
+}
+
+.glyphicon.spinning {
+    animation: spin 1s infinite linear;
+    -webkit-animation: spin2 1s infinite linear;
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg); }
+    to { transform: scale(1) rotate(360deg); }
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
+}
+
 
 @import 'directives/main';
 @import 'home/main';

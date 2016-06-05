@@ -1,52 +1,130 @@
 module.exports =
   function() {
-        $(".elem-highlight").on("click", function(e) {
-          e.preventDefault();
-          var selector = $(this)
-            .parents()
-            .map(function() { return this.tagName; })
-            .get()
-            .reverse()
-            .concat([this.nodeName])
-            .join(">");
+    $(document).ready(function() {
+      // event binders
+      function bindMouseEnterEvent() {
+        $('body').off('mouseenter').on('mouseenter', '*', function(ev) {
+          $('body').find('*').removeClass('__activate');
+          $(this).addClass('__activate');
+          window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+        });
+      }
 
-          var id = $(this).attr("id");
-          if (id) {
-            selector += "#"+ id;
-          }
-
-          var classNames = $(this).attr("class");
-          if (classNames) {
-            selector += "." + $.trim(classNames).replace(/\s/gi, ".");
-          }
-          function makeSubElems(elem){
-          var data = [];
-          var subelems = elem.find('a, span, h2, p, img');
-          subelems.each(function(){
-            var tag = $(this).prop('tagName');
-            if (tag==='A')
-              data.push({type: 'link', data: $(this).attr('href')});
-            else if (tag === 'IMG')
-              data.push({type: 'image', data: $(this).attr('src')});
-            if ($(this).text())
-              data.push({type: 'content', data: $(this).text()});
-            });
-            return data;
-          }
-          var rtn;
-          if (!window.parent.messenger.isMultiple()){
-            var idx = $(selector).index(this);
-            rtn = {selector: selector, data: makeSubElems($(this)), index: idx, multiple: false};
-          }
-          else{
-            var siblings = $(selector);
-            var data = [];
-            siblings.each(function(){
-              data.push(makeSubElems($(this)));
-            });
-            rtn = {selector: selector, data: data, multiple: true};
-          }
-          window.parent.messenger.set(rtn);
-          //alert(selector);
+      bindMouseEnterEvent();
+      $('body').on('mouseleave', '*', function(ev) {
+        bindMouseEnterEvent();
+        $(this).removeClass('__activate');
       });
-    };
+
+      $('body').on('click','*', function(ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        $(this).addClass('__clickActivate');
+        var coordinates = {x: ev.clientX, y: ev.clientY};
+        window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
+      });
+
+      // data stuff
+      // need to map out any given event handler to its current target
+      // extract the contents into a json format...
+      // all attributes will be come a key value pair
+      // all inner elements will become content
+      // send it on hover
+
+      function dataCompiler(element) {
+        var output;
+        var attributes = getAttributes(element);
+        var content = getContent(element);
+        var aggregate = attributes.concat(content);
+        aggregate = dataIndexer(aggregate);
+        var selectorPath = getSelectorPath(element);
+
+        return {
+          selector: selectorPath.selector,
+          elements: aggregate
+        }
+      }
+
+      function dataIndexer(array) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].attr === "content") {
+            break;
+          }
+          array[i]['index'] = i;
+          array[i]['name'] = 'field' + i;
+        }
+        return array;
+      }
+
+      function getAttributes(element) {
+        // this compiles and gets all the attributes on given element
+        var attributes;
+        var output = [];
+        $.each(element.attributes, function( index, attr ) {
+          if (attr.value) {
+            attributes = {};
+            attributes['attr'] = 'attribute';
+            attributes['value'] = attr.value;
+            attributes['attributeName'] = attr.name;
+            output.push(attributes);
+          }
+        });
+        return output;
+      }
+
+      function getContent(element) {
+        // gets the content from the element
+        var content = {};
+        var output = [];
+        var children = $(element).find('*');
+        var innerHTML = "";
+        if (children.length >= 5) {
+          content['content'] = "Too many elements - narrow your search";
+          output.push(content);
+          return output;
+        }
+        if (children.length > 0) {
+          for (var i = 0; i < children.length; i++) {
+            // allow user to choose from each one
+            if (children[i].innerHTML) {
+              var obj = {};
+              obj['value'] = children[i].textContent;
+              obj['attr'] = 'text';
+              output.push(obj);
+            }
+          }
+          innerHTML += element.textContent; 
+        } else {
+          // no children
+          innerHTML += element.textContent;
+        }
+        content = {
+          value: innerHTML,
+          index: -1,
+          attr: 'content'
+        };
+        output.push(content);
+        // content['additionalTargets'] = additionalTargets;
+        return output;
+      }
+
+      function getSelectorPath(element) {
+        var selector = $(element).first().parentsUntil("html").andSelf().map(function(){
+              return this.tagName;
+            }).get().join(">");
+
+        var id = $(element).attr("id");
+        if (id) {
+          selector += "#"+ id;
+        }
+        // TODO : selector index here
+
+        var classNames = $(element).attr("class");
+        if (classNames) {
+          selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+        }
+        return {selector: selector};
+      }
+
+    });
+};

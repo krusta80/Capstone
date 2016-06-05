@@ -1,0 +1,15 @@
+<div class="scraperInfo absolute topleft" ng-show="data">
+  <div class="underline bold">Information</div>
+  <div>
+    <span class="bold">Selector: </span><span>{{scraperSelector}}</span>
+  </div>
+  <div>
+    <span class="bold">Content: </span><span>{{content.value}}</span>
+  </div>
+
+  <div ng-repeat="element in scraperElements">
+    <span class="bold">{{element.attributeName || element.name}}: </span><span>{{element.value}}</span>  
+    
+  </div>
+
+</div>

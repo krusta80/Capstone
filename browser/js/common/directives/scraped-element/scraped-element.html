@@ -1,0 +1,24 @@
+<div ng-show="scrapedElementData.data.length > 0">
+    <div class="container">
+        <div class="btn-group" role="group">
+            <button ng-class="{'btn-warning': getRepeating()}" ng-click="setRepeating()" class="btn btn-success">Repeating</button>
+            <button ng-click="setReset()" class="btn btn-danger">Reset</button>
+            <button class="btn btn-default" ng-click="">Save page</button>
+
+            <span class="text-success" ng-show="saved">Page Saved!</span>
+        </div>
+
+        <hr/>
+
+        <div class="panel" ng-repeat="item in scrapedElementData.data">
+            <select class="form-control scrapedSelect" ng-model="selector" ng-init="selector = item['content']">
+                <option ng-repeat="(key, value) in item" value="{{value}}" ng-if="isSelector(key)">{{key}}</option>
+            </select>
+            <span><span class="bold">value:</span> {{selector}}</span>
+
+            <div class="btn btn-danger pull-right" ng-click="removeItem(item)">Delete</div>
+        </div>
+        
+        </div>
+    </div>
+</div>

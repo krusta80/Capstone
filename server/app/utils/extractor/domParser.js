@@ -3,23 +3,26 @@ var cheerio = require('cheerio'),
 
 var STYLE =
 `<style type="text/css">
-  .elem-highlight:hover{
-    border: solid red !important;
+  .__activate {
+    border: 1px solid red !important;
+  }
+  .__clickActivate {
+    border: 1px solid orange !important;
   }
 </style>`;
 
 
-var SELECTOR =
-`<div class="elem-highlight"></div>`;
+// var SELECTOR =
+// `<div class="elem-highlight"></div>`;
 
 function inject(html){
   var $ = cheerio.load(html);
   //Grab text and image elements
-  var elements = $('span,a, p, h3, img');
-  elements.each(function(elem){
-    if ($(this).text() || $(this).attr('src') || $(this).attr('href') )
-      $(this).wrap(SELECTOR);
-  });
+  // var elements = $('span,a, p, h3, img');
+  // elements.each(function(elem){
+  //   if ($(this).text() || $(this).attr('src') || $(this).attr('href') )
+  //     $(this).wrap(SELECTOR);
+  // });
   //inject css
   $('head').append(STYLE);
   $('body').append('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>');

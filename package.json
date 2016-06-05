@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon --watch server -e js,html server/start.js",
     "postinstall": "gulp build",
-    "test-util": "nodemon --exec mocha tests/server/utils/*.js"
+    "test-util": "nodemon --exec mocha tests/server/utils/*.js",
+    "test-server": "nodemon --exec mocha tests/server/*"
   },
   "engines": {
     "node": ">=4.0.0"
