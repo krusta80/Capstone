@@ -18,12 +18,17 @@ function evaluate(horseman, targetElements){
         var fieldVal = fields[fieldName];
         var elem = document.querySelectorAll(element.domSelector);
         if (!elem.length) return acc;
+        var elemAttrs = elem[element.selectorIndex].attributes;
         var elemVal;
-        var targetElem = elem[element.selectorIndex].getElementsByTagName(fieldVal.type)[fieldVal.index];
-        if (fieldVal.attr === 'text')
-          elemVal = targetElem.innerText;
-        else
-          elemVal = targetElem.getAttribute(fieldVal.attr);
+        if (fieldVal.attr !== 'content' && fieldVal.attr !== 'text'){
+          elemVal = elemAttrs[fieldVal.index].value;
+        }
+        else if (fieldVal.attr === 'text'){
+          elemVal= elem[element.selectorIndex].childNodes[fieldVal.index - elemAttrs.length].textContent;
+        }
+        else if (fieldVal.attr === 'content'){
+          elemVal = elem[element.selectorIndex].textContent;
+        }
         acc[fieldName] = {index: fieldVal.index, value: elemVal};
         return acc;
       }, {});
