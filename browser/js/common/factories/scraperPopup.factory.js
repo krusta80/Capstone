@@ -42,8 +42,8 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
   };
 
   scrapedFieldObj.add = function(rawData) {
-    // var contentObj = _.filter(rawData.elements, 'attr', 'content');
-    var contentObj = rawData.elements[rawData.elements.length-1]
+    // var contentObj = rawData.elements[rawData.elements.length-1]
+    var contentObj = _.filter(rawData.elements, 'attr', 'content');
     if (contentObj === "Too many elements - narrow your search") { return; }
     cachedData['raw'] = rawData;
     cachedData['data'] = scrapedFieldObj.transform(rawData.elements);
@@ -59,7 +59,8 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
     for (var i = 0; i < arrayOfObj.length; i++) {
       if(arrayOfObj[i].attr === 'content') {
         arrayOfObj[i]['selected'] = true;
-        return arrayOfObj;
+      } else {
+        arrayOfObj[i]['selected'] = false;
       }
     }
     return arrayOfObj;

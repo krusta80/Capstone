@@ -6,7 +6,6 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
     transclude: true,
     link: function(scope) {
       scope.popupactivated = false;
-
       scope.addRow = function(obj) {
         ScraperPopupFactory.addRow();
       };
@@ -38,13 +37,15 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
 
         scope.selection = [];
         scope.selectedAttributes = function selectedAttribuets() {
-          return scope.attributes.map(function(attribute) {
+          var output = []
+          scope.attributes.forEach(function(attribute) {
             if (attribute.selected) {
-              return attribute;
+              output.push(attribute);
             }
           });
+          return output;
         };
-        
+        scope.$apply();
       });
 
     }

@@ -63,7 +63,7 @@ module.exports =
         $.each(element.attributes, function( index, attr ) {
           if (attr.value) {
             attributes = {};
-            attributes['attr'] = 'attribute';
+            attributes['attr'] = attr.name;
             attributes['value'] = attr.value;
             attributes['attributeName'] = attr.name;
             output.push(attributes);
