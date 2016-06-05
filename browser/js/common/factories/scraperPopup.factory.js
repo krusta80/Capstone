@@ -23,7 +23,6 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
       domSelector: cachedData.raw.selector,
       fields: JSON.stringify(fieldsObj)
     };
-    console.log('final schema: ', scraperElementSchema);
     return $http.post('/api/scraperelements', scraperElementSchema);
   };
 
@@ -43,8 +42,9 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
   };
 
   scrapedFieldObj.add = function(rawData) {
-    var contentObj = _.filter(rawData.elements, 'attr', 'content');
-    if (contentObj.value === "Too many elements - narrow your search") { return; }
+    // var contentObj = _.filter(rawData.elements, 'attr', 'content');
+    var contentObj = rawData.elements[rawData.elements.length-1]
+    if (contentObj === "Too many elements - narrow your search") { return; }
     cachedData['raw'] = rawData;
     cachedData['data'] = scrapedFieldObj.transform(rawData.elements);
     return cachedData;
@@ -59,22 +59,14 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
     for (var i = 0; i < arrayOfObj.length; i++) {
       if(arrayOfObj[i].attr === 'content') {
         arrayOfObj[i]['selected'] = true;
-      } else {
-        arrayOfObj[i]['selected'] = false;  
+        return arrayOfObj;
       }
     }
     return arrayOfObj;
   }
 
   scrapedFieldObj.getContent = function(arrayOfObj) {
-    for (var i = 0; i < arrayOfObj.length; i++) {
-      if (arrayOfObj[i].content) {
-        return {content: arrayOfObj[i].content};
-      }
-      if (arrayOfObj[i].key === "content") {
-        return arrayOfObj[i];
-      }
-    }
+    return arrayOfObj[arrayOfObj.length-1];
   }
 
   return scrapedFieldObj;

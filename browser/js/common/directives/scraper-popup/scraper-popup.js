@@ -2,6 +2,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
   return {
     restric: 'E',
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
+    scope: {},
     transclude: true,
     link: function(scope) {
       scope.popupactivated = false;
@@ -37,7 +38,11 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
 
         scope.selection = [];
         scope.selectedAttributes = function selectedAttribuets() {
-          return _.filter(scope.attributes, 'selected', true);
+          return scope.attributes.map(function(attribute) {
+            if (attribute.selected) {
+              return attribute;
+            }
+          });
         };
         
       });
