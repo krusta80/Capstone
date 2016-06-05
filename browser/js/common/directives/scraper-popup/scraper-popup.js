@@ -11,16 +11,18 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
       };
 
       scope.getContent = function(arrayOfObj) {
-        console.log('getcontent', arrayOfObj);
         return getContent(arrayOfObj);
       };
 
-      scope.saveData = function(selectedAttribute) {
-        
-      };
-
-      scope.removePopupItem = function() {
-        
+      scope.saveData = function(attributes) {
+        var cachedData = ScraperPopupFactory.get();
+        ScraperPopupFactory.save(attributes, cachedData)
+          .then(function(resp) {
+            if (resp.status === 200) {
+              scope.popupactivated = false;  
+            }
+            
+          })
       };
 
       $rootScope.$on('click', function(evt, data, coordinates){
@@ -28,12 +30,16 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         scope.left = coordinates.x;
         scope.top = coordinates.y;
         ScraperPopupFactory.reset();
-        scope.popupData = ScraperPopupFactory.add(data.elements).data;
-        ScraperPopupFactory.saveToRow(); // default
 
+        scope.popupData = ScraperPopupFactory.add(data).data;
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
-        scope.selectedAttribute = scope.currentContent.value;
-        scope.$apply();
+        scope.attributes = scope.popupData;
+
+        scope.selection = [];
+        scope.selectedAttributes = function selectedAttribuets() {
+          return _.filter(scope.attributes, 'selected', true);
+        };
+        
       });
 
     }

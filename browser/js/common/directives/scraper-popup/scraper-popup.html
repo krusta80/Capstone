@@ -1,13 +1,22 @@
 <div class="absolute scraperPopup" ng-if="popupactivated" ng-style="{ left: left + 'px', top: top + 'px'}">
     <div class="panel">
-          <div class="glyphicon glyphicon-plus"></div>
-          <select ng-model="selectedAttribute">
-              <option ng-repeat="attribute in popupData" value="{{attribute.value}}">{{attribute.key}}</option>
-          </select>
-          <span>{{selectedAttribute}}</span>
-
-          <div class="btn btn-danger pull-right" ng-click="removePopupItem(item)">Delete</div>
-
-        <div class="btn btn-primary" ng-click="saveData(selectedAttribute)">save</div>
+      <h4>Attributes that can be saved</h4>
+      <form>
+          <div ng-repeat="attribute in attributes">
+            <label name="selectedAttributes[]">
+              <div class="checkbox">
+                <input type="checkbox" name="selectedAttributes[]"
+                  value="{{attribute.value}}"
+                  ng-model="attribute.selected">
+              </div>
+              
+              <div class="inline-block">
+                <div>Name: {{attribute.key}}</div>
+                <div>Value: {{attribute.value}}</div>
+              </div>
+            </label>
+          </div>
+          <div class="btn btn-primary" type="submit" ng-click="saveData(selectedAttributes())">save</div>
+      </form>
     </div>
 </div>

@@ -11,15 +11,10 @@ var appSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User',
         required: true
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
-    },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model('App', appSchema);

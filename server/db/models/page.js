@@ -21,15 +21,10 @@ var pageSchema = new mongoose.Schema({
     },
     targetElements: {
         type: [ScraperElement]
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
-    },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
     }
+},
+{
+    timestamps: true
 });
 
 module.exports = mongoose.model('Page', pageSchema);

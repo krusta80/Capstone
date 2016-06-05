@@ -1,22 +1,38 @@
-app.factory('ScraperPopupFactory', function($http){
+app.factory('ScraperPopupFactory', function($http, Messenger){
   var scrapedFieldObj = {};
   var cachedData = {
     data: [],
-    toBeSaved: []
+    raw: null
   };
-  scrapedFieldObj.save = function() {
+  scrapedFieldObj.save = function(savedAttributes, cache) {
+    var fieldsObj = {};
+    savedAttributes.forEach(function(attribute) {
+      
+      fieldsObj[attribute.key] = {
+        attr: attribute.key
+      };
+      var obj;
+      if (attribute.key.includes('target')) {
+        fieldsObj[attribute.key]['index'] = attribute.key[attribute.key.length-1] - 1;
+        fieldsObj[attribute.key]['type'] = 'subelement';
+        console.log('fields obj made!', fieldsObj);
+      }
+    });
 
-  };
+    var scraperElementSchema = {
+      name: 'test',
+      domSelector: cachedData.raw.selector,
+      fields: JSON.stringify(fieldsObj)
+    };
+    console.log('final schema: ', scraperElementSchema);
 
-  scrapedFieldObj.saveToRow = function(index) {
-    // defaults to content
-    index = index || _.findIndex(cachedData.data,'key','content');
-    cachedData.toBeSaved.push(index);
+
+    return $http.post('/api/scraperelements', scraperElementSchema);
   };
 
   scrapedFieldObj.reset = function() {
     cachedData['data'] = [];
-    cachedData['toBeSaved'] = [];
+    cachedData['raw'] = null;
   };
 
   scrapedFieldObj.remove = function(dataObj) {
@@ -29,11 +45,11 @@ app.factory('ScraperPopupFactory', function($http){
     cachedData.data.push(clone);
   };
 
-  scrapedFieldObj.add = function(dataArr) {
-    var contentObj = _.filter(dataArr, 'key', 'content');
+  scrapedFieldObj.add = function(rawData) {
+    var contentObj = _.filter(rawData.elements, 'key', 'content');
     if (contentObj.value === "Too many elements - narrow your search") { return; }
-    cachedData['data'] = scrapedFieldObj.transform(dataArr);
-    console.log('heres the transformed data', cachedData);
+    cachedData['raw'] = rawData;
+    cachedData['data'] = scrapedFieldObj.transform(rawData.elements);
     return cachedData;
   };
 
@@ -49,6 +65,12 @@ app.factory('ScraperPopupFactory', function($http){
       obj = {};
       obj['key'] = Object.keys(arrayOfObj[i])[0];
       obj['value'] = arrayOfObj[i][obj['key']];
+      if(Object.keys(arrayOfObj[i])[0] === 'content') {
+        obj['selected'] = true;
+      } else {
+        obj['selected'] = false;  
+      }
+      
       array.push(obj);
     }
     return array;
