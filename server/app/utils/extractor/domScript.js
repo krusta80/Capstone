@@ -63,7 +63,7 @@ module.exports =
         $.each(element.attributes, function( index, attr ) {
           if (attr.value) {
             attributes = {};
-            attributes['attr'] = 'attribute';
+            attributes['attr'] = attr.name;
             attributes['value'] = attr.value;
             attributes['attributeName'] = attr.name;
             output.push(attributes);
@@ -93,7 +93,7 @@ module.exports =
               output.push(obj);
             }
           }
-          innerHTML += element.textContent; 
+          innerHTML += element.textContent;
         } else {
           // no children
           innerHTML += element.textContent;
