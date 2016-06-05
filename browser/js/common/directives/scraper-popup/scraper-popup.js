@@ -2,10 +2,10 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
   return {
     restric: 'E',
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
+    scope: {},
     transclude: true,
     link: function(scope) {
       scope.popupactivated = false;
-
       scope.addRow = function(obj) {
         ScraperPopupFactory.addRow();
       };
@@ -26,6 +26,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
       };
 
       $rootScope.$on('click', function(evt, data, coordinates){
+        console.log("data on click:", data);
         scope.popupactivated = true;
         scope.left = coordinates.x;
         scope.top = coordinates.y;
@@ -37,9 +38,15 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
 
         scope.selection = [];
         scope.selectedAttributes = function selectedAttribuets() {
-          return _.filter(scope.attributes, 'selected', true);
+          var output = []
+          scope.attributes.forEach(function(attribute) {
+            if (attribute.selected) {
+              output.push(attribute);
+            }
+          });
+          return output;
         };
-        
+        scope.$apply();
       });
 
     }

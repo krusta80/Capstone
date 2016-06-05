@@ -49,6 +49,7 @@ router.post('/:id/run', function(req,res,next){
 });
 
 router.post('/', ensureAuthenticated, function (req, res) {
+    req.body.user = req.user;
     Job.create(req.body)
     .then(function(job) {
         res.send(job);
