@@ -21,7 +21,8 @@ module.exports =
         ev.preventDefault();
         ev.stopPropagation();
         $(this).addClass('__clickActivate');
-        window.parent.messenger.click(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+        var coordinates = {x: ev.clientX, y: ev.clientY};
+        window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
       });
 
       // data stuff

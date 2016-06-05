@@ -5,9 +5,10 @@ app.factory('Messenger', function($rootScope){
       hoverValue = val;
       $rootScope.$broadcast('hover', hoverValue);
     },
-    click: function(val) {
+    click: function(val, coordinates) {
       clickValue = val;
-      $rootScope.$broadcast('extract',clickValue);
+      console.log('here is the click ');
+      $rootScope.$broadcast('click',clickValue,coordinates);
     },
     get: function(){
       if (clickValue)
