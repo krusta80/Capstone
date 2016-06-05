@@ -10,9 +10,9 @@ var chartBuilderSchema = new mongoose.Schema({
 	job: {mongoose.Schema.Types.ObjectId, ref: 'Job', required: true},
 	pages: {type: [Page], required: true},
 	chartType: {type: String, enum: chartTypes},
-	historical: {type: boolean, default: false},
-	createdDate: {type: date, default: Date.now},
-	modifiedDate: {type: date, default: Date.now}
+	historical: {type: Boolean, default: false},
+	createdDate: {type: Date, default: Date.now},
+	modifiedDate: {type: Date, default: Date.now}
 });
 
 module.exports = mongoose.model('ChartBuilder', chartBuilderSchema)
