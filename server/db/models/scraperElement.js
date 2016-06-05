@@ -22,15 +22,10 @@ var scraperElementSchema = new mongoose.Schema({
     },
     lastScrapedTS: {
         type: Date
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
-    },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
     }
+},
+{
+timestamps: true
 });
 
 module.exports = mongoose.model('ScraperElement', scraperElementSchema);

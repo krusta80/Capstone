@@ -1,19 +1,19 @@
 app.factory('Messenger', function($rootScope){
-  var msg, repeating = false;
+  var hoverValue, clickValue, repeating = false;
   return {
-    set: function(val){
-      msg = val;
+    hover: function(val){
+      hoverValue = val;
+      $rootScope.$broadcast('hover', hoverValue);
+    },
+    click: function(val, coordinates) {
+      clickValue = val;
+      $rootScope.$broadcast('click',clickValue,coordinates);
     },
     get: function(){
-      if (msg)
-        return msg;
+      if (clickValue)
+        console.log("clickValue", clickValue);
+        return clickValue;
       return;
-    },
-    isMultiple: function(){
-      return repeating;
-    },
-    setMultiple: function(){
-      repeating = !repeating;
     }
   };
 });

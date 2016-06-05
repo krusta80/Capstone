@@ -30,20 +30,16 @@ var jobSchema = mongoose.Schema({
   },
   lastRun: {
   	type: Date
-  },
-	createdDate: {
-    type: Date,
-    default: Date.now
-  },
-  modifiedDate: {
-    type: Date,
-    default: Date.now
   }
+},
+{
+  timestamps: true
 });
 
 function Results(id){
   this.pages = {};
   this.jobId = id;
+  this.pageCount = 1;
 }
 jobSchema.methods.runJob = function(){
   var results = new Results(this._id);

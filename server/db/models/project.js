@@ -14,15 +14,10 @@ var projectSchema = mongoose.Schema({
   		type: mongoose.Schema.Types.ObjectId, 
   		ref: 'User'
   	},
-  	jobs: [Job],
-  	createdDate: {
-        type: Date,
-        default: Date.now
-    },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
-    }
+  	jobs: [Job]
+},
+{
+  timestamps: true
 });
 
 module.exports = mongoose.model('Project', projectSchema);
