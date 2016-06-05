@@ -84,7 +84,7 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
 
     $scope.loadJob = function(job) {
         $scope.activeJob = job;
-        console.log("active job is", job);
+        //console.log("active job is", job);
         $state.go('projects.job', {id: job._id});
     };
 
@@ -138,20 +138,20 @@ app.controller('JobCtrl', function(job, ProjectFactory, JobFactory, PageFactory,
             $scope.pages[$scope.selectedPage].enumString = $scope.pages[$scope.selectedPage].enum.join(",");
     };
 
-    $scope.savePage = function() {
+    $scope.saveJob = function() {
         if($scope.pageForm.$pristine)
             return;
-        if($scope.pages[$scope.selectedPage]._id)
-            PageFactory.update($scope.pages[$scope.selectedPage])
-            .then(function(page) {
-                $scope.pages[$scope.selectedPage] = page;
+        if($scope.job._id)
+            JobFactory.update($scope.job)
+            .then(function(job) {
+                $scope.job = job;
                 $scope.pageForm.$setPristine();
                 $scope.reportSuccess();
             })
         else
-            PageFactory.create($scope.pages[$scope.selectedPage])
-            .then(function(page) {
-                $scope.pages[$scope.selectedPage] = page;
+            JobFactory.create($scope.job)
+            .then(function(job) {
+                $scope.job = job;
                 $scope.pageForm.$setPristine();
                 $scope.reportSuccess();
             })
