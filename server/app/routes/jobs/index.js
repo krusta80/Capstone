@@ -59,7 +59,7 @@ router.post('/', ensureAuthenticated, function (req, res) {
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Job.findById(req.params.id)
     .then(function(job) {
-        Object.keys(job).forEach(function(property) {
+        Object.keys(Job.schema.paths).forEach(function(property) {
             if(req.body[property])
                 job[property] = req.body[property];
         })

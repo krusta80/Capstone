@@ -27,28 +27,38 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
     $scope.fromChild = false;
 
     $scope.loadProject = function() {
-        if($scope.selectedProject)
-            JobFactory.fetchByProjectId($scope.selectedProject._id)
-            .then(function(jobs) {
-                $scope.jobs = jobs;
-                if(!$scope.jobs.length) {
-                    $scope.activeJob = undefined;
-                    $state.go('projects');
-                }
-                else {
-                    if($scope.fromChild)
-                        $scope.loadJob($scope.activeJob);
-                    else
-                        $scope.loadJob(jobs[0]);
-                    $scope.fromChild = false;
-                }
-            })
+        if($scope.selectedProject) {
+            $scope.jobs = $scope.selectedProject.jobs;
+            if(!$scope.jobs.length) {
+                $scope.activeJob = undefined;
+                $state.go('projects');
+            }
+            else {
+                if($scope.fromChild)
+                    $scope.loadJob($scope.activeJob);
+                else
+                    $scope.loadJob(jobs[0]);
+                $scope.fromChild = false;
+            }    
+        }
         else {
             $scope.jobs = [];
             $scope.activeJob = -1;
             $state.go('projects');
         }  
     };
+
+    $scope.saveProject = function(job) {
+        $scope.selectedProject.jobs[$scope.jobIndex] = job;
+        return ProjectFactory.update($scope.selectedProject)
+        .then(function(project) {
+            $scope.selectedProject = project;
+            $scope.loadJobs(project);
+            $scope.activeJob = $scope.jobs[$scope.jobIndex];
+            return $scope.activeJob;
+        })
+        //console.log("saving project", $scope.selectedProject);
+    }
 
     $scope.loadJobs = function(project) {
          return JobFactory.fetchByProjectId(project._id)
@@ -139,22 +149,13 @@ app.controller('JobCtrl', function(job, ProjectFactory, JobFactory, PageFactory,
     };
 
     $scope.saveJob = function() {
-        if($scope.pageForm.$pristine)
-            return;
-        if($scope.job._id)
-            JobFactory.update($scope.job)
-            .then(function(job) {
-                $scope.job = job;
-                $scope.pageForm.$setPristine();
-                $scope.reportSuccess();
-            })
-        else
-            JobFactory.create($scope.job)
-            .then(function(job) {
-                $scope.job = job;
-                $scope.pageForm.$setPristine();
-                $scope.reportSuccess();
-            })
+        console.log("job to be saved is", $scope.job);
+        $scope.saveProject($scope.job)
+        .then(function(savedJob) {
+            console.log("saved job is", savedJob);
+            job = savedJob;
+            $scope.job = job;
+        });
     };
 
     $scope.removePage = function() {
