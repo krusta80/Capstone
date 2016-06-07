@@ -14,7 +14,7 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 router.get('/', ensureAuthenticated, function (req, res) {
-    Project.find({User: req.user._id})
+    Project.find({user: req.user._id})
     .then(function(projects) {
         res.send(projects);
     })
@@ -32,6 +32,7 @@ router.get('/:id', ensureAuthenticated, function (req, res) {
 });
 
 router.post('/', ensureAuthenticated, function (req, res) {
+    req.body.user = req.user;
     Project.create(req.body)
     .then(function(project) {
         res.send(project);
@@ -40,12 +41,12 @@ router.post('/', ensureAuthenticated, function (req, res) {
 
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Project.findById(req.params.id)
-    .then(function(project) {
-        Object.keys(project).forEach(function(property) {
+    .then(function(fetchedProject) {
+        Object.keys(Project.schema.paths).forEach(function(property) {
             if(req.body[property])
-                project[property] = req.body[property];
+                fetchedProject[property] = req.body[property];
         })
-        return project.save();
+        return fetchedProject.save();
     })
     .then(function(project) {
         res.send(project);

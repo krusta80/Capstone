@@ -1,20 +1,22 @@
-<div class="scraperPopup absolute topleft" ng-show="data">
-  <div class="underline bold">Information</div>
-  <div>
-    <span class="bold">Selector: </span><span>{{data.selector|truncate:25}}</span>
-  </div>
-  <div>
-    <span class="bold">Content: </span><span>{{data.content}}</span>
-  </div>
-
-  <div ng-repeat="(key, val) in data.attributes">
-    <span class="bold">{{key}}: </span><span>{{val}}</span>
-  </div>
-
-  <div class="bold underline" ng-show="data.additionalTargets">Additional Targets</div>
-  <div ng-repeat="targetObj in data.additionalTargets">
-    <div ng-repeat="(key, value) in targetObj">
-      <span class="bold">{{key}}: </span><span>{{value}}</span>  
+<div class="absolute scraperPopup" ng-if="popupactivated" ng-style="{ left: left + 'px', top: top + 'px'}">
+    <div class="panel">
+      <h4>Attributes that can be saved</h4>
+      <form>
+          <div ng-repeat="attribute in attributes">
+            <label name="selectedAttributes[]">
+              <div class="checkbox">
+                <input type="checkbox" name="selectedAttributes[]"
+                  value="{{attribute.value}}"
+                  ng-model="attribute.selected">
+              </div>
+              
+              <div class="inline-block">
+                <div>Name: {{attribute.attributeName || attribute.attr}}</div>
+                <div>Value: {{attribute.value}}</div>
+              </div>
+            </label>
+          </div>
+          <div class="btn btn-primary" type="submit" ng-click="saveData(selectedAttributes())">save</div>
+      </form>
     </div>
-  </div>
 </div>

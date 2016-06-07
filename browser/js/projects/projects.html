@@ -1,0 +1,73 @@
+<div class="container">
+	<div class="pull-right">
+		<select ng-change="loadProject()" ng-model="selectedProject" ng-options="project.title for project in projects track by project._id">
+			<option value="">-- choose an project --</option>
+		</select>
+		<a ng-show="selectedProject" style="margin-left: 10px" href="#" ng-click="editProject()">
+	    	<span class="glyphicon glyphicon-pencil"></span>
+	    </a>
+	    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
+	    	<span class="glyphicon glyphicon-plus"></span>
+	    </a>
+	</div>
+    <div style="margin-top: 15px">
+    	<ul class="nav nav-tabs" ng-show="selectedProject">
+		  <li ng-class="{active: activeJob._id === job._id}" ng-repeat="job in jobs"><a href="#" ng-click="loadJob(job)">{{job.title}}</a></li>
+		  <li ng-class="{active: !activeJob || activeJob._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></li>
+		</ul>
+    
+		<ui-view>
+			<h4 align=center ng-show="selectedProject">Select a job from the tabs above (or click the + to add new).</h4>
+		</ui-view>
+    </div>
+
+	<!-- Project Modal -->
+	  <div class="modal fade" id="projectModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Add Project</h4>
+	        </div>
+	        <div class="modal-body">
+	          <div class="form-group">
+		        <label for="projectName">Project Name</label>
+		        <input type="text" ng-model="projectTitle" class="form-control" id="projectTitle" placeholder="Enter new project title">
+		      </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addProject()">Submit</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+	<!-- Job Modal -->
+	  <div class="modal fade" id="jobModal" role="dialog">
+	    <div class="modal-dialog modal-sm">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal">&times;</button>
+	          <h4 class="modal-title">Add Job</h4>
+	        </div>
+	        <div class="modal-body">
+	          <div class="form-group">
+		        <label for="jobTitle">Job Title</label>
+		        <input type="text" ng-model="jobTitle" class="form-control" id="jobTitle" placeholder="Enter new job title">
+		      </div>
+	        </div>
+	        <div class="modal-footer">
+	          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+	          <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addJob()">Submit</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+
+</div>
+
+
+
+
+

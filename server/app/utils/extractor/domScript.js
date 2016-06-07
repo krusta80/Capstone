@@ -7,7 +7,6 @@ module.exports =
           $('body').find('*').removeClass('__activate');
           $(this).addClass('__activate');
           window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
-          
         });
       }
 
@@ -21,7 +20,8 @@ module.exports =
         ev.preventDefault();
         ev.stopPropagation();
         $(this).addClass('__clickActivate');
-        window.parent.messenger.click(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+        var coordinates = {x: ev.clientX, y: ev.clientY};
+        window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
       });
 
       // data stuff
@@ -32,53 +32,81 @@ module.exports =
       // send it on hover
 
       function dataCompiler(element) {
-        var obj = {};
-        obj['attributes'] = getAttributes(element);
-        $.extend(obj, getContent(element), getSelectorPath(element));
-        
-        return obj;
+        var output;
+        var attributes = getAttributes(element);
+        var content = getContent(element);
+        var aggregate = attributes.concat(content);
+        aggregate = dataIndexer(aggregate);
+        var selectorPath = getSelectorPath(element);
+
+        return {
+          selector: selectorPath.selector,
+          selectorIndex: selectorPath.selectorIndex,
+          elements: aggregate
+        }
+      }
+
+      function dataIndexer(array) {
+        for (var i = 0; i < array.length; i++) {
+          if (array[i].attr === "content") {
+            break;
+          }
+          array[i]['index'] = i;
+          array[i]['name'] = 'field' + i;
+        }
+        return array;
       }
 
       function getAttributes(element) {
         // this compiles and gets all the attributes on given element
-        var attributes = {};
+        var attributes;
+        var output = [];
         $.each(element.attributes, function( index, attr ) {
           if (attr.value) {
-            attributes[attr.name] = attr.value;
+            attributes = {};
+            attributes['attr'] = attr.name;
+            attributes['value'] = attr.value;
+            attributes['attributeName'] = attr.name;
+            output.push(attributes);
           }
         });
-        return attributes;
+        return output;
       }
 
       function getContent(element) {
         // gets the content from the element
         var content = {};
-        var additionalTargets = [];
+        var output = [];
         var children = $(element).find('*');
         var innerHTML = "";
         if (children.length >= 5) {
           content['content'] = "Too many elements - narrow your search";
-          return content;
+          output.push(content);
+          return output;
         }
         if (children.length > 0) {
           for (var i = 0; i < children.length; i++) {
             // allow user to choose from each one
             if (children[i].innerHTML) {
-              var target = 'target' + (i+1);
               var obj = {};
-              obj[target] = children[i].textContent;
-              additionalTargets.push(obj);  
-              
+              obj['value'] = children[i].textContent;
+              obj['attr'] = 'text';
+              output.push(obj);
             }
           }
-          innerHTML += element.textContent; 
+          innerHTML += element.textContent;
         } else {
           // no children
           innerHTML += element.textContent;
         }
-        content['content'] = innerHTML;
-        content['additionalTargets'] = additionalTargets;
-        return content;
+        content = {
+          value: innerHTML,
+          index: -1,
+          attr: 'content'
+        };
+        output.push(content);
+        // content['additionalTargets'] = additionalTargets;
+        return output;
       }
 
       function getSelectorPath(element) {
@@ -86,16 +114,21 @@ module.exports =
               return this.tagName;
             }).get().join(">");
 
-        var id = $(element).attr("id");
-        if (id) {
-          selector += "#"+ id;
-        }
 
-        var classNames = $(element).attr("class");
-        if (classNames) {
-          selector += "." + $.trim(classNames).replace(/\s/gi, ".");
-        }
-        return {selector: selector};
+
+        // var id = $(element).attr("id");
+        // if (id) {
+        //   selector += "#"+ id;
+        // }
+        // // TODO : selector index here
+
+
+
+        // var classNames = $(element).attr("class");
+        // if (classNames) {
+        //   selector += "." + $.trim(classNames).replace(/\s/gi, ".");
+        // }
+        return {selector: selector, selectorIndex: $(selector).index(element)};
       }
 
     });

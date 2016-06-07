@@ -10,15 +10,10 @@ var schemaSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'App',
         required: true
-    },
-    createdDate: {
-        type: Date,
-        default: Date.now
-    },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
     }
+},
+{
+    timestamps: true
 });
 
 mongoose.model('Schema', schemaSchema);

@@ -4,7 +4,7 @@ var ScraperElement = mongoose.model('ScraperElement').schema;
 
 var pageSchema = new mongoose.Schema({
     title: {
-        type: String, 
+        type: String,
         required: true
     },
     description: {
@@ -17,20 +17,26 @@ var pageSchema = new mongoose.Schema({
     active: {
         type: Boolean,
         required: true,
-        default: false 
+        default: false
     },
     targetElements: {
         type: [ScraperElement]
     },
-    createdDate: {
-        type: Date,
-        default: Date.now
+    actions: String,
+    paginate:{
+      type:Boolean,
+      default: false
     },
-    modifiedDate: {
-        type: Date,
-        default: Date.now
+    paginateSelector: String,
+    maxPages: {
+      type: Number,
+      default: 1
     }
-});
+},
+{
+    timestamps: true
+}
+);
 
 module.exports = mongoose.model('Page', pageSchema);
 
