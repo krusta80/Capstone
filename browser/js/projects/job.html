@@ -6,85 +6,94 @@
     	<span class="glyphicon glyphicon-plus"></span>
     </a>
 	<div style="margin-top: 5px; max-height:500px;overflow-y:scroll" class="list-group">
-		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.name }}</a>
+		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.title }}</a>
 	</div>
 </div>
-<div class="col-md-8" ng-show="pages.length === 0">
-	<h4 style="margin-left: 50px">You have not yet defined any pages for this job.</h4>
-</div>
-<div class="col-md-8" ng-show="pages.length > 0">
+
+<div class="col-md-8">
 	<form class="form-horizontal" name="pageForm">
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Page</label>
-	    <div class="col-sm-10">
-	      <input type="input" class="form-control" placeholder="Enter Page Name" ng-model="pages[selectedPage].name">
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Type</label>
-	    <div class="col-sm-10">
-	      <select class="form-control" ng-options="type for type in types" ng-model="pages[selectedPage].type"></select>
-	    </div>
-	  </div>
-	  <div class="form-group" ng-show="pages[selectedPage].type === 'Number'">
-	    <label class="col-sm-2 control-label">Min</label>
-	    <div class="col-sm-7">
-	      <input type="input" class="form-control" ng-disabled="!minSwitch" ng-model="pages[selectedPage].min">
-	    </div>
-	    <div class="col-sm-3">
-	      <toggle-switch style="margin-top: 3px;" ng-model="minSwitch" class="switch-small"></toggle-switch>
-	    </div>
-	  </div>
-	  <div class="form-group" ng-show="pages[selectedPage].type === 'Number'">
-	    <label class="col-sm-2 control-label">Max</label>
-	    <div class="col-sm-7">
-	      <input type="input" class="form-control" ng-disabled="!maxSwitch" ng-model="pages[selectedPage].max">
-	    </div>
-	    <div class="col-sm-3">
-	      <toggle-switch style="margin-top: 3px;" ng-model="maxSwitch" class="switch-small"></toggle-switch>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Default</label>
-	    <div class="col-sm-7">
-	      <input type="input" class="form-control" ng-disabled="!defaultSwitch" ng-model="pages[selectedPage].default">
-	    </div>
-	    <div class="col-sm-3">
-	      <toggle-switch style="margin-top: 3px;" ng-model="defaultSwitch" class="switch-small"></toggle-switch>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Enum</label>
-	    <div class="col-sm-7">
-	      <input type="input" class="form-control" ng-disabled="!enumSwitch" ng-model="pages[selectedPage].enumString">
-	    </div>
-	    <div class="col-sm-3">
-	      <toggle-switch style="margin-top: 3px;" ng-model="enumSwitch" class="switch-small"></toggle-switch>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Options</label>
-	    <div class="col-xs-7" style="margin-left: 15px; padding-left: 25px;">
-	       <label class="checkbox"><input type="checkbox" ng-model="pages[selectedPage].required">Required</label>
-	       <label class="checkbox"><input type="checkbox" ng-model="pages[selectedPage].unique">Unique</label>
-	       <label class="checkbox"><input type="checkbox" ng-model="pages[selectedPage].select">Select</label>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label">Index</label>
-	    <div class="col-xs-7" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px">
-	       <label class="checkbox"><input type="checkbox" ng-disabled="pages[selectedPage].sparse" ng-model="pages[selectedPage].index">Full Index</label>
-	       <label class="checkbox"><input type="checkbox" ng-disabled="pages[selectedPage].index" ng-model="pages[selectedPage].sparse">Sparse Index</label>
-	    </div>
-	  </div>
-	  <div class="form-group">
-	    <div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px">
-	       <button ng-click="savePage()" class="btn btn-default">Submit</button>
-	       <button ng-click="removePage()" class="btn btn-danger">Delete</button>
-	       <alert type="success" ng-show="success">
-        		Page successfully saved!
-    	   </alert>
-	    </div>
-	  </div>
+	<h4 style="margin-left: 50px">Job Details</h4>
+	<div style="margin-left: 50px">
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Job Title</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter job title..." ng-model="job.title">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Description</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter job description..." ng-model="job.description">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Active Job</label>
+		    <div class="col-sm-3">
+		      <toggle-switch style="margin-top: 3px;" ng-model="job.active" class="switch-small"></toggle-switch>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Frequency</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter number of minutes between runs..." ng-model="job.frequency">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Last Run</label>
+		    <div class="col-sm-7">
+		      <input type="input" class="form-control" disabled ng-model="job.lastRun">
+		    </div>
+		  </div>
+	</div>
+	<hr>
+	<div ng-show="pages.length === 0">
+		<h4 style="margin-left: 50px">You have not yet defined any pages for this job.</h4>
+	</div>
+	<div style="margin-left: 50px" ng-show="pages.length > 0">
+		<h4>Page Details</h4>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Page Title</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter Page Name" ng-model="pages[selectedPage].title">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Description</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter Page Description" ng-model="pages[selectedPage].description">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">URL</label>
+		    <div class="col-sm-10">
+		      <input type="input" class="form-control" placeholder="Enter URL" ng-model="pages[selectedPage].url">
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <label class="col-sm-2 control-label">Active Page</label>
+		    <div class="col-sm-3">
+		      <toggle-switch style="margin-top: 3px;" ng-model="pages[selectedPage].active" class="switch-small"></toggle-switch>
+		    </div>
+		  </div>
+		  <div class="form-group">
+		    <div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 0">
+		       <button ng-click="viewPage()" class="btn btn-primary">View Page</button>
+		    </div>
+		  </div>
+	</div>
+	<div>
+		<hr>
+		  <div class="form-group">
+		    <div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px">
+		       <button ng-click="saveJob()" class="btn btn-success">Save Job</button>
+		       <button ng-click="removeJob()" class="btn btn-danger">Delete Job</button>
+		       <button ng-click="runJob()" ng-disabled="!job.active" class="btn btn-primary">Run Job</button>
+		       <alert type="success" ng-show="success">
+	        		Job successfully saved!
+	    	   </alert>
+		    </div>
+		  </div>
+	</div>
 	</form>
 </div>
+

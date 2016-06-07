@@ -10,16 +10,8 @@
 	    	<span class="glyphicon glyphicon-plus"></span>
 	    </a>
 	</div>
-    <div style="margin-top: 15px">
-    	<ul class="nav nav-tabs" ng-show="selectedProject">
-		  <li ng-class="{active: activeJob._id === job._id}" ng-repeat="job in jobs"><a href="#" ng-click="loadJob(job)">{{job.title}}</a></li>
-		  <li ng-class="{active: !activeJob || activeJob._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></li>
-		</ul>
-    
-		<ui-view>
-			<h4 align=center ng-show="selectedProject">Select a job from the tabs above (or click the + to add new).</h4>
-		</ui-view>
-    </div>
+    <ui-view></ui-view>
+	    
 
 	<!-- Project Modal -->
 	  <div class="modal fade" id="projectModal" role="dialog">

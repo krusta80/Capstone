@@ -43,7 +43,7 @@ router.put('/:id', ensureAuthenticated, function (req, res) {
     Project.findById(req.params.id)
     .then(function(fetchedProject) {
         Object.keys(Project.schema.paths).forEach(function(property) {
-            if(req.body[property])
+            if(req.body[property] !== undefined)
                 fetchedProject[property] = req.body[property];
         })
         return fetchedProject.save();

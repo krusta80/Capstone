@@ -19,12 +19,19 @@ app.factory('JobFactory', function ($http) {
     		.then(parseData)
     	},
     	update: function(job) {
-    		return $http.put('/api/jobs/' + job._id, job)
+            return $http.put('/api/jobs/' + job._id, job)
     		.then(parseData)
     	},
     	remove: function(id) {
     		return $http.delete('/api/jobs/' + id)
     		.then(parseData)
-    	}
+    	},
+        findJobIndex: function(jobs, id) {
+            for(var i = 0; i < jobs.length; i++) {
+                if(jobs[i]._id === id)
+                    return i;
+            }
+            return -1;
+        }
     }
 });

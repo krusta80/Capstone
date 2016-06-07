@@ -14,7 +14,7 @@ var ensureAuthenticated = function (req, res, next) {
 };
 
 router.get('/byJob/:jobId', ensureAuthenticated, function (req, res) {
-    Page.find({Job: req.params.jobId})
+    Page.find({job: req.params.jobId})
     .then(function(pages) {
         res.send(pages);
     });
@@ -37,8 +37,8 @@ router.post('/', ensureAuthenticated, function (req, res) {
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Page.findById(req.params.id)
     .then(function(page) {
-        Object.keys(page).forEach(function(property) {
-            if(req.body[property])
+        Object.keys(Page.schema.paths).forEach(function(property) {
+            if(req.body[property] !== undefined)
                 page[property] = req.body[property];
         })
         return page.save();

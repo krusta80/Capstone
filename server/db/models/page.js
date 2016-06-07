@@ -10,6 +10,10 @@ var pageSchema = new mongoose.Schema({
     description: {
         type: String
     },
+    job: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Job'
+    },
     url: {
         type: String,
         required: true
