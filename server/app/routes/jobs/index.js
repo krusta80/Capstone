@@ -60,7 +60,7 @@ router.put('/:id', ensureAuthenticated, function (req, res) {
     Job.findById(req.params.id)
     .then(function(job) {
         Object.keys(Job.schema.paths).forEach(function(property) {
-            if(req.body[property])
+            if(req.body[property] !== undefined)
                 job[property] = req.body[property];
         })
         return job.save();

@@ -6,7 +6,7 @@
     	<span class="glyphicon glyphicon-plus"></span>
     </a>
 	<div style="margin-top: 5px; max-height:500px;overflow-y:scroll" class="list-group">
-		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.name }}</a>
+		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.title }}</a>
 	</div>
 </div>
 
