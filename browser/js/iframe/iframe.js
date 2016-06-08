@@ -13,14 +13,12 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page, ScraperPopupFactory) {
     $scope.loaded = false;
     $scope.loading = false;
     $scope.url ='http://msnbc.com';
     $scope.saved = false;
 
-
-    debugger; 
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
@@ -60,4 +58,10 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                 console.log('there was an error');
             });
     };
+
+    if (page) {
+        $scope.url = page.url;
+        ScraperPopupFactory.setPage(page);
+        $scope.searchthis($scope.url);
+    }
 });

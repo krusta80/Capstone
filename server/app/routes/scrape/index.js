@@ -79,9 +79,12 @@ router.get('/proxy', function(req, res, next) {
   request(newurl, function(error, response, html) {
     if (error) { next(error); }
 
+    console.log("proxy url");
+
     // prepends the the sources to have the base url
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
     html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
 
@@ -105,6 +108,9 @@ router.post('/proxy', function(req, res, next) {
     html = parseDOM(html);
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/src="\/?([A-Ga-gI-Zi-z])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/href="\/?([A-Ga-gI-Zi-z])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
     html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
     res.send(html);
