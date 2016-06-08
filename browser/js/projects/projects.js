@@ -178,8 +178,8 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
         }
     };
 
-    $scope.viewPage = function(page) {
-        $state.go('iframe', {pageid: page._id});
+    $scope.viewPage = function() {
+        $state.go('iframe', {pageid: $scope.pages[$scope.selectedPage]._id});
     }
 
     $scope.reportSuccess = function() {
