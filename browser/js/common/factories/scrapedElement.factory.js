@@ -1,4 +1,4 @@
-app.factory('ScraperElementFactory', function($http){
+app.factory('ScraperElementFactory', function($http, PageFactory){
   var scrapedFieldObj = {};
   var cachedData = {
     data: [],

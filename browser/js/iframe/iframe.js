@@ -13,7 +13,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page, ScraperPopupFactory) {
     $scope.loaded = false;
     $scope.loading = false;
     $scope.url ='http://msnbc.com';
@@ -61,6 +61,7 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
 
     if (page) {
         $scope.url = page.url;
+        ScraperPopupFactory.setPage(page);
         $scope.searchthis($scope.url);
     }
 });

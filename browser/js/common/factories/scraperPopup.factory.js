@@ -1,8 +1,12 @@
-app.factory('ScraperPopupFactory', function($http, Messenger){
+app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
   var scrapedFieldObj = {};
+  var pageObj;
   var cachedData = {
     data: [],
     raw: null
+  };
+  scrapedFieldObj.setPage = function(page) {
+    pageObj = page;
   };
   scrapedFieldObj.save = function(savedAttributes, cache) {
     var fieldsObj = {};
@@ -25,7 +29,10 @@ app.factory('ScraperPopupFactory', function($http, Messenger){
       fields: JSON.stringify(fieldsObj)
     };
     console.log("toPost:",scraperElementSchema);
-    return $http.post('/api/scraperelements', scraperElementSchema);
+    console.log('this is the page', pageObj);
+    pageObj.targetElements.push(scraperElementSchema);
+    return PageFactory.update(pageObj);
+    // return $http.post('/api/scraperelements', scraperElementSchema);
   };
 
   scrapedFieldObj.reset = function() {
