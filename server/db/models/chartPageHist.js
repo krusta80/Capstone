@@ -1,35 +1,35 @@
 'use strict';
 var mongoose = require('mongoose');
 
-var chartBuilderPageSchema = mongoose.Schema({
+var chartPageHistSchema = mongoose.Schema({
 	page: {
 		type: mongoose.Schema.Types.ObjectId, 
 		ref: 'Page'
 	},
 	xElem: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'ScraperElement'
+		ref: 'ScraperElementHist'
 	},
 	xSubElem: {
 		type: String
 	},
 	yElem: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'ScraperElement'
+		ref: 'ScraperElementHist'
 	},
 	ySubElem: {
 		type: String
 	},
 	weight: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'ScraperElement'
+		ref: 'ScraperElementHist'
 	},
-	weightSubElem: {
+	WeightSubElem: {
 		type: String
 	},
 	grouping: {
 		type: mongoose.Schema.Types.ObjectId, 
-		ref: 'ScraperElement'
+		ref: 'ScraperElementHist'
 	},
 	groupingSubElem: {
 		type: String
@@ -44,4 +44,4 @@ var chartBuilderPageSchema = mongoose.Schema({
 	}
 });
 
-mongoose.exports = mongoose.model('ChartBuilderPage', chartBuilderPageSchema);
+mongoose.exports = mongoose.model('ChartPageHist', chartPageHistSchema);
