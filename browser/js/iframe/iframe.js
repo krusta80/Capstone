@@ -1,19 +1,26 @@
 app.config(function ($stateProvider) {
 
     $stateProvider.state('iframe', {
-        url: '/iframe',
+        url: '/iframe/:pageid',
         templateUrl: 'js/iframe/iframe.html',
-        controller: 'IframeCtrl'
+        controller: 'IframeCtrl',
+        resolve: {
+            page: function($stateParams, PageFactory) {
+                return PageFactory.fetchById($stateParams.pageid)
+            }
+        }
     });
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page) {
     $scope.loaded = false;
     $scope.loading = false;
     $scope.url ='http://msnbc.com';
     $scope.saved = false;
 
+
+    debugger; 
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
