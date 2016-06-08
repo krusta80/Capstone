@@ -39,6 +39,18 @@ router.post('/', ensureAuthenticated, function (req, res) {
     });
 });
 
+router.post('/:projectId/job/:jobIndex/run', function(req,res,next){
+  Project.findById(req.params.projectId).populate({
+    path: 'jobs.pages'
+   })
+  .then(function(project){
+    return project.jobs[req.params.jobIndex].runJob();
+  })
+  .then(function(result){
+    res.json(result);
+  },next);
+});
+
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Project.findById(req.params.id)
     .then(function(fetchedProject) {

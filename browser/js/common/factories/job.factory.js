@@ -26,6 +26,10 @@ app.factory('JobFactory', function ($http) {
     		return $http.delete('/api/jobs/' + id)
     		.then(parseData)
     	},
+        runJob: function(projectId, jobIndex) {
+            return $http.post('/api/projects/' + projectId + '/job/' + jobIndex + '/run')
+            .then(parseData)
+        },
         findJobIndex: function(jobs, id) {
             for(var i = 0; i < jobs.length; i++) {
                 if(jobs[i]._id === id)
