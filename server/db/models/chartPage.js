@@ -36,9 +36,6 @@ var chartPageSchema = mongoose.Schema({
 	groupingSubElem: {
 		type: String
 	},
-	chartPageHist: {
-		type: [ChartPageHist]
-	}
 	modifiedDate: {
 		type: Date, 
 		default: Date.now
