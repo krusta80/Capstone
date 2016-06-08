@@ -12,7 +12,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-//Base url is /dashboard
+//Base url is /charts
 router.get('/', ensureAuthenticated, function (req, res){
 	Chart.find({user: req.user._id})
 	.then(function(charts){
@@ -24,14 +24,14 @@ router.get('/', ensureAuthenticated, function (req, res){
 	})
 });
 
-router.get('/charts/:id', ensureAuthenticated, function(req,res){
+router.get('/:id', ensureAuthenticated, function(req,res){
 	Chart.findById(req.params.id)
 	.then(function(chart){
 		res.send(chart);
 	});
 });
 
-router.post('/charts', ensureAuthenticated, function(req,res){
+router.post('/', ensureAuthenticated, function(req,res){
 	req.body.user = req.user;
 	Chart.create(req.body)
 	.then(function(chart){
@@ -39,7 +39,7 @@ router.post('/charts', ensureAuthenticated, function(req,res){
 	});
 });
 
-router.put('/charts/:id', ensureAuthenticated, function(req,res){
+router.put('/:id', ensureAuthenticated, function(req,res){
 	Chart.findById(req.params.id)
 	.then(function(fetchedChart){
 		Object.keys(Chart.schema.paths).forEach(function(property){
@@ -54,7 +54,7 @@ router.put('/charts/:id', ensureAuthenticated, function(req,res){
 	});
 });
 
-router.delete('/charts/:id', ensureAuthenticated, function(req,res){
+router.delete('/:id', ensureAuthenticated, function(req,res){
 	Chart.findByIdAndRemove(req.params.id)
 	.then(function(chart){
 		res.send(chart);

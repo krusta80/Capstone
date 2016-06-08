@@ -13,7 +13,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-//Base url is /dashboard/charts/:id/chartpage/
+//Base url is /chartpage/
 router.get('/:id', ensureAuthenticated, function(req,res){
 	ChartPage.findById(req.params.id)
 	.then(function(chartPage){
