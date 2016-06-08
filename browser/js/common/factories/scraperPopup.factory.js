@@ -32,7 +32,6 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
     console.log('this is the page', pageObj);
     pageObj.targetElements.push(scraperElementSchema);
     return PageFactory.update(pageObj);
-    // return $http.post('/api/scraperelements', scraperElementSchema);
   };
 
   scrapedFieldObj.reset = function() {

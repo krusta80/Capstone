@@ -17,12 +17,11 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
       scope.saveData = function(attributes) {
         var cachedData = ScraperPopupFactory.get();
         ScraperPopupFactory.save(attributes, cachedData)
-          .then(function(resp) {
-            if (resp.status === 200) {
-              scope.popupactivated = false;  
+          .then(function(data) {
+            if (data) {
+              scope.popupactivated = false;
             }
-            
-          })
+          });
       };
 
       $rootScope.$on('click', function(evt, data, coordinates){
