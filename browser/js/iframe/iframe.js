@@ -19,8 +19,6 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
     $scope.url ='http://msnbc.com';
     $scope.saved = false;
 
-
-    debugger; 
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
@@ -60,4 +58,9 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                 console.log('there was an error');
             });
     };
+
+    if (page) {
+        $scope.url = page.url;
+        $scope.searchthis($scope.url);
+    }
 });
