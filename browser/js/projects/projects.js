@@ -100,7 +100,7 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
     
 });
 
-app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope) {
+app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.pages = pages;
     
@@ -177,6 +177,10 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             $scope.pageForm.$setPristine();
         }
     };
+
+    $scope.viewPage = function(page) {
+        $state.go('iframe', {pageid: page._id});
+    }
 
     $scope.reportSuccess = function() {
         $scope.success = true;
