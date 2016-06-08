@@ -126,6 +126,13 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
         });
     };
 
+    $scope.removeJob = function() {
+        JobFactory.remove($scope.job._id)
+        .then(function(removedJob) {
+            $state.go('projects.project', {projectId: $scope.selectProject._id})
+        })
+    };
+
     $scope.setSelected = function(ind) {
         console.log("dirty:", $scope.pageForm.$dirty);
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
@@ -176,6 +183,13 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             }
             $scope.pageForm.$setPristine();
         }
+    };
+
+    $scope.runJob = function() {
+        JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))
+        .then(function(rez) {
+            console.log("Results object:", rez);
+        })
     };
 
     $scope.viewPage = function() {
