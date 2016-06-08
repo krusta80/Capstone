@@ -11,6 +11,8 @@ router.use('/scraperelements', require('./scraperElements'));
 router.use('/pages', require('./pages'));
 router.use('/jobs', require('./jobs'));
 router.use('/projects', require('./projects'));
+router.use('/charts', require('./chart'));
+router.use('/chartpages', require('./chartPage'));
 
 // Make sure this is after all of
 // the registered routes!
