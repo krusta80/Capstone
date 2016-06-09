@@ -37,10 +37,10 @@ router.post('/', ensureAuthenticated, function (req, res) {
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Page.findById(req.params.id)
     .then(function(page) {
-        Object.keys(Page.schema.paths).forEach(function(property) {
-            if(req.body[property] !== undefined)
-                page[property] = req.body[property];
-        })
+        Object.keys(req.body).forEach(function(property) {
+          if (property in ['title', 'url', 'targetElements', 'active', 'paginate', 'maxPages'])
+            page[property] = req.body[property];
+        });
         return page.save();
     })
     .then(function(page) {
