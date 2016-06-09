@@ -36,7 +36,7 @@ app.config(function ($stateProvider) {
 
 app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
 	$scope.projects = projects;
-    
+
     $scope.addProject = function() {
         ProjectFactory.create({title: $scope.projectTitle})
         .then(function(project) {
@@ -49,7 +49,7 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
     $scope.loadProject = function() {
         if(!$scope.selectedProject)
             $state.go('projects');
-        else    
+        else
             $state.go('projects.project', {projectId: $scope.selectedProject._id})
     };
 
@@ -67,7 +67,7 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
             $scope.jobs = $scope.project.jobs;
             var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
             if(jobIndex === -1)
-                jobIndex = $scope.jobs.length - 1;    
+                jobIndex = $scope.jobs.length - 1;
             $scope.loadJob($scope.project.jobs[jobIndex]);
         })
         //console.log("saving project", $scope.selectedProject);
@@ -97,13 +97,13 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
 
     if(project.jobs.length > 0)
         $scope.loadJob($scope.jobs[0]);
-    
+
 });
 
 app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.pages = pages;
-    
+
     if(!$scope.pages)
         $scope.pages = [];
 
@@ -122,7 +122,7 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             console.log("newPage is", newPage);
             $scope.pages.push(newPage);
             $scope.job.pages.push(newPage._id);
-            $scope.selectedPage = $scope.pages.length - 1;    
+            $scope.selectedPage = $scope.pages.length - 1;
         });
     };
 
@@ -137,11 +137,11 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
         console.log("dirty:", $scope.pageForm.$dirty);
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
             return;
-        
+
         //  first we save the selectedPage
         PageFactory.update($scope.pages[$scope.selectedPage])
         .then(function(updatedPage) {
-            $scope.selectedPage = ind;    
+            $scope.selectedPage = ind;
         })
     };
 
@@ -154,10 +154,17 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             .then(function(updatedPage) {
                 console.log("page updated", updatedPage);
                 $scope.pages[$scope.selectedPage] = updatedPage;
-                $scope.saveProject($scope.job);   
+                $scope.saveProject($scope.job);
             });
         else
-            $scope.saveProject($scope.job);   
+            $scope.saveProject($scope.job);
+    };
+    $scope.savePage = function(){
+      return PageFactory.update($scope.pages[$scope.selectedPage])
+      .then(function(page){
+        $scope.pageSaved = true;
+        console.log('saved:',page);
+      });
     };
 
     $scope.removePage = function() {

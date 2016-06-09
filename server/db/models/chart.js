@@ -7,38 +7,38 @@ var chartTypes = ['Scatter Plot'];
 
 var chartSchema = new mongoose.Schema({
 	name: {
-    	type: String, 
+    	type: String,
     	required: true
   },
 	project: {
-    	type: mongoose.Schema.Types.ObjectId, 
+    	type: mongoose.Schema.Types.ObjectId,
     	ref: 'Project', required: true
   },
 	job: {
-    	type: mongoose.Schema.Types.ObjectId, 
-    	ref: 'Job', 
+    	type: mongoose.Schema.Types.ObjectId,
+    	ref: 'Job',
     	required: true
   },
 	pages: {
-    	type: [Page], 
+    	type: [Page],
     	required: true
   },
 	chartType: {
-    	type: String, 
+    	type: String,
     	enum: chartTypes
   },
 	historical: {
-    	type: Boolean, 
+    	type: Boolean,
     	default: false
   },
 	createdDate: {
-    	type: Date, 
+    	type: Date,
     	default: Date.now
   },
 	modifiedDate: {
-    	type: Date, 
+    	type: Date,
     	default: Date.now
   }
 });
 
-module.exports = mongoose.model('Chart', chartSchema);
+mongoose.model('Chart', chartSchema);
