@@ -51,6 +51,9 @@ jobSchema.methods.runJob = function(){
   })
   .then(function(){
     return results;
+  })
+  .catch(function(err){
+    console.log(err);
   });
 
 };
