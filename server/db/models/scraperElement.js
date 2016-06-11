@@ -13,10 +13,7 @@ var scraperElementSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    selectorIndex: {
-        type: Number,
-        min: 0
-    },
+    selectorIndex: Number,
     fields: {
         type: String        //  this is a JSON representation of a map of columns / fields
     },

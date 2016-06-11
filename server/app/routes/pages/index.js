@@ -13,7 +13,7 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
-var UPDATE_FIELDS = ['title', 'url', 'targetElements', 'active', 'paginate', 'maxPages'];
+var UPDATE_FIELDS = ['title', 'url', 'targetElements', 'active', 'paginate', 'maxPages', 'repeating'];
 
 router.get('/byJob/:jobId', ensureAuthenticated, function (req, res) {
     Page.find({job: req.params.jobId})

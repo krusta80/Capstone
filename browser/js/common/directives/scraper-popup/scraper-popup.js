@@ -14,9 +14,9 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         return getContent(arrayOfObj);
       };
 
-      scope.saveData = function(attributes) {
+      scope.saveData = function(attributes, isRepeating) {
         var cachedData = ScraperPopupFactory.get();
-        ScraperPopupFactory.save(attributes, cachedData)
+        ScraperPopupFactory.save(attributes, cachedData, isRepeating)
           .then(function(data) {
             if (data) {
               scope.popupactivated = false;
@@ -31,7 +31,9 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         scope.top = coordinates.y;
         ScraperPopupFactory.reset();
 
-        scope.popupData = ScraperPopupFactory.add(data).data;
+        var cached = ScraperPopupFactory.add(data);
+        scope.popupData = cached.data;
+        scope.rawData = cached.raw;
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
         scope.attributes = scope.popupData;
 
@@ -51,8 +53,3 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
     }
   };
 });
-
-
-
-
-

@@ -8,7 +8,7 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
   scrapedFieldObj.setPage = function(page) {
     pageObj = page;
   };
-  scrapedFieldObj.save = function(savedAttributes, cache) {
+  scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
     var fieldsObj = {};
     savedAttributes.forEach(function(attribute) {
       var obj = {
@@ -18,14 +18,14 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
       if (attribute.attr === 'content') {
         fieldsObj[attribute.attr] = obj;
       } else {
-        fieldsObj[attribute.name] = obj;  
+        fieldsObj[attribute.name] = obj;
       }
     });
 
     var scraperElementSchema = {
       name: 'test',
       domSelector: cachedData.raw.selector,
-      selectorIndex: cachedData.raw.selectorIndex,
+      selectorIndex: (!isRepeating ? cachedData.raw.selectorIndex : -1),
       fields: JSON.stringify(fieldsObj)
     };
     console.log("toPost:",scraperElementSchema);
