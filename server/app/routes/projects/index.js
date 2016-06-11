@@ -44,8 +44,7 @@ router.post('/:projectId/job/:jobIndex/run', function(req,res,next){
     path: 'jobs.pages'
    })
   .then(function(project){
-    console.log(project);
-    return project.jobs[req.params.jobIndex].runJob();
+    return project.jobs[req.params.jobIndex].runJob(project);
   })
   .then(function(result){
     res.json(result);

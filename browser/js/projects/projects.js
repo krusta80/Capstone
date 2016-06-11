@@ -32,6 +32,18 @@ app.config(function ($stateProvider) {
         },
         controller: 'JobCtrl'
     });
+    $stateProvider.state('projects.project.jobHistory', {
+      url: '/job/:id/history',
+      template: 'Hello',
+      resolve: {
+        project: function($stateParams, ProjectFactory){
+          return ProjectFactory.fetchById($stateParams.projectId);
+        }
+      },
+      controller: function(project, $scope){
+        console.log(project);
+      }
+    });
 });
 
 app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
@@ -100,7 +112,7 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
 
 });
 
-app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state) {
+app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state, $window) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.pages = pages;
 
@@ -199,8 +211,9 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
     $scope.runJob = function() {
         JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))
         .then(function(rez) {
+            $window.location.reload();
             console.log("Results object:", rez);
-        })
+        });
     };
 
     $scope.viewPage = function() {
