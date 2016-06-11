@@ -123,7 +123,11 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             $scope.pages.push(newPage);
             $scope.job.pages.push(newPage._id);
             $scope.selectedPage = $scope.pages.length - 1;
-        });
+            $scope.saveJob();
+        })
+        .then(function() {
+            console.log("Job saved...");
+        })
     };
 
     $scope.removeJob = function() {
