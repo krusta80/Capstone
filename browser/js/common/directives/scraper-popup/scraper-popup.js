@@ -28,11 +28,19 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         if (paginate){
           var page = ScraperPopupFactory.getPage();
           var cached = ScraperPopupFactory.get();
-          page.paginateSelector = cached.raw.selector + ':eq(' + cached.raw.selectorIndex +')';
-          PageFactory.update(page)
-          .then(function(){
-              scope.popupactivated = false;
+          var paginateSelector = '';
+          cached.data.forEach(function(item){
+            if (item.attr === 'id')
+              paginateSelector+= '#' + item.value;
           });
+          if (paginateSelector){ //for now, pagination element must have id attribute
+            page.paginateSelector = paginateSelector;
+            PageFactory.update(page)
+            .then(function(){
+                scope.hideAttributes = false;
+                scope.popupactivated = false;
+            });
+          }
 
         }
       };
