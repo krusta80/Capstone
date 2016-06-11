@@ -8,29 +8,47 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
   scrapedFieldObj.setPage = function(page) {
     pageObj = page;
   };
-  scrapedFieldObj.save = function(savedAttributes, cache) {
-    var fieldsObj = {};
-    savedAttributes.forEach(function(attribute) {
-      var obj = {
-        attr: attribute['attr'],
-        index: attribute['index']
-      };
-      if (attribute.attr === 'content') {
-        fieldsObj[attribute.attr] = obj;
-      } else {
-        fieldsObj[attribute.name] = obj;  
-      }
-    });
+  scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
 
-    var scraperElementSchema = {
-      name: 'test',
-      domSelector: cachedData.raw.selector,
-      selectorIndex: cachedData.raw.selectorIndex,
-      fields: JSON.stringify(fieldsObj)
-    };
-    console.log("toPost:",scraperElementSchema);
-    console.log('this is the page', pageObj);
-    pageObj.targetElements.push(scraperElementSchema);
+    if (!isRepeating){
+      var fieldsObj = {};
+      savedAttributes.forEach(function(attribute) {
+        var obj = {
+          attr: attribute['attr'],
+          index: attribute['index']
+        };
+        if (attribute.attr === 'content') {
+          fieldsObj[attribute.attr] = obj;
+        } else {
+          fieldsObj[attribute.name] = obj;
+        }
+      });
+      var scraperElementSchema = {
+        name: 'test',
+        domSelector: cachedData.raw.selector,
+        selectorIndex: cachedData.raw.selectorIndex,
+        fields: JSON.stringify(fieldsObj)
+      };
+    // console.log("toPost:",scraperElementSchema);
+    // console.log('this is the page', pageObj);
+      pageObj.targetElements.push(scraperElementSchema);
+    }
+    else{
+      cachedData.raw.repeats.forEach(function(elem){
+        var scraperElementSchema = {
+          name: 'test',
+          domSelector: elem.selector,
+          selectorIndex: elem.selectorIndex,
+          fields: JSON.stringify({
+              field0:{
+                attr: 'content',
+                index: -1
+            }
+          })
+        };
+        pageObj.targetElements.push(scraperElementSchema);
+      });
+    }
     return PageFactory.update(pageObj);
   };
 
