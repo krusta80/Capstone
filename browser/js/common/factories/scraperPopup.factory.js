@@ -8,6 +8,9 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
   scrapedFieldObj.setPage = function(page) {
     pageObj = page;
   };
+  scrapedFieldObj.getPage = function(){
+    return pageObj;
+  };
   scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
 
     if (!isRepeating){

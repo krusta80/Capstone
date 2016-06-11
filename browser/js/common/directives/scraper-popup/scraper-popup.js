@@ -1,15 +1,16 @@
-app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
+app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFactory){
   return {
     restric: 'E',
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
     scope: {},
     transclude: true,
     link: function(scope) {
+      var paginate = false;
       scope.popupactivated = false;
       scope.addRow = function(obj) {
         ScraperPopupFactory.addRow();
       };
-
+      scope.getPage = ScraperPopupFactory.getPage;
       scope.getContent = function(arrayOfObj) {
         return getContent(arrayOfObj);
       };
@@ -23,6 +24,22 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
             }
           });
       };
+      scope.setPaginator = function(){
+        if (paginate){
+          var page = ScraperPopupFactory.getPage();
+          var cached = ScraperPopupFactory.get();
+          page.paginateSelector = cached.raw.selector + ':eq(' + cached.raw.selectorIndex +')';
+          PageFactory.update(page)
+          .then(function(){
+              scope.popupactivated = false;
+          });
+
+        }
+      };
+      scope.toggleAttributes = function(){
+        scope.hideAttributes = !scope.hideAttributes;
+        paginate = !paginate;
+      };
 
       $rootScope.$on('click', function(evt, data, coordinates){
         console.log("data on click:", data);
@@ -30,7 +47,6 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         scope.left = coordinates.x;
         scope.top = coordinates.y;
         ScraperPopupFactory.reset();
-        console.log(data);
         var cached = ScraperPopupFactory.add(data);
         scope.popupData = cached.data;
         scope.rawData = cached.raw;
@@ -44,7 +60,6 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
           else {
             scope.attributes.forEach(function(attribute) {
               if (attribute.selected) {
-                console.log(attribute);
                 output.push(attribute);
               }
             });
