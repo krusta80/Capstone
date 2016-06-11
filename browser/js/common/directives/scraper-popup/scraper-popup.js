@@ -30,21 +30,25 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         scope.left = coordinates.x;
         scope.top = coordinates.y;
         ScraperPopupFactory.reset();
-
+        console.log(data);
         var cached = ScraperPopupFactory.add(data);
         scope.popupData = cached.data;
         scope.rawData = cached.raw;
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
         scope.attributes = scope.popupData;
-
         scope.selection = [];
-        scope.selectedAttributes = function selectedAttribuets() {
-          var output = []
-          scope.attributes.forEach(function(attribute) {
-            if (attribute.selected) {
-              output.push(attribute);
-            }
-          });
+        scope.selectedAttributes = function selectedAttribuets(repeating) {
+          var output = [];
+          if (repeating)
+            output = output.concat(scope.rawData.repeats);
+          else {
+            scope.attributes.forEach(function(attribute) {
+              if (attribute.selected) {
+                console.log(attribute);
+                output.push(attribute);
+              }
+            });
+          }
           return output;
         };
         scope.$apply();

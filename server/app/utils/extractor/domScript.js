@@ -116,10 +116,11 @@ module.exports =
             }).get().join(">");
         //finding repeating
         var repeating = $(selector);
-        var repeats = $.map(repeating, function(elem){
-          var text = $(elem).text();
-          if (text)
-            return text;
+        var repeats = $.map(repeating, function(elem, i){
+            return {
+              selector: selector,
+              selectorIndex: i
+            };
         });
         //console.log('repeating', repeating);
         return {selector: selector, selectorIndex: $(repeating).index(element), repeating: repeats};

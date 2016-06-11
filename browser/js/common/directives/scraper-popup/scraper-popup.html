@@ -2,7 +2,7 @@
     <div class="panel">
       <h4>Attributes that can be saved</h4>
       <div ng-show="rawData.repeats.length > 1">
-        <span><b>Repeating elements: {{rawData.repeats.length}}</b></span><a ng-click="saveData(selectedAttributes(), true)"> Add all...</a>
+        <span><b>Repeating elements: {{rawData.repeats.length}}</b></span><a ng-click="saveData(selectedAttributes(true),true)"> Add all...</a>
       </div>
       <form>
           <div ng-repeat="attribute in attributes">
