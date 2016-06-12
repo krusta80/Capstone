@@ -172,28 +172,32 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
     };
 
     $scope.removePage = function() {
+        $scope.job.pages.splice($scope.selectedPage,1);
         if($scope.pages[$scope.selectedPage]._id)
             PageFactory.remove($scope.pages[$scope.selectedPage]._id)
             .then(function(page) {
+                console.log("Removed page", page);
                 $scope.pages.splice($scope.selectedPage,1);
-                if($scope.pages.length === $scope.selectedPage) {
-                    if($scope.selectedPage > 0)
-                        $scope.selectedPage--;
-                    else
-                        delete $scope.selectedPage;
-                }
-                $scope.pageForm.$setPristine();
-            })
-        else {
-            $scope.pages.splice($scope.selectedPage,1);
-            if($scope.pages.length === $scope.selectedPage) {
+                
                 if($scope.selectedPage > 0)
                     $scope.selectedPage--;
                 else
                     delete $scope.selectedPage;
-            }
-            $scope.pageForm.$setPristine();
+
+                $scope.saveJob();
+                //$scope.pageForm.$setPristine();
+            })
+        else {
+            $scope.pages.splice($scope.selectedPage,1);
+            if($scope.selectedPage > 0)
+                $scope.selectedPage--;
+            else
+                delete $scope.selectedPage;
+            
+            $scope.saveJob();    
+            //$scope.pageForm.$setPristine();
         }
+        
     };
 
     $scope.runJob = function() {
