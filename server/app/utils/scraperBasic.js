@@ -73,10 +73,10 @@ function execute(horseman, page, results){
   else
     p = evaluate(horseman, page.targetElements);
   return p.then(function(fieldHists){
-    console.log(fieldHists);
+    //console.log(fieldHists);
     var nSucceeded = fieldHists.filter(i=>i.fields !== JSON.stringify({}));
     results.pages[page._id] = {numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
-      return mongoose.model('ScraperElementHist').insertMany(fieldHists);
+      return mongoose.model('ScraperElementHist').create(fieldHists);
         //TO DO: Populate additional fields
   });
 }
