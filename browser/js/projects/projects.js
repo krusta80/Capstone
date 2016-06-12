@@ -34,14 +34,27 @@ app.config(function ($stateProvider) {
     });
     $stateProvider.state('projects.project.jobHistory', {
       url: '/job/:id/history',
-      template: 'Hello',
+      templateUrl: 'js/projects/job-history.html',
       resolve: {
         project: function($stateParams, ProjectFactory){
           return ProjectFactory.fetchById($stateParams.projectId);
         }
       },
-      controller: function(project, $scope){
-        console.log(project);
+      controller: function(project, $scope, $stateParams){
+        var job = _.filter(project.jobs, {_id: $stateParams.id});
+
+        $scope.history = job[0].runHistory.map(function(hist){
+          var parsedHist = JSON.parse(hist);
+          parsedHist.pages = Object.keys(parsedHist.pages).map(function(hist){
+            return {
+              id: hist,
+              scraped: parsedHist.pages[hist].numElements,
+              success: parsedHist.pages[hist].numSuccess
+            };
+          });
+          return parsedHist;
+        });
+        console.log($scope.history);
       }
     });
 });
