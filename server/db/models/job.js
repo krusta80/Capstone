@@ -60,7 +60,7 @@ jobSchema.methods.runJob = function(){
     return scraper.go(10000, results);
   })
   .then(function(){
-    this.isRunning = false;
+    instance.isRunning = false;
     results.runAt = Date.now();
     instance.runHistory.push(JSON.stringify(results));
     instance.lastRun = Date.now();
