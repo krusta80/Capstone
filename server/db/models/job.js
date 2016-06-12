@@ -48,9 +48,17 @@ function Results(id){
   this.pageCount = 1;
 }
 
-jobSchema.methods.runJob = function(){
-  if(this.isRunning)
+jobSchema.methods.runJob = function(project){
+  var dd = new Date(this.lastRun);
+  console.log("Attempting to run job id", this._id, "(", Date.now(), ")");
+  console.log("   -> Is running:",this.isRunning);
+  console.log("   -> Last RunTS:",dd);
+  console.log("   -> Frequency :",this.frequency);
+  
+  if(this.isRunning || Date.now() - dd < this.frequency*60000) {
+    console.log("JOB EITHER RUNNING OR RUN TOO RECENTLY!!");
     return;
+  }
   this.isRunning = true;
   var results = new Results(this._id);
   var instance = this;
