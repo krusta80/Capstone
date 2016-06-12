@@ -65,10 +65,14 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
         .then(function(project) {
             $scope.project = project;
             $scope.jobs = $scope.project.jobs;
-            var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
-            if(jobIndex === -1)
-                jobIndex = $scope.jobs.length - 1;
-            $scope.loadJob($scope.project.jobs[jobIndex]);
+            if(job) {
+                var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
+                if(jobIndex === -1)
+                    jobIndex = $scope.jobs.length - 1;
+                $scope.loadJob($scope.project.jobs[jobIndex]);    
+            }
+            else
+                $state.go('projects.project', {projectId: $scope.selectedProject._id})
         })
         //console.log("saving project", $scope.selectedProject);
     }
@@ -111,7 +115,7 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
         $scope.selectedPage = $scope.pages.length - 1;
 
     $scope.addPage = function() {
-        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
+        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
             return;
         PageFactory.create({
             title: "new_page_" + Math.random().toString(10).slice(3,8),
@@ -131,10 +135,15 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
     };
 
     $scope.removeJob = function() {
-        JobFactory.remove($scope.job._id)
-        .then(function(removedJob) {
-            $state.go('projects.project', {projectId: $scope.selectProject._id})
-        })
+        $scope.jobs.splice(JobFactory.findJobIndex($scope.jobs, $scope.job._id),1);
+        if($scope.jobs.length > 0)
+            $scope.saveProject($scope.jobs[0]);
+        else
+            $scope.saveProject();
+        // JobFactory.remove($scope.job._id)
+        // .then(function(removedJob) {
+        //     $state.go('projects.project', {projectId: $scope.selectProject._id})
+        // })
     };
 
     $scope.setSelected = function(ind) {
