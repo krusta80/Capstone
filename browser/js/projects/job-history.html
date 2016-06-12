@@ -13,7 +13,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="page in run.pages" ng-class="{success: page.success >= page.scraped, danger: page.success < page.scraped}">
+                    <tr ng-repeat="page in run.pages" ng-class="{success: page.success >= page.scraped, danger: (page.success < page.scraped) || !page.scraped}">
                         <td>{{page.id}}</td>
                         <td>{{page.scraped}}</td>
                         <td>{{page.success}}</td>

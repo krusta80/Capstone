@@ -48,12 +48,12 @@ app.config(function ($stateProvider) {
           parsedHist.pages = Object.keys(parsedHist.pages).map(function(hist){
             return {
               id: hist,
-              scraped: parsedHist.pages[hist].numElements,
-              success: parsedHist.pages[hist].numSuccess
+              scraped: parsedHist.pages[hist] ? parsedHist.pages[hist].numElements : 0,
+              success: parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0
             };
           });
           return parsedHist;
-        });
+        }).reverse();
         console.log($scope.history);
       }
     });
@@ -94,7 +94,7 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
                 var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
                 if(jobIndex === -1)
                     jobIndex = $scope.jobs.length - 1;
-                $scope.loadJob($scope.project.jobs[jobIndex]);    
+                $scope.loadJob($scope.project.jobs[jobIndex]);
             }
             else
                 $state.go('projects.project', {projectId: $scope.selectedProject._id})
@@ -108,8 +108,8 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
             active: false
         });
         //$scope.selectedProject.jobs = $scope.jobs;
-        //ProjectFactory.update($scope.selectedProject)    
-        
+        //ProjectFactory.update($scope.selectedProject)
+
         $scope.saveProject($scope.jobs[$scope.jobs.length-1]);
     };
 
@@ -213,7 +213,7 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             .then(function(page) {
                 console.log("Removed page", page);
                 $scope.pages.splice($scope.selectedPage,1);
-                
+
                 if($scope.selectedPage > 0)
                     $scope.selectedPage--;
                 else
@@ -228,11 +228,11 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
                 $scope.selectedPage--;
             else
                 delete $scope.selectedPage;
-            
-            $scope.saveJob();    
+
+            $scope.saveJob();
             //$scope.pageForm.$setPristine();
         }
-        
+
     };
 
     $scope.runJob = function() {
