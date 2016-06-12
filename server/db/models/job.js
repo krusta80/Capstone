@@ -4,6 +4,7 @@ var Page = mongoose.model('Page').schema;
 var Scraper = require('../../app/utils/scraperBasic');
 var Promise = require('bluebird');
 
+
 var jobSchema = mongoose.Schema({
   title: {
     type: String,
@@ -20,6 +21,7 @@ var jobSchema = mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Page'
 	}],
+  runHistory: [String],
   active: {
     type: Boolean,
     required: true,
@@ -41,7 +43,7 @@ function Results(id){
   this.jobId = id;
   this.pageCount = 1;
 }
-jobSchema.methods.runJob = function(){
+jobSchema.methods.runJob = function(project){
   var results = new Results(this._id);
   var instance = this;
   return Promise.map(instance.pages, function(page){
@@ -50,7 +52,16 @@ jobSchema.methods.runJob = function(){
     return scraper.go(10000, results);
   })
   .then(function(){
+    results.runAt = Date.now();
+    instance.runHistory.push(JSON.stringify(results));
+    instance.lastRun = Date.now();
+    return project.save();
+  })
+  .then(function(){
     return results;
+  })
+  .catch(function(err){
+    console.log(err);
   });
 
 };

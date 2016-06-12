@@ -32,6 +32,31 @@ app.config(function ($stateProvider) {
         },
         controller: 'JobCtrl'
     });
+    $stateProvider.state('projects.project.jobHistory', {
+      url: '/job/:id/history',
+      templateUrl: 'js/projects/job-history.html',
+      resolve: {
+        project: function($stateParams, ProjectFactory){
+          return ProjectFactory.fetchById($stateParams.projectId);
+        }
+      },
+      controller: function(project, $scope, $stateParams){
+        var job = _.filter(project.jobs, {_id: $stateParams.id});
+
+        $scope.history = job[0].runHistory.map(function(hist){
+          var parsedHist = JSON.parse(hist);
+          parsedHist.pages = Object.keys(parsedHist.pages).map(function(hist){
+            return {
+              id: hist,
+              scraped: parsedHist.pages[hist] ? parsedHist.pages[hist].numElements : 0,
+              success: parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0
+            };
+          });
+          return parsedHist;
+        }).reverse();
+        console.log($scope.history);
+      }
+    });
 });
 
 app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
@@ -65,10 +90,14 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
         .then(function(project) {
             $scope.project = project;
             $scope.jobs = $scope.project.jobs;
-            var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
-            if(jobIndex === -1)
-                jobIndex = $scope.jobs.length - 1;
-            $scope.loadJob($scope.project.jobs[jobIndex]);
+            if(job) {
+                var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
+                if(jobIndex === -1)
+                    jobIndex = $scope.jobs.length - 1;
+                $scope.loadJob($scope.project.jobs[jobIndex]);
+            }
+            else
+                $state.go('projects.project', {projectId: $scope.selectedProject._id})
         })
         //console.log("saving project", $scope.selectedProject);
     }
@@ -80,7 +109,8 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
         });
         //$scope.selectedProject.jobs = $scope.jobs;
         //ProjectFactory.update($scope.selectedProject)
-        $scope.saveProject($scope.jobs.length-1);
+
+        $scope.saveProject($scope.jobs[$scope.jobs.length-1]);
     };
 
     $scope.loadJob = function(job) {
@@ -100,7 +130,7 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
 
 });
 
-app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state) {
+app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state, $window) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.pages = pages;
 
@@ -111,7 +141,7 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
         $scope.selectedPage = $scope.pages.length - 1;
 
     $scope.addPage = function() {
-        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
+        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
             return;
         PageFactory.create({
             title: "new_page_" + Math.random().toString(10).slice(3,8),
@@ -123,14 +153,23 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
             $scope.pages.push(newPage);
             $scope.job.pages.push(newPage._id);
             $scope.selectedPage = $scope.pages.length - 1;
-        });
+            $scope.saveJob();
+        })
+        .then(function() {
+            console.log("Job saved...");
+        })
     };
 
     $scope.removeJob = function() {
-        JobFactory.remove($scope.job._id)
-        .then(function(removedJob) {
-            $state.go('projects.project', {projectId: $scope.selectProject._id})
-        })
+        $scope.jobs.splice(JobFactory.findJobIndex($scope.jobs, $scope.job._id),1);
+        if($scope.jobs.length > 0)
+            $scope.saveProject($scope.jobs[0]);
+        else
+            $scope.saveProject();
+        // JobFactory.remove($scope.job._id)
+        // .then(function(removedJob) {
+        //     $state.go('projects.project', {projectId: $scope.selectProject._id})
+        // })
     };
 
     $scope.setSelected = function(ind) {
@@ -168,35 +207,40 @@ app.controller('JobCtrl', function(jobId, pages, ProjectFactory, JobFactory, Pag
     };
 
     $scope.removePage = function() {
+        $scope.job.pages.splice($scope.selectedPage,1);
         if($scope.pages[$scope.selectedPage]._id)
             PageFactory.remove($scope.pages[$scope.selectedPage]._id)
             .then(function(page) {
+                console.log("Removed page", page);
                 $scope.pages.splice($scope.selectedPage,1);
-                if($scope.pages.length === $scope.selectedPage) {
-                    if($scope.selectedPage > 0)
-                        $scope.selectedPage--;
-                    else
-                        delete $scope.selectedPage;
-                }
-                $scope.pageForm.$setPristine();
-            })
-        else {
-            $scope.pages.splice($scope.selectedPage,1);
-            if($scope.pages.length === $scope.selectedPage) {
+
                 if($scope.selectedPage > 0)
                     $scope.selectedPage--;
                 else
                     delete $scope.selectedPage;
-            }
-            $scope.pageForm.$setPristine();
+
+                $scope.saveJob();
+                //$scope.pageForm.$setPristine();
+            })
+        else {
+            $scope.pages.splice($scope.selectedPage,1);
+            if($scope.selectedPage > 0)
+                $scope.selectedPage--;
+            else
+                delete $scope.selectedPage;
+
+            $scope.saveJob();
+            //$scope.pageForm.$setPristine();
         }
+
     };
 
     $scope.runJob = function() {
         JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))
         .then(function(rez) {
+            $window.location.reload();
             console.log("Results object:", rez);
-        })
+        });
     };
 
     $scope.viewPage = function() {

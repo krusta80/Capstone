@@ -1,27 +1,52 @@
-app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
+app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFactory){
   return {
     restric: 'E',
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
     scope: {},
     transclude: true,
     link: function(scope) {
+      var paginate = false;
       scope.popupactivated = false;
       scope.addRow = function(obj) {
         ScraperPopupFactory.addRow();
       };
-
+      scope.getPage = ScraperPopupFactory.getPage;
       scope.getContent = function(arrayOfObj) {
         return getContent(arrayOfObj);
       };
 
-      scope.saveData = function(attributes) {
+      scope.saveData = function(attributes, isRepeating) {
         var cachedData = ScraperPopupFactory.get();
-        ScraperPopupFactory.save(attributes, cachedData)
+        ScraperPopupFactory.save(attributes, cachedData, isRepeating)
           .then(function(data) {
             if (data) {
               scope.popupactivated = false;
             }
           });
+      };
+      scope.setPaginator = function(){
+        if (paginate){
+          var page = ScraperPopupFactory.getPage();
+          var cached = ScraperPopupFactory.get();
+          var paginateSelector = '';
+          cached.data.forEach(function(item){
+            if (item.attr === 'id')
+              paginateSelector+= '#' + item.value;
+          });
+          if (paginateSelector){ //for now, pagination element must have id attribute
+            page.paginateSelector = paginateSelector;
+            PageFactory.update(page)
+            .then(function(){
+                scope.hideAttributes = false;
+                scope.popupactivated = false;
+            });
+          }
+
+        }
+      };
+      scope.toggleAttributes = function(){
+        scope.hideAttributes = !scope.hideAttributes;
+        paginate = !paginate;
       };
 
       $rootScope.$on('click', function(evt, data, coordinates){
@@ -30,19 +55,23 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
         scope.left = coordinates.x;
         scope.top = coordinates.y;
         ScraperPopupFactory.reset();
-
-        scope.popupData = ScraperPopupFactory.add(data).data;
+        var cached = ScraperPopupFactory.add(data);
+        scope.popupData = cached.data;
+        scope.rawData = cached.raw;
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
         scope.attributes = scope.popupData;
-
         scope.selection = [];
-        scope.selectedAttributes = function selectedAttribuets() {
-          var output = []
-          scope.attributes.forEach(function(attribute) {
-            if (attribute.selected) {
-              output.push(attribute);
-            }
-          });
+        scope.selectedAttributes = function selectedAttribuets(repeating) {
+          var output = [];
+          if (repeating)
+            output = output.concat(scope.rawData.repeats);
+          else {
+            scope.attributes.forEach(function(attribute) {
+              if (attribute.selected) {
+                output.push(attribute);
+              }
+            });
+          }
           return output;
         };
         scope.$apply();
@@ -51,8 +80,3 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory){
     }
   };
 });
-
-
-
-
-

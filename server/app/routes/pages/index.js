@@ -13,6 +13,8 @@ var ensureAuthenticated = function (req, res, next) {
     }
 };
 
+var UPDATE_FIELDS = ['title', 'url', 'targetElements', 'active', 'paginate', 'maxPages', 'repeating', 'paginateSelector'];
+
 router.get('/byJob/:jobId', ensureAuthenticated, function (req, res) {
     Page.find({job: req.params.jobId})
     .then(function(pages) {
@@ -38,13 +40,13 @@ router.put('/:id', ensureAuthenticated, function (req, res) {
     Page.findById(req.params.id)
     .then(function(page) {
         Object.keys(req.body).forEach(function(property) {
-          if (property in ['title', 'url', 'targetElements', 'active', 'paginate', 'maxPages'])
+          if (UPDATE_FIELDS.indexOf(property) > -1)
             page[property] = req.body[property];
         });
         return page.save();
     })
-    .then(function(page) {
-        res.send(page);
+    .then(function(newPage) {
+        res.send(newPage);
     });
 });
 

@@ -35,6 +35,10 @@ var pageSchema = new mongoose.Schema({
     maxPages: {
       type: Number,
       default: 1
+    },
+    wait:{
+      type:Number,
+      default: 5000
     }
 },
 {
@@ -43,4 +47,3 @@ var pageSchema = new mongoose.Schema({
 );
 
 module.exports = mongoose.model('Page', pageSchema);
-
