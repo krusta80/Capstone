@@ -6,23 +6,23 @@ app.factory('AppFactory', function ($http) {
     return {
     	fetchAll: function() {
     		return $http.get('/api/apps')
-    		.then(parseData)
+    		.then(parseData);
     	},
     	fetchById: function(id) {
     		return $http.get('/api/apps/' + id)
-    		.then(parseData)
+    		.then(parseData);
     	},
     	create: function(app) {
     		return $http.post('/api/apps', app)
-    		.then(parseData)
+    		.then(parseData);
     	},
     	update: function(app) {
     		return $http.put('/api/apps/' + app._id, app)
-    		.then(parseData)
+    		.then(parseData);
     	},
     	remove: function(id) {
     		return $http.delete('/api/apps/' + id)
-    		.then(parseData)
+    		.then(parseData);
     	}
-    }
+    };
 });
