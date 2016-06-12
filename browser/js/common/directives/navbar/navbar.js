@@ -11,7 +11,8 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                 { label: 'Iframe', state: 'iframe' },
                 { label: 'Projects', state: 'projects' },
                 //{ label: 'Documentation', state: 'docs' },
-                { label: 'Members Only', state: 'membersOnly', auth: true }
+                { label: 'Members Only', state: 'membersOnly', auth: true },
+                { label: 'Chart', state: 'chart'}
             ];
 
             scope.user = null;
