@@ -83,8 +83,9 @@ app.controller('ProjectCtrl', function(project, ProjectFactory, JobFactory, $sco
             active: false
         });
         //$scope.selectedProject.jobs = $scope.jobs;
-        //ProjectFactory.update($scope.selectedProject)
-        $scope.saveProject($scope.jobs.length-1);
+        //ProjectFactory.update($scope.selectedProject)    
+        
+        $scope.saveProject($scope.jobs[$scope.jobs.length-1]);
     };
 
     $scope.loadJob = function(job) {
