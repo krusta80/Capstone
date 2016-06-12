@@ -30,6 +30,10 @@ var jobSchema = mongoose.Schema({
   frequency: {
     type: Number
   },
+  isRunning: {
+    type: Boolean,
+    default: false
+  },
   lastRun: {
   	type: Date
   }
@@ -43,7 +47,11 @@ function Results(id){
   this.jobId = id;
   this.pageCount = 1;
 }
-jobSchema.methods.runJob = function(project){
+
+jobSchema.methods.runJob = function(){
+  if(this.isRunning)
+    return;
+  this.isRunning = true;
   var results = new Results(this._id);
   var instance = this;
   return Promise.map(instance.pages, function(page){
@@ -52,6 +60,7 @@ jobSchema.methods.runJob = function(project){
     return scraper.go(10000, results);
   })
   .then(function(){
+    this.isRunning = false;
     results.runAt = Date.now();
     instance.runHistory.push(JSON.stringify(results));
     instance.lastRun = Date.now();
