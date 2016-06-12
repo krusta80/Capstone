@@ -54,7 +54,7 @@ jobSchema.methods.runJob = function(project){
   console.log("   -> Is running:",this.isRunning);
   console.log("   -> Last RunTS:",dd);
   console.log("   -> Frequency :",this.frequency);
-  
+
   if(this.isRunning || Date.now() - dd < this.frequency*60000) {
     console.log("JOB EITHER RUNNING OR RUN TOO RECENTLY!!");
     return;
@@ -72,7 +72,7 @@ jobSchema.methods.runJob = function(project){
     results.runAt = Date.now();
     instance.runHistory.push(JSON.stringify(results));
     instance.lastRun = Date.now();
-    return project.save();
+    return Promise.join(project.save(), mongoose.model('ScraperElementHist').clean());
   })
   .then(function(){
     return results;
