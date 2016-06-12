@@ -17,7 +17,6 @@ app.controller('ChartCtrl', function ($scope, $rootScope, ChartFactory, $statePa
     $scope.options = ChartFactory.getOptions();
     $scope.data = ChartFactory.getData();
     $scope.chartName = route;
-
     $scope.params = {
         mode: "basic",
         visible: true,
@@ -25,7 +24,7 @@ app.controller('ChartCtrl', function ($scope, $rootScope, ChartFactory, $statePa
         selectedChart: $scope.chartName,
         charts: ['scatterChart', 'discreteBarChart']
     };
-    
+
     $scope.selectChart = function(chart) {
         $state.go('chart', {chartname: chart});
     };
