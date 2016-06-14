@@ -6,7 +6,7 @@ module.exports =
         $('body').off('mouseenter').on('mouseenter', '*', function(ev) {
           $('body').find('*').removeClass('__activate');
           $(this).addClass('__activate');
-          //window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+          window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
         });
       }
 

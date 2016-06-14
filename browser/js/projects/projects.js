@@ -61,6 +61,14 @@ app.config(function ($stateProvider) {
 
 app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
 	$scope.projects = projects;
+    $scope.noProjects = false;
+    if (projects.length > 0) {
+        // select the first product
+        $state.go('projects.project', {projectId: $scope.projects[0]._id})
+        $scope.noProjects = false;
+    } else {
+        $scope.noProjects = true;
+    }
 
     $scope.addProject = function() {
         ProjectFactory.create({title: $scope.projectTitle})
@@ -72,14 +80,21 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
     };
 
     $scope.loadProject = function() {
-        if(!$scope.selectedProject)
+        if(!$scope.selectedProject) {
             $state.go('projects');
-        else
+            $scope.noProjects = true;
+        } else
             $state.go('projects.project', {projectId: $scope.selectedProject._id})
+            $scope.noProjects = false;
     };
 
     $scope.selectProject = function(project) {
         $scope.selectedProject = project;
+        if (!project) {
+            $scope.noProjects = true;
+        } else {
+            $scope.noProjects = false;
+        }
     };
 
 });

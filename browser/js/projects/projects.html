@@ -1,4 +1,5 @@
-<div class="container">
+<div class="container projects-container">
+	<div class="row">
 	<div class="pull-right">
 		<select ng-change="loadProject()" ng-model="selectedProject" ng-options="project.title for project in projects track by project._id">
 			<option value="">-- choose an project --</option>
@@ -10,8 +11,16 @@
 	    	<span class="glyphicon glyphicon-plus"></span>
 	    </a>
 	</div>
+	</div>
+	<div class="block projects-block" ng-if="noProjects">
+		<div class="centered">
+			<h3 class="grey">Create a new project to continue.</h3>
+			<div class="btn btn-primary">Create</div>
+		</div>
+	</div>
+
     <ui-view></ui-view>
-	    
+
 
 	<!-- Project Modal -->
 	  <div class="modal fade" id="projectModal" role="dialog">
@@ -58,8 +67,3 @@
 	  </div>
 
 </div>
-
-
-
-
-
