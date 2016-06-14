@@ -1,8 +1,16 @@
-<div style="margin-top: 15px">
-	<ul class="nav nav-tabs">
+<div style="margin-top: 15px" class="container">
+	<!-- <ul class="nav nav-tabs">
 	  <li ng-class="{active: jobTab._id === job._id}" ng-repeat="jobTab in jobs"><a href="#" ng-click="loadJob(jobTab)">{{jobTab.title}}</a></li>
 	  <li ng-class="{active: !job || job._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></li>
-	</ul>
+	</ul> -->
+	<!-- <div class="col-md-3">
+		<span class="sub-header">Jobs</span>
+		<span ng-class="{active: !job || job._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></span>
+	</div>
+	<div class="sub-categories">
+		<div ng-class="{active: jobTab._id === job._id}" ng-repeat="jobTab in jobs"><a href="#" ng-click="loadJob(jobTab)">{{jobTab.title}}</a></div>
+	</div> -->
+
 
 	<ui-view>
 		<h4 align=center>Select a job from the tabs above (or click the + to add new).</h4>

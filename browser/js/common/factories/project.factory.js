@@ -1,6 +1,8 @@
 app.factory('ProjectFactory', function ($http) {
+    var cacheData;
     var parseData = function(res) {
-    	return res.data;
+    	cacheData = res.data;
+        return cacheData;
     };
 
     return {
@@ -30,6 +32,9 @@ app.factory('ProjectFactory', function ($http) {
                     return i;
             }
             return -1;
+        },
+        getCacheProjects: function() {
+            return cacheData;
         }
     }
 });
