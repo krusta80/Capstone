@@ -18,6 +18,7 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
     $scope.loading = false;
     $scope.url ='http://msnbc.com';
     $scope.saved = false;
+    $scope.page = page;
 
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
@@ -37,11 +38,11 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                         $scope.$apply();
 
                         // var iframecontents = $('#iframedisplay').contents()[0];
-                        
+
                         // var iframebodycontents = $(iframecontents).find('body').find('*');
                         // $(iframebodycontents).find('*').on('click', function(ev) {
                         //     //$scope.selector = Messenger.get();
-                            
+
                         //     var selector = Messenger.get();
                         //     if (selector){
                         //         debugger;
@@ -51,7 +52,7 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                         // });
 
                     };
-                    
+
                 }, 0);
             })
             .catch(function(err) {

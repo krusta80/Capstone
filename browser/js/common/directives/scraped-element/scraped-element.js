@@ -1,10 +1,17 @@
 
-app.directive('scrapedElement', function($rootScope, ScraperElementFactory){
+app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
   return {
     restrict: 'E',
     templateUrl: '/js/common/directives/scraped-element/scraped-element.html',
-    link: function(scope) {
-      scope.scrapedElementData = ScraperElementFactory.get();
+    scope: {
+      page: '='
+    },
+    link: function(scope, attr, link) {
+      scope.scrapedPageObject = ScraperElementFactory.setAndGet(scope.page);
+      scope.scrapedPageObject.targetElements.forEach(function(targetElem) {
+        targetElem.fields = JSON.parse(targetElem.fields);
+      });
+      debugger;
       scope.getNumber = function(num) {
         return new Array(num);
       };
@@ -19,10 +26,8 @@ app.directive('scrapedElement', function($rootScope, ScraperElementFactory){
         ScraperElementFactory.remove(obj);
       };
       $rootScope.$on('extract', function(event,value) {
-        ScraperElementFactory.add(value);
-        scope.$apply();
+        ScraperElementFactory.update(value);
       });
     }
   };
 });
-

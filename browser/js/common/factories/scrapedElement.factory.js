@@ -1,9 +1,6 @@
 app.factory('ScraperElementFactory', function($http, PageFactory){
   var scrapedFieldObj = {};
-  var cachedData = {
-    data: [],
-    maxAdditionalFields: 0
-  };
+  var cachedData;
   scrapedFieldObj.save = function() {
 
   };
@@ -18,17 +15,12 @@ app.factory('ScraperElementFactory', function($http, PageFactory){
     cachedData.data.splice(index,1);
   };
 
-  scrapedFieldObj.add = function(dataObj) {
-    if (dataObj.content === "Too many elements - narrow your search") { return; }
-    if (dataObj.additionalTargets) {
-      if (cachedData.maxAdditionalFields < dataObj.additionalTargets.length) {
-        cachedData.maxAdditionalFields = dataObj.additionalTargets.length;
-      }    
-    }
-    cachedData['data'].push(dataObj);
+  scrapedFieldObj.update = function(pageObj) {
+    cachedData = pageObj;
   };
 
-  scrapedFieldObj.get = function() {
+  scrapedFieldObj.setAndGet = function(pageObj) {
+    cachedData = pageObj;
     return cachedData;
   };
 

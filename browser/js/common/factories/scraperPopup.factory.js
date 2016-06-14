@@ -1,4 +1,4 @@
-app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
+app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFactory){
   var scrapedFieldObj = {};
   var pageObj;
   var cachedData = {
@@ -52,6 +52,7 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
         pageObj.targetElements.push(scraperElementSchema);
       });
     }
+    $rootScope.$emit('extract',pageObj);
     return PageFactory.update(pageObj);
   };
 
