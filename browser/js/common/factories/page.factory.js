@@ -21,6 +21,7 @@ app.factory('PageFactory', function ($http) {
     		.then(parseData)
     	},
     	remove: function(id) {
+            console.log("heres delete id: ", id);
     		return $http.delete('/api/pages/' + id)
     		.then(parseData)
     	},
