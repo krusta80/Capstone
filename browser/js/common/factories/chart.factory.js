@@ -24,6 +24,9 @@ app.factory('ChartFactory', function() {
     this.setData(chartTypesMap[chartName].data);
   };
 
+  var xAxisLabel = 'Price';
+  var yAxisLabel = 'Stars Avg';
+
   var chartTypesMap = {
     scatterChart: {
       options: {
@@ -31,9 +34,6 @@ app.factory('ChartFactory', function() {
               type: 'scatterChart',
               height: 450,
               color: d3.scale.category10().range(),
-              scatter: {
-                  onlyCircles: false
-              },
               showDistX: true,
               showDistY: true,
             //tooltipContent: function(d) {
@@ -41,31 +41,22 @@ app.factory('ChartFactory', function() {
             //},
               duration: 350,
               xAxis: {
-                  axisLabel: 'X Axis',
+                  axisLabel: xAxisLabel,
                   tickFormat: function(d){
+                    //Sets how many decimal points are being displayed, here set to two
                       return d3.format('.02f')(d);
                   }
               },
               yAxis: {
-                  axisLabel: 'Y Axis',
+                  axisLabel: yAxisLabel,
                   tickFormat: function(d){
                       return d3.format('.02f')(d);
                   },
                   axisLabelDistance: -5
-              },
-              zoom: {
-                  //NOTE: All attributes below are optional
-                  enabled: true,
-                  scaleExtent: [1, 10],
-                  useFixedDomain: false,
-                  useNiceScale: false,
-                  horizontalOff: false,
-                  verticalOff: false,
-                  unzoomEventType: 'dblclick.zoom'
               }
           }
         },
-        data: generateData(4,40)
+        data: generateData({'Beats', 'Sennheiser', 'Bose'},40)
     },
     discreteBarChart: {
       options: {
@@ -90,10 +81,10 @@ app.factory('ChartFactory', function() {
                   },
                   duration: 500,
                   xAxis: {
-                      axisLabel: 'X Axis'
+                      axisLabel: xAxisLabel
                   },
                   yAxis: {
-                      axisLabel: 'Y Axis',
+                      axisLabel: yAxisLabel,
                       axisLabelDistance: -10
                   }
               }
@@ -141,15 +132,14 @@ app.factory('ChartFactory', function() {
   };
   return chartFactoryObj;
 
-    /* Random Data Generator (took from nvd3.org) */
+    /* Random Data Generator (took from nvd3.org) */ 
   function generateData(groups, points) {
       var data = [],
-          shapes = ['circle', 'cross', 'triangle-up', 'triangle-down', 'diamond', 'square'],
           random = d3.random.normal();
 
-      for (var i = 0; i < groups; i++) {
+      for (var i = 0; i < groups.length; i++) {
           data.push({
-              key: 'Group ' + i,
+              key: groups[i],
               values: []
           });
 
@@ -158,7 +148,7 @@ app.factory('ChartFactory', function() {
                   x: random(),
                   y: random(),
                   size: Math.random(),
-                  shape: shapes[j % 6]
+                  shape: 'circle'
               });
           }
       }
