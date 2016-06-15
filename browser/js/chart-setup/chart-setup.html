@@ -1,0 +1,13 @@
+<div class="container">
+    <div class="span">
+        <select id="selectProject"
+            ng-model="params.project"
+            ng-options="chart for chart in params.charts">
+        </select>
+        <div id="mode">
+            <label><input type="checkbox" ng-model="params.visible"> Visible</label>&nbsp;
+            <label><input type="checkbox" ng-model="params.disabled"> Disabled</label>&nbsp;
+        </div>
+    </div>
+
+</div>
