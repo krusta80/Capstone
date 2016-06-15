@@ -56,7 +56,7 @@ app.factory('ChartFactory', function() {
               }
           }
         },
-        data: generateData({'Beats', 'Sennheiser', 'Bose'},40)
+        data: generateData(['Beats', 'Sennheiser', 'Bose'],40)
     },
     discreteBarChart: {
       options: {
