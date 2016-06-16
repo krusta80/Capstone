@@ -23,13 +23,15 @@ var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = mongoose.model('User'),
   pageData = require('./tests/server/seeds/testPage'),
+  histData = require('./tests/server/seeds/chartSeed'),
   Page = mongoose.model('Page'),
-  Job = mongoose.model('Job');
+  Job = mongoose.model('Job'),
+  ScraperElementHist = mongoose.model('ScraperElementHist');
 
 var wipeCollections = function () {
     var removeUsers = User.remove({});
     return Promise.all([
-        removeUsers, Page.remove({}), Job.remove({})
+        removeUsers, Page.remove({}), Job.remove({}), ScraperElementHist.remove({})
     ]);
 };
 
@@ -54,12 +56,16 @@ var seedPages = function(){
   return Page.create(pageData);
 };
 
+var seedHist = function(){
+  return ScraperElementHist.create(histData);
+};
+
 connectToDb
     .then(function () {
         return wipeCollections();
     })
     .then(function () {
-        return Promise.join(seedUsers(), seedPages());
+        return Promise.join(seedUsers(), seedPages(), seedHist());
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));
