@@ -27,7 +27,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
         }
       });
       var scraperElementSchema = {
-        name: 'test',
+        name: 'target ' + (pageObj.targetElements.length).toString(),
         domSelector: cachedData.raw.selector,
         selectorIndex: cachedData.raw.selectorIndex,
         fields: JSON.stringify(fieldsObj)
@@ -52,8 +52,15 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
         pageObj.targetElements.push(scraperElementSchema);
       });
     }
-    $rootScope.$emit('extract',pageObj);
-    return PageFactory.update(pageObj);
+
+    // var payload = _.clone(pageObj);
+    // payload.targetElements.forEach(function(targetElement) {
+    //   targetElement.fields = JSON.stringify(targetElement.fields);
+    // });
+    return PageFactory.update(pageObj).then(function(_data) {
+        $rootScope.$emit('extract',_data);
+        return _data;
+    })
   };
 
   scrapedFieldObj.reset = function() {

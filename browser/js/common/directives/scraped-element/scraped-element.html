@@ -1,9 +1,13 @@
-<div class="clearfix" ng-show="scrapedPageObject.targetElements.length > 0">
+<div class="clearfix"" ng-show="scrapedPageObject.targetElements.length>0">
+
+    <div class="btn btn-primary" ng-click="setReset()">
+        reset
+    </div>
     <div class="clearfix" ng-repeat="target in scrapedPageObject.targetElements">
-        <div class="pull-left">{{target.name}}</div>
-        <div class="clearfix" ng-repeat="(key, value) in target.fields">
+        <h4>{{target.name}}</h4>
+        <div class="clearfix" ng-repeat="(key, value) in target.fields track by $index">
             <div class="pull-left">{{key}}</div>
-            <div class="btn btn-danger pull-right" ng-click="removeItem(key)">Delete</div>
+            <div class="btn btn-danger pull-right" ng-click="removeItem(target, key)">Delete</div>
         </div>
     </div>
 </div>

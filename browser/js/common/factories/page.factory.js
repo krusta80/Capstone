@@ -1,6 +1,17 @@
 app.factory('PageFactory', function ($http) {
     var parseData = function(res) {
-    	return res.data;
+        if (res.data.targetElements) {
+            return jsonifyData(res.data);
+        }
+        return res.data;
+    };
+    var jsonifyData = function(data) {
+        data.targetElements.forEach(function(targetElement) {
+            if (typeof targetElement.fields === "string") {
+                targetElement.fields = JSON.parse(targetElement.fields);
+            }
+        });
+        return data;
     };
 
     return {
@@ -17,6 +28,11 @@ app.factory('PageFactory', function ($http) {
     		.then(parseData)
     	},
     	update: function(page) {
+            page.targetElements.forEach(function(targetElement) {
+                if (typeof targetElement.fields != "string") {
+                    targetElement.fields = JSON.stringify(targetElement.fields);
+                }
+            });
     		return $http.put('/api/pages/' + page._id, page)
     		.then(parseData)
     	},

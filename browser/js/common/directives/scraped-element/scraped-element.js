@@ -9,9 +9,10 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
     link: function(scope, attr, link) {
       scope.scrapedPageObject = ScraperElementFactory.setAndGet(scope.page);
       scope.scrapedPageObject.targetElements.forEach(function(targetElem) {
-        targetElem.fields = JSON.parse(targetElem.fields);
+        if (typeof targetElem.fields === 'string') {
+          targetElem.fields = JSON.parse(targetElem.fields);
+        }
       });
-      debugger;
       scope.getNumber = function(num) {
         return new Array(num);
       };
@@ -22,10 +23,11 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
       scope.isSelector = function(key) {
         return key != "selector"
       };
-      scope.removeItem = function(obj) {
-        ScraperElementFactory.remove(obj);
+      scope.removeItem = function(target, key) {
+        ScraperElementFactory.remove(target, key);
       };
       $rootScope.$on('extract', function(event,value) {
+        debugger;
         ScraperElementFactory.update(value);
       });
     }
