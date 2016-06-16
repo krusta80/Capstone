@@ -23,15 +23,17 @@ var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = mongoose.model('User'),
   pageData = require('./tests/server/seeds/testPage'),
-  histData = require('./tests/server/seeds/chartSeed'),
+  makeHist = require('./tests/server/seeds/chartSeed'),
+  makeProj = require('./tests/server/seeds/jobSeed');
   Page = mongoose.model('Page'),
   Job = mongoose.model('Job'),
+  Project = mongoose.model('Project'),
   ScraperElementHist = mongoose.model('ScraperElementHist');
 
 var wipeCollections = function () {
     var removeUsers = User.remove({});
     return Promise.all([
-        removeUsers, Page.remove({}), Job.remove({}), ScraperElementHist.remove({})
+        removeUsers, Page.remove({}), Project.remove({}), ScraperElementHist.remove({})
     ]);
 };
 
@@ -56,16 +58,21 @@ var seedPages = function(){
   return Page.create(pageData);
 };
 
-var seedHist = function(){
-  return ScraperElementHist.create(histData);
+var seedHist = function(pageId){
+  return ScraperElementHist.create(makeHist(pageId, 10));
+};
+
+var seedProject = function(pageId){
+  return Project.create(makeProj(pageId));
 };
 
 connectToDb
     .then(function () {
         return wipeCollections();
     })
-    .then(function () {
-        return Promise.join(seedUsers(), seedPages(), seedHist());
+    .then(seedPages)
+    .then(function (page) {
+        return Promise.join(seedUsers(), seedHist(page._id), seedProject(page._id));
     })
     .then(function () {
         console.log(chalk.green('Seed successful!'));

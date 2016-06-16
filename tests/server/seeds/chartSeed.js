@@ -26,4 +26,4 @@ function makeHistElement(pageId, count){
   return rtn;
 }
 
-module.exports = makeHistElement(page1Id, 10);
+module.exports = makeHistElement;

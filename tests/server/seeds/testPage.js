@@ -86,4 +86,4 @@ var page2 = {
   targetElements: [scraperElement3, scraperElement4]
 
 };
-module.exports = [page, page2];
+module.exports = page;
