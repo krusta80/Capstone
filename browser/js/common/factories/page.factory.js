@@ -6,10 +6,11 @@ app.factory('PageFactory', function ($http) {
         return res.data;
     };
     var jsonifyData = function(data) {
-        data.targetElements.forEach(function(targetElement) {
+        data.targetElements = data.targetElements.map(function(targetElement) {
             if (typeof targetElement.fields === "string") {
                 targetElement.fields = JSON.parse(targetElement.fields);
             }
+            return targetElement;
         });
         return data;
     };
@@ -28,13 +29,13 @@ app.factory('PageFactory', function ($http) {
     		.then(parseData)
     	},
     	update: function(page) {
-            page.targetElements.forEach(function(targetElement) {
+            page.targetElements = page.targetElements.map(function(targetElement) {
                 if (typeof targetElement.fields != "string") {
                     targetElement.fields = JSON.stringify(targetElement.fields);
                 }
+                return targetElement;
             });
-    		return $http.put('/api/pages/' + page._id, page)
-    		.then(parseData)
+    		return $http.put('/api/pages/' + page._id, page).then(parseData);
     	},
     	remove: function(id) {
             console.log("heres delete id: ", id);

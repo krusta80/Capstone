@@ -19,7 +19,6 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         var cachedData = ScraperPopupFactory.get();
         ScraperPopupFactory.save(attributes, cachedData, isRepeating)
           .then(function(data) {
-            debugger;
             if (data) {
               scope.popupactivated = false;
             }

@@ -32,8 +32,6 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
         selectorIndex: cachedData.raw.selectorIndex,
         fields: JSON.stringify(fieldsObj)
       };
-    // console.log("toPost:",scraperElementSchema);
-    // console.log('this is the page', pageObj);
       pageObj.targetElements.push(scraperElementSchema);
     }
     else{
@@ -52,15 +50,15 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
         pageObj.targetElements.push(scraperElementSchema);
       });
     }
-
-    // var payload = _.clone(pageObj);
-    // payload.targetElements.forEach(function(targetElement) {
-    //   targetElement.fields = JSON.stringify(targetElement.fields);
-    // });
-    return PageFactory.update(pageObj).then(function(_data) {
-        $rootScope.$emit('extract',_data);
-        return _data;
-    })
+    $rootScope.$emit('extract',pageObj);
+    var payload = _.cloneDeep(pageObj);
+    payload.targetElements.forEach(function(targetElement) {
+      targetElement.fields = JSON.stringify(targetElement.fields);
+    });
+    return PageFactory.update(payload).then(function(data) {
+      $rootScope.$emit('extract',data); // need to do it twice to update the data... couldnt find a refactor that worked
+      return data;
+    });
   };
 
   scrapedFieldObj.reset = function() {

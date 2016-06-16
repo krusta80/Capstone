@@ -27,8 +27,7 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
         ScraperElementFactory.remove(target, key);
       };
       $rootScope.$on('extract', function(event,value) {
-        debugger;
-        ScraperElementFactory.update(value);
+        scope.scrapedPageObject = ScraperElementFactory.update(value);
       });
     }
   };
