@@ -8,10 +8,23 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('DashboardCtrl', function ($scope, $stateParams, $state) {
+app.controller('DashboardCtrl', function ($scope, $stateParams, $state, DashboardFactory) {
 
     $scope.newChart = function(){
         $state.go('dashboard.chartSetup');
+    };
+
+    $scope.getCharts = function(){
+        DashboardFactory.getCharts()
+        .then(function(charts){
+            $scope.charts = charts;
+        })
+    };
+
+    $scope.getCharts();
+    
+    $scope.jsonCharts = function(){
+        res.send($scope.getCharts());
     };
 
 
