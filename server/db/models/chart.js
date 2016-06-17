@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var Page = mongoose.model('Page').schema;
 
-var chartTypes = ['Scatter Plot'];
+var chartTypes = ['scatterChart', 'discreteBarChart'];
 
 var chartSchema = new mongoose.Schema({
 	name: {
@@ -30,6 +30,10 @@ var chartSchema = new mongoose.Schema({
 	historical: {
     	type: Boolean,
     	default: false
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   },
 	createdDate: {
     	type: Date,
