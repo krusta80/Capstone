@@ -13,28 +13,29 @@ app.factory('ChartSetupFactory', function($http) {
 
   ChartSetupFactory.getJobs = function (project){
     //hit project and return jobs within
-    return $http.get('/api/jobs/byProject/' + project._id)
+    return $http.get('/api/projects/' + project._id + '/jobs')
     .then(function(response){
-      console.log('/api/jobs/byProject/' + project._id)
-      console.log('project._id is',project._id)
-      console.log('response.data is',response.data)
       return response.data;
     });
   };
 
   ChartSetupFactory.getPages = function (job){
     //hit job and return pages within
-    return $http.get('/api/jobs/byJob/' + job.id)
+    return $http.get('/api/pages/byJob/' + job._id)
     .then(function(response){
       return response.data;
     });
   };
 
-  ChartSetupFactory.saveData = function (data){
+  ChartSetupFactory.saveChart = function (data){
     //saves $scope.data
-    return $http.post('/api/charts')
+    return $http.post('/api/charts', data)
     .then(function(response){
+      console.log('response is',response)
       return response.data;
+    })
+    .catch(function(err){
+      console.log("Err:", err);
     });
   };
 

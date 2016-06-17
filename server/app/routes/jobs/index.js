@@ -24,12 +24,15 @@ router.get('/', ensureAuthenticated, function (req, res) {
     })
 });
 
+//note: Schema does not currently support this route
 router.get('/byProject/:projectId', ensureAuthenticated, function (req, res) {
-    console.log(Job.find({Project: req.params.projectId}))
     Job.find({Project: req.params.projectId})
     .then(function(jobs) {
         res.send(jobs);
-    });
+    })
+    .catch(function(err){
+        console.log("Err:", err);
+    })
 });
 
 router.get('/:id', ensureAuthenticated, function (req, res) {

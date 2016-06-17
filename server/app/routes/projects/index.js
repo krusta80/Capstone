@@ -31,6 +31,13 @@ router.get('/:id', ensureAuthenticated, function (req, res) {
     });
 });
 
+router.get('/:id/jobs', ensureAuthenticated, function (req, res) {
+    Project.findById(req.params.id)
+    .then(function(project) {
+        res.send(project.jobs);
+    });
+});
+
 router.post('/', ensureAuthenticated, function (req, res) {
     req.body.user = req.user;
     Project.create(req.body)

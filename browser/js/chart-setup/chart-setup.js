@@ -9,27 +9,32 @@ app.config(function ($stateProvider) {
 });
 
 app.controller('ChartSetupCtrl', function ($scope, $stateParams, $state, ChartSetupFactory) {
-    $scope.data;
-    $scope.params = {
-        // jobs: ChartSetupFactory.getJobs($scope.params.selectedProject),
-        // pages: ChartSetupFactory.getPages($scope.params.selectedJob),
-        chartTypes: ['scatterChart', 'discreteBarChart'] //dropdown, needs to be modularized eventually
-    };
-    //$scope.saveData = ChartSetupFactory.saveData($scope.data);
 
-    //reference user projects
+    $scope.data;
+
     ChartSetupFactory.getProjects()
     .then(function(projects) {
-        $scope.params.projects = projects;
+        $scope.projects = projects;
     });
 
     $scope.getJobs = function(){
-        console.log("Running, project is: ",$scope.data.project)
         ChartSetupFactory.getJobs($scope.data.project)
         .then(function(jobs){
-            console.log("jobs are: ",jobs);
-            $scope.params.jobs = jobs;
+            $scope.jobs = jobs;
         })
+    };
+
+    $scope.getPages = function(){
+        ChartSetupFactory.getPages($scope.data.job)
+        .then(function(pages){
+            $scope.pages = pages;
+        });
+    };
+
+    $scope.chartTypes = ['scatterChart', 'discreteBarChart']; //dropdown, needs to be modularized eventually
+
+    $scope.saveChart = function(){
+        ChartSetupFactory.saveChart($scope.data);
     };
 
 });
