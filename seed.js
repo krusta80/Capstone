@@ -39,18 +39,14 @@ var wipeCollections = function () {
 
 var seedUsers = function () {
 
-    var users = [
-        {
-            email: 'testing@fsa.com',
-            password: 'password'
-        },
+    var user =
         {
             email: 'obama@gmail.com',
             password: 'potus'
-        }
-    ];
+        };
 
-    return User.create(users);
+
+    return User.create(user);
 
 };
 
@@ -62,8 +58,8 @@ var seedHist = function(pageId){
   return ScraperElementHist.create(makeHist(pageId, 10));
 };
 
-var seedProject = function(pageId){
-  return Project.create(makeProj(pageId));
+var seedProject = function(pageId, userId){
+  return Project.create(makeProj(pageId, userId));
 };
 
 connectToDb
@@ -72,13 +68,16 @@ connectToDb
     })
     .then(seedPages)
     .then(function (page) {
-        return Promise.join(seedUsers(), seedHist(page._id), seedProject(page._id));
-    })
-    .then(function () {
-        console.log(chalk.green('Seed successful!'));
-        process.kill(0);
-    })
-    .catch(function (err) {
-        console.error(err);
-        process.kill(1);
-    });
+        seedUsers()
+        .then(function(user){
+          return Promise.join(seedHist(page._id), seedProject(page._id, user._id));
+        })
+        .then(function () {
+            console.log(chalk.green('Seed successful!'));
+            process.kill(0);
+        })
+        .catch(function (err) {
+            console.error(err);
+            process.kill(1);
+        });
+      });

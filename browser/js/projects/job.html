@@ -118,6 +118,7 @@
 		       <button ng-click="saveJob()" class="btn btn-success">Save Job</button>
 		       <button ng-click="removeJob()" class="btn btn-danger">Delete Job</button>
 		       <button ng-click="runJob()" ng-disabled="!job.active" class="btn btn-primary">Run Job</button>
+					 <button ng-disabled="!job.pages.length" class="btn btn-success" ui-sref="projects.project.jobChartDesigner({id: job._id})">Create chart</button>
 		       <alert type="success" ng-show="success">
 	        		Job successfully saved!
 	    	   </alert>
