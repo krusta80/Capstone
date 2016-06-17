@@ -37,6 +37,11 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                         $scope.loading = false; // this is to set the loader
                         $scope.$apply();
 
+                        var iframe = document.getElementById('iframedisplay').contentDocument;
+
+                        $scope.page.targetElements.forEach(function(targetElement) {
+                            iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].className += " __clickActivate";
+                        });
                         // var iframecontents = $('#iframedisplay').contents()[0];
 
                         // var iframebodycontents = $(iframecontents).find('body').find('*');
