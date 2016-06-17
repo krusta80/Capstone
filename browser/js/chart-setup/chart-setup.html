@@ -1,12 +1,25 @@
 <div class="container">
     <div class="span">
+        Chart Name: <input type="text" name="chartName"><br>
         <select id="selectProject"
-            ng-model="params.project"
-            ng-options="chart for chart in params.charts">
-        </select>
-        <div id="mode">
-            <label><input type="checkbox" ng-model="params.visible"> Visible</label>&nbsp;
-            <label><input type="checkbox" ng-model="params.disabled"> Disabled</label>&nbsp;
+            ng-model="data.project"
+            ng-options="project.title for project in params.projects"
+            ng-change="getJobs()">
+        </select><br>
+        <select id="selectJob"
+            ng-model="data.job"
+            ng-options="job for job in params.jobs">
+        </select><br>
+        <select multiple id="selectPage"
+            ng-model="data.pages"
+            ng-options="page for page in params.pages">
+        </select><br>
+        <select id="selectChartType"
+            ng-model="data.chartType"
+            ng-options="chartType for chartType in params.chartTypes">
+        </select><br>
+        <div id="historical">
+            <label> Historical <input type="checkbox" ng-model="params.historical"> </label>
         </div>
     </div>
 

@@ -32,7 +32,6 @@ router.get('/:id', ensureAuthenticated, function(req,res){
 });
 
 router.post('/', ensureAuthenticated, function(req,res){
-	req.body.user = req.user;
 	Chart.create(req.body)
 	.then(function(chart){
 		res.send(chart);

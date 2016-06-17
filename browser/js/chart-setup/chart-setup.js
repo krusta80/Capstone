@@ -2,25 +2,34 @@ app.config(function ($stateProvider) {
 
     $stateProvider.state('chartSetup', {
         url: '/chart-setup',
-        templateUrl: 'js/chart-setup/chart-setup.html',
+        templateUrl: '/js/chart-setup/chart-setup.html',
         controller: 'ChartSetupCtrl'
     });
 
 });
 
-app.controller('ChartSetupCtrl', function ($scope, $stateParams, $state, chartSetupFactory) {
-
+app.controller('ChartSetupCtrl', function ($scope, $stateParams, $state, ChartSetupFactory) {
+    $scope.data;
     $scope.params = {
-        chartName: $scope.chartName, //free text
-        selectedProject: $scope.project, //dropdown
-        projects: chartSetupFactory.getProjects(), //reference to user projects
-        selectedJob: $scope.job, //dropdown dependent on project
-        jobs: chartSetupFactory.getJobs($scope.params.selectedProject),
-        selectedPage: $scope.page, //multiple select
-        pages: chartSetupFactory.getPages($scope.params.selectedJob),
-        selectedChartType: $scope.chartType,
-        chartTypes: ['scatterChart', 'discreteBarChart'], //dropdown, needs to be modularized eventually
-        historical: $scope.historical //boolean
+        // jobs: ChartSetupFactory.getJobs($scope.params.selectedProject),
+        // pages: ChartSetupFactory.getPages($scope.params.selectedJob),
+        chartTypes: ['scatterChart', 'discreteBarChart'] //dropdown, needs to be modularized eventually
+    };
+    //$scope.saveData = ChartSetupFactory.saveData($scope.data);
+
+    //reference user projects
+    ChartSetupFactory.getProjects()
+    .then(function(projects) {
+        $scope.params.projects = projects;
+    });
+
+    $scope.getJobs = function(){
+        console.log("Running, project is: ",$scope.data.project)
+        ChartSetupFactory.getJobs($scope.data.project)
+        .then(function(jobs){
+            console.log("jobs are: ",jobs);
+            $scope.params.jobs = jobs;
+        })
     };
 
 });

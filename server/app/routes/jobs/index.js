@@ -25,6 +25,7 @@ router.get('/', ensureAuthenticated, function (req, res) {
 });
 
 router.get('/byProject/:projectId', ensureAuthenticated, function (req, res) {
+    console.log(Job.find({Project: req.params.projectId}))
     Job.find({Project: req.params.projectId})
     .then(function(jobs) {
         res.send(jobs);
