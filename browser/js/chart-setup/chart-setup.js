@@ -1,6 +1,6 @@
 app.config(function ($stateProvider) {
 
-    $stateProvider.state('chartSetup', {
+    $stateProvider.state('dashboard.chartSetup', {
         url: '/chart-setup',
         templateUrl: '/js/chart-setup/chart-setup.html',
         controller: 'ChartSetupCtrl'
