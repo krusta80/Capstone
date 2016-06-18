@@ -55,28 +55,16 @@
         <span class="icon-bar"></span>
       </button>
       <ul class="breadcrumb">
-        <li><a href="#/">Materialism</a></li>
+        <li><a ui-sref="/" ui-sref-active="active">Home</a></li>
         <li ng-bind="pageTitle" class="active">Loading..</li>
       </ul>
     </div>
 
     <ul class="nav navbar-nav navbar-right navbar-right-no-collapse">
-      <li class="dropdown pull-right">
-        <button class="dropdown-toggle pointer btn btn-round-sm btn-link withoutripple" bs-dropdown="dropdown"
-                data-template-url="assets/tpl/partials/dropdown-navbar.html" data-animation="mat-grow-top-right">
-          <i class="md md-more-vert f20"></i>
+      <li class="pull-right" ng-show="!user" ui-sref="login" title="login">
+        <button class="pointer btn btn-round-sm btn-link">
+          <i class="md md-account-box f20"></i>
         </button>
-      </li>
-      <li class="dropdown pull-right">
-        <button class="dropdown-toggle pointer btn btn-round-sm btn-link withoutripple" bs-dropdown="dropdown"
-                data-template-url="assets/tpl/partials/theme-picker.html"
-                analytics-on="click" analytics-category="Themepicker" analytics-event="Open">
-          <i class="md md-settings f20"></i>
-        </button>
-      </li>
-
-      <li class="pull-right pointer " ng-show="!user">
-        <button ui-sref="login" class="btn login-button">Login</button>
       </li>
     </ul>
   </div>
