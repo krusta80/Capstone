@@ -1,0 +1,270 @@
+* {
+  box-sizing: border-box; }
+
+body {
+  background: #fdfdfd; }
+
+#main {
+  padding-top: 15px;
+  margin: 0 auto; }
+
+.absolute {
+  position: absolute; }
+
+.topleft {
+  top: 0;
+  left: 0; }
+
+.bold {
+  font-weight: 700; }
+
+.underline {
+  text-decoration: underline; }
+
+.glyphicon.spinning {
+  animation: spin 1s infinite linear;
+  -webkit-animation: spin2 1s infinite linear; }
+
+@keyframes spin {
+  from {
+    transform: scale(1) rotate(0deg); }
+  to {
+    transform: scale(1) rotate(360deg); } }
+
+@-webkit-keyframes spin2 {
+  from {
+    -webkit-transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg); } }
+
+fullstack-logo {
+  display: block; }
+  fullstack-logo img {
+    display: block;
+    width: 100%; }
+
+navbar {
+  display: block;
+  background: white;
+  border-bottom: 1px solid black;
+  box-shadow: 1px 1px 14px -3px black; }
+  navbar .container {
+    width: 91%;
+    max-width: 1340px;
+    padding-top: 20px; }
+  navbar fullstack-logo {
+    margin-top: 5px;
+    margin-right: 20px;
+    width: 40px; }
+  navbar a {
+    color: black;
+    font-size: 16px; }
+  navbar .nav > li > a {
+    cursor: pointer;
+    transition: color 0.2s; }
+    navbar .nav > li > a.active {
+      color: #c80a0c; }
+    navbar .nav > li > a:hover {
+      background: none;
+      color: #f31214; }
+    navbar .nav > li > a:focus {
+      background: none; }
+  navbar .login-button {
+    float: right;
+    border: 1px solid black;
+    margin-top: 10px;
+    background: none;
+    outline: none !important; }
+  navbar .welcome {
+    float: right;
+    margin-top: 12px; }
+    navbar .welcome span {
+      color: black;
+      font-size: 16px;
+      margin-right: 5px; }
+    navbar .welcome a {
+      color: #f30046;
+      cursor: pointer; }
+
+.active-col, .grid-col:hover {
+  background: green;
+  cursor: pointer; }
+
+.scraperInfo {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 12px;
+  padding: 10px;
+  left: 20px;
+  word-wrap: break-word; }
+
+.scraperPopup {
+  background-color: rgba(0, 0, 0, 0.6);
+  color: black;
+  font-size: 12px;
+  padding: 10px;
+  word-wrap: break-word; }
+  .scraperPopup label {
+    margin-left: 20px; }
+
+.inline-block {
+  display: inline-block; }
+
+.tablecontainer {
+  width: 98vw;
+  margin: 0 auto; }
+
+.scrapedSelect {
+  display: inline-block;
+  width: auto;
+  min-width: 150px;
+  margin-right: 20px; }
+
+#home fullstack-logo {
+  padding-top: 30px;
+  width: 150px;
+  margin: 0 auto; }
+
+#home h1 {
+  margin-top: 40px;
+  text-align: center; }
+
+#about {
+  margin: 0 auto;
+  width: 90%; }
+  #about:after {
+    content: "";
+    display: table;
+    clear: both; }
+  #about p {
+    width: 40%;
+    margin: 0 auto;
+    text-align: justify;
+    font-size: 22px;
+    font-weight: 300;
+    float: left; }
+  #about .carousel {
+    float: right;
+    width: 55%;
+    overflow: hidden;
+    margin: 0 auto; }
+    #about .carousel .carousel-inner {
+      height: 500px !important; }
+    #about .carousel .carousel-control {
+      background: none; }
+    #about .carousel .carousel-indicators {
+      display: none; }
+    #about .carousel img {
+      max-width: 100%;
+      max-height: 500px;
+      display: block;
+      margin: 0 auto; }
+
+tutorial-section {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 20px 0 60px 0; }
+  tutorial-section > h1 {
+    margin: 20px 0 40px 0;
+    text-align: center;
+    font-weight: bold; }
+
+tutorial-video {
+  display: block;
+  width: 600px;
+  margin: 0 auto; }
+  tutorial-video h1 {
+    font-weight: 300;
+    font-size: 24px;
+    margin-bottom: 15px; }
+  tutorial-video iframe {
+    width: 600px;
+    height: 400px; }
+
+tutorial-section-menu {
+  display: block; }
+  tutorial-section-menu:after {
+    content: "";
+    display: table;
+    clear: both; }
+  tutorial-section-menu ul {
+    margin-left: 23px;
+    list-style-type: none;
+    font-weight: 300; }
+    tutorial-section-menu ul li {
+      float: left;
+      margin-right: 40px;
+      padding: 10px;
+      cursor: pointer; }
+      tutorial-section-menu ul li:hover {
+        background: #f3f3f3; }
+
+#login-form {
+  width: 60%;
+  margin: 0 auto; }
+
+#iframedisplay {
+  width: 100%;
+  height: calc(100vh - 180px);
+  position: relative; }
+
+.iframeContainer {
+  position: relative;
+  height: calc(100vh - 180px); }
+  .iframeContainer .overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; }
+    .iframeContainer .overlay .centered {
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      margin-top: -22.75px;
+      margin-left: -68.425px; }
+
+/* This parent can be any width and height */
+.block {
+  text-align: center;
+  /* May want to do this if there is risk the container may be narrower than the element inside */
+  white-space: nowrap; }
+
+/* The ghost, nudged to maintain perfect centering */
+.block:before {
+  content: '';
+  display: inline-block;
+  height: 90%;
+  vertical-align: middle;
+  margin-right: -0.25em;
+  /* Adjusts for spacing */ }
+
+/* The element to be centered, can also be of any width and height */
+.centered {
+  display: inline-block;
+  vertical-align: middle;
+  width: auto; }
+
+.projects-container {
+  height: 90vh; }
+
+.projects-block {
+  height: 100%; }
+  .projects-block h3 {
+    font-family: arial, sans-serif;
+    font-size: 45px;
+    color: rgba(0, 0, 0, 0.5); }
+
+.sub-header {
+  font-size: 20px; }
+
+.sub-categories {
+  margin-left: 20px; }
+
+.red {
+  color: red; }
+
+.sub-active {
+  border: 1px solid black; }
