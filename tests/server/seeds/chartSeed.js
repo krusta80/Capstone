@@ -9,7 +9,7 @@ function makeHistElement(pageId, count){
   while (count--){
     runDate.setDate(runDate.getDate() + 1);
     rtn.push({
-      page: page1Id,
+      page: pageId,
       fields: JSON.stringify({
         price:{
           index: 0,
@@ -17,10 +17,10 @@ function makeHistElement(pageId, count){
        },
        reviews: {
          index: 1,
-         value: Math.round((Math.random() * 4)).toString()
+         value: Math.round((Math.random() * 4)+1).toString()
        }
       }),
-      jobRunTS: runDate
+      jobRunTS: runDate.getTime()
     });
   }
   return rtn;

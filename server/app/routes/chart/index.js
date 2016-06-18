@@ -11,6 +11,10 @@ var ensureAuthenticated = function (req, res, next) {
         res.status(401).end();
     }
 };
+router.get('/new', function(req,res,next){
+  var chart = new Chart();
+  res.json(chart);
+});
 
 //Base url is /charts
 router.get('/', ensureAuthenticated, function (req, res){

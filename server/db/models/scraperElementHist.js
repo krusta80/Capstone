@@ -22,9 +22,7 @@ var scraperElementSchema = new mongoose.Schema({
         //         }
                 //  this is a JSON representation of a map of columns / fields
     },
-    jobRunTS: {
-        type: Date
-    },
+    jobRunTS: Number,
     createdDate: {
         type: Date,
         default: Date.now

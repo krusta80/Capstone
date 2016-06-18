@@ -8,6 +8,7 @@ router.use('/apps', require('./apps'));
 router.use('/schemas', require('./schemas'));
 router.use('/fields', require('./fields'));
 router.use('/scraperelements', require('./scraperElements'));
+router.use('/hists', require('./scraperElementHists'));
 router.use('/pages', require('./pages'));
 router.use('/jobs', require('./jobs'));
 router.use('/projects', require('./projects'));

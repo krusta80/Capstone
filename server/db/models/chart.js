@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var Page = mongoose.model('Page').schema;
 
-var chartTypes = ['scatterChart', 'discreteBarChart'];
+var chartTypes = ['scatterChart', 'barChart', 'lineChart'];
 
 var chartSchema = new mongoose.Schema({
 	name: {
@@ -12,16 +12,14 @@ var chartSchema = new mongoose.Schema({
   },
 	project: {
     	type: mongoose.Schema.Types.ObjectId,
-    	ref: 'Project', required: true
+    	ref: 'Project'
   },
 	job: {
     	type: mongoose.Schema.Types.ObjectId,
-    	ref: 'Job',
-    	required: true
+    	ref: 'Job'
   },
 	pages: {
-    	type: [Page],
-    	required: true
+    	type: [Page]
   },
 	chartType: {
     	type: String,
