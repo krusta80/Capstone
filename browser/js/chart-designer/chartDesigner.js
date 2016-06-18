@@ -11,6 +11,14 @@ app.config(function($stateProvider){
       controller: function(project, ChartFactory, JobFactory, $scope, $rootScope){
         ChartFactory.setPages(project.jobs[JobFactory.findJobIndex(project.jobs, ChartFactory.getChart().job )].pages);
 
+        function formatDate(date){
+          var d = new Date(date);
+          return d.toLocaleDateString('en-US', {
+            day : 'numeric',
+            month : 'numeric',
+            year : 'numeric'
+          }) + " " + d.toLocaleTimeString('en-US', {hour12:false, hour:'2-digit', minute:'2-digit'});
+        }
         $scope.getFields = function(data){
           return Object.keys(data[0]).map(function(field, i){
             return {
@@ -32,6 +40,7 @@ app.config(function($stateProvider){
             });
           }
           page.isActive = false;
+          $scope.redrawChart();
         };
 
         $scope.activePages = function(){
@@ -40,10 +49,18 @@ app.config(function($stateProvider){
           });
         };
 
-        $scope.redrawChart = function(page){
-          //console.log(ChartFactory.getPages());
-          if (page.selectedX && page.selectedY)
+        $scope.redrawChart = function(){
             $rootScope.$broadcast('recalc');
+        };
+
+        $scope.getDateRange = function(){
+          return ChartFactory.getPages()[0].data.map(function(d, i){
+            return {
+              label: formatDate(d._time),
+              value: d._time,
+              index: i
+            };
+          }).sort();
         };
       }
     });

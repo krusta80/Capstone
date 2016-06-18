@@ -16,6 +16,17 @@ app.factory('ChartFactory', function($http, $q) {
     }, []);
   }
 
+  function setMinMax(data){
+    if (!chart.startDate){
+      var minMax = data.map(function(d){
+        return Number(d._time);
+      }).sort();
+      chart.startDate = { value: minMax[0] };
+      chart.endDate =  { value: minMax[minMax.length - 1]};
+    }
+
+  }
+
   function stringToNumber(str){
     return Number(str.replace(/\D/ig, ""));
   }
@@ -45,6 +56,7 @@ app.factory('ChartFactory', function($http, $q) {
       return $http.get('/api/hists/' + page._id )
       .then(function(res){
         page.data = parseData(res.data);
+        setMinMax(page.data);
         return page;
       });
     },

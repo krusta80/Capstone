@@ -54,8 +54,11 @@ var seedPages = function(){
   return Page.create(pageData);
 };
 
-var seedHist = function(pageId){
-  return ScraperElementHist.create(makeHist(pageId, 10));
+var seedHist = function(pages){
+  return Promise.map(pages, function(page){
+    return ScraperElementHist.create(makeHist(page._id, 10));
+
+  });
 };
 
 var seedProject = function(pageId, userId){
@@ -67,10 +70,10 @@ connectToDb
         return wipeCollections();
     })
     .then(seedPages)
-    .then(function (page) {
+    .then(function (pages) {
         seedUsers()
         .then(function(user){
-          return Promise.join(seedHist(page._id), seedProject(page._id, user._id));
+          return Promise.join(seedHist(pages), seedProject(pages, user._id));
         })
         .then(function () {
             console.log(chalk.green('Seed successful!'));
