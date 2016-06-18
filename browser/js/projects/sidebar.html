@@ -1,4 +1,4 @@
-<div class="col-md-3 sidebar">
+<div class="col-md-2">
   <div>
     <span class="sub-header">Projects</span>
     <a ng-show="selectedProject" style="margin-left: 10px" href="#" ng-click="editProject()">
@@ -8,7 +8,7 @@
       <span class="glyphicon glyphicon-plus"></span>
     </a>
   </div>
-  <select ng-change="loadProject()" ng-model="selectedProject" ng-options="project.title for project in projects track by project._id">
+  <select ng-change="loadProject()" ng-model="selectedProject" class="form-control" ng-options="project.title for project in projects track by project._id">
     <option value="">-- choose an project --</option>
   </select>
 

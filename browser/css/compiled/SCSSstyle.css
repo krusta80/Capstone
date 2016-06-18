@@ -4,6 +4,9 @@
 body {
   background: #fdfdfd; }
 
+main {
+  padding-top: 68px; }
+
 #main {
   padding-top: 15px;
   margin: 0 auto; }
