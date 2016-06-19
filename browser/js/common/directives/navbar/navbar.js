@@ -7,13 +7,14 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
         link: function (scope) {
 
             scope.items = [
-                { label: 'Home', state: 'home' },
-                //{ label: 'Iframe', state: 'iframe' },
-                { label: 'Projects', state: 'projects' },
+                { label: 'Home', state: 'home' , icon: "md md-home"},
+                //{ label: 'Iframe', state: 'iframe' , icon: ""},
+                { label: 'Projects', state: 'projects' , icon: "md md-list"},
+                // { label: 'Job Manager', state: 'job' , icon: "md md-assignment-turned-in"},
                 //{ label: 'Documentation', state: 'docs' },
-                { label: 'Members Only', state: 'membersOnly', auth: true },
-                { label: 'Chart', state: 'chart'},
-                { label: 'Dashboard', state: 'dashboard', auth: true }
+                // { label: 'Members Only', state: 'membersOnly', auth: true , icon: ""},
+                { label: 'Chart', state: 'chart', icon: "md md-insert-chart"},
+                { label: 'Dashboard', state: 'dashboard', auth: true , icon: "md md-dashboard"}
             ];
 
             scope.user = null;

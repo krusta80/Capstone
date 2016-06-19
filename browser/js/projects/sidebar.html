@@ -1,0 +1,32 @@
+<div class="col-md-2">
+  <div>
+    <span class="sub-header">Projects</span>
+    <a ng-show="selectedProject" style="margin-left: 10px" href="#" ng-click="editProject()">
+      <span class="glyphicon glyphicon-pencil"></span>
+    </a>
+    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+  </div>
+  <select ng-change="loadProject()" ng-model="selectedProject" class="form-control" ng-options="project.title for project in projects track by project._id">
+    <option value="">-- choose an project --</option>
+  </select>
+
+  <div>
+    <span class="sub-header">Jobs</span>
+    <span ng-class="{active: !job || job._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></span>
+    <div class="sub-categories">
+      <div ng-class="{active: jobTab._id === job._id}" ng-repeat="jobTab in jobs"><a href="#" ng-click="loadJob(jobTab)">{{jobTab.title}}</a></div>
+    </div>
+  </div>
+
+  <div>
+    <span class="sub-header">Pages</span>
+  	<a style="margin-left: 10px; outline: 0" href="#" ng-click="addPage()">
+      	<span class="glyphicon glyphicon-plus"></span>
+    </a>
+  	<div style="margin-top: 5px; max-height:500px;overflow-y:scroll" class="list-group">
+  		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.title }}</a>
+  	</div>
+  </div>
+</div>

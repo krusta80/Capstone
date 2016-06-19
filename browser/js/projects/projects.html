@@ -1,17 +1,27 @@
-<div class="container">
-	<div class="pull-right">
-		<select ng-change="loadProject()" ng-model="selectedProject" ng-options="project.title for project in projects track by project._id">
-			<option value="">-- choose an project --</option>
-		</select>
-		<a ng-show="selectedProject" style="margin-left: 10px" href="#" ng-click="editProject()">
-	    	<span class="glyphicon glyphicon-pencil"></span>
-	    </a>
-	    <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
-	    	<span class="glyphicon glyphicon-plus"></span>
-	    </a>
+<div class="projects-container">
+
+	<!-- <div class="sub-categories">
+		<div class="project_{{project._id}}" ng-model="selectedProject" ng-repeat="project in projects" ng-class="{'sub-active': getClass(project) }">
+			<a ng-click="loadProject(project)" ng-class="{'red': getClass(project) }">{{project.title}}</a>
+		</div>
+	</div> -->
+	<!-- <select ng-change="loadProject()" ng-model="selectedProject" ng-options="project.title for project in projects track by project._id">
+		<option value="">-- choose an project --</option>
+	</select> -->
+
+
+	<side-bar></side-bar>
+
+	<!-- when there are no projects created yet -->
+	<div class="block projects-block" ng-if="noProjects">
+		<div class="centered">
+			<h3 class="grey">Create a new project to continue.</h3>
+			<div class="btn btn-primary" data-toggle="modal" data-target="#projectModal">Create</div>
+		</div>
 	</div>
-    <ui-view></ui-view>
-	    
+
+  <ui-view></ui-view>
+
 
 	<!-- Project Modal -->
 	  <div class="modal fade" id="projectModal" role="dialog">
@@ -58,8 +68,3 @@
 	  </div>
 
 </div>
-
-
-
-
-

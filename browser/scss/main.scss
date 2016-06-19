@@ -12,6 +12,11 @@ body {
     display: table;
     clear: both;
   }
+
+}
+
+main {
+  padding-top: 68px;
 }
 
 #main {
@@ -55,3 +60,4 @@ body {
 @import 'tutorial/main';
 @import 'login/main';
 @import 'iframe/main';
+@import 'projects/main';
