@@ -151,7 +151,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
 });
 
-app.controller('JobCtrl', function($rootScope, jobId, pages, ProjectFactory, JobFactory, PageFactory, $scope, $state, $window) {
+app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.$parent.$parent.pages = pages;
 
@@ -266,7 +266,7 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, ProjectFactory, Job
 
     $scope.viewPage = function() {
         $state.go('iframe', {pageid: $scope.pages[$scope.selectedPage]._id});
-    }
+    };
 
     $scope.reportSuccess = function() {
         $scope.success = true;
@@ -274,5 +274,22 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, ProjectFactory, Job
             $scope.success = false;
             $scope.$apply();
         }.bind(this), 2000);
+    };
+
+    $scope.newChart = function(){
+      ChartFactory.getNewChart()
+      .then(function(chart){
+        chart.name = "New chart";
+        chart.chartType = "lineChart";
+        chart.job = $scope.job._id;
+        chart.project = $scope.project._id;
+        $scope.newChart = chart;
+      });
+    };
+
+    $scope.goToDesigner = function(jobId){
+      $timeout(function(){ //wait 1 sec for the modal to close
+        $state.go('projects.project.jobChartDesigner', {id: jobId});
+      }, 1000);
     };
 });

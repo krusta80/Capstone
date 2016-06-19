@@ -1,0 +1,57 @@
+
+<div class="col-lg-3 col-md-12">
+  <h4>Pages</h4>
+  <div class="panel panel-default" ng-repeat="page in getPages()">
+    <div class="panel-heading">
+      <span class="panel-title">{{page.title}}</span>
+      <input ng-click="toggleActive($index)" type="checkbox" class="pull-right" />
+    </div>
+    <div class="panel-body" ng-if="page.isActive">
+      <div class="form-group">
+        <label>Y-Axis</label>
+        <select ng-model="page.selectedY" ng-change="redrawChart()" ng-options="field.name for field in getFields(page.data) track by field.index"/>
+      </div>
+      <div class="form-group">
+        <label>X-Axis</label>
+        <select ng-model="page.selectedX" ng-change="redrawChart()" ng-options="field.name for field in getFields(page.data) track by field.index"/>
+      </div>
+      <div class="form-group" ng-show="getChart().chartType==='scatterChart'">
+        <label>Radius</label>
+        <select ng-model="page.selectedR" ng-change="redrawChart()" ng-options="field.name for field in getFields(page.data) track by field.index"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-9 col-md-12" ng-if="activePages()">
+  <h3>{{getChart().name}}</h3>
+  <line-chart ng-if="getChart().chartType==='lineChart'"></line-chart>
+  <scatter-chart ng-if="getChart().chartType === 'scatterChart'"></scatter-chart>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Chart options</h3></div>
+      <div class="panel-body">
+        <form class="form-inline">
+          <div class="form-group">
+              <label class="control-label">X-Axis label</label>
+              <input class="form-control" ng-model="getChart().xLabel" ng-blur="redrawChart()" type="text"/>
+          </div>
+          <div class="form-group">
+              <label class="control-label">Y-Axis label</label>
+              <input class="form-control" ng-model="getChart().yLabel" ng-blur="redrawChart()" type="text"/>
+          </div>
+        </form>
+        <form class="form-inline">
+          <div class="form-group">
+              <label class="control-label">Start date</label>
+              <select ng-model="getOptions().startDate" ng-change="redrawChart()" ng-options="date.label for date in getDateRange() track by date.value"></select>
+          </div>
+          <div class="form-group">
+              <label class="control-label">End date</label>
+              <select ng-model="getOptions().endDate" ng-change="redrawChart()" ng-options="date.label for date in getDateRange() track by date.value"></select>
+          </div>
+        </form>
+        <button class="btn btn-default">Publish to dashboard</button>
+        <button class="btn btn-default" ng-click="saveChart()">Save</button><span> {{message.msg}}</span>
+      </div>
+    </div>
+  </div>

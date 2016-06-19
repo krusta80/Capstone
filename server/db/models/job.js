@@ -72,7 +72,8 @@ jobSchema.methods.runJob = function(project){
     results.runAt = Date.now();
     instance.runHistory.push(JSON.stringify(results));
     instance.lastRun = Date.now();
-    return Promise.join(project.save(), mongoose.model('ScraperElementHist').clean());
+    var model = mongoose.model('ScraperElementHist');
+    return Promise.join(project.save(), model.clean(), model.stamp());
   })
   .then(function(){
     return results;
