@@ -259,6 +259,7 @@ app.controller('JobCtrl', function(jobId, pages, $timeout, ProjectFactory, JobFa
       ChartFactory.getNewChart()
       .then(function(chart){
         chart.name = "New chart";
+        chart.chartType = "lineChart";
         chart.job = $scope.job._id;
         chart.project = $scope.project._id;
         $scope.newChart = chart;

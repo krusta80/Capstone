@@ -8,10 +8,12 @@ app.directive('lineChart', function(){
           return page.isActive && (page.selectedX && page.selectedY);
         });
         if (activePages.length){
-          var chart = ChartFactory.getChart();
+          $scope.options.chart.xAxis.axisLabel = ChartFactory.getChart().xLabel || 'X-Axis';
+          $scope.options.chart.yAxis.axisLabel = ChartFactory.getChart().yLabel || 'Y-Axis';
+          var options = ChartFactory.getOptions();
           $scope.data = activePages.map(function(page){
             var filteredData = page.data.filter(function(dp){
-              return dp._time >= chart.startDate.value && dp._time <= chart.endDate.value;
+              return dp._time >= options.startDate.value && dp._time <= options.endDate.value;
             });
             return {
               key: page.title,
@@ -56,11 +58,11 @@ app.directive('lineChart', function(){
               },
 
               yAxis: {
-                  axisLabel: 'Y Axis',
+                  axisLabel: 'Y-Axis',
                   tickFormat: function(d){
                       return d;
                   },
-                  axisLabelDistance: 20
+                  axisLabelDistance: -5
               }
           }
       };

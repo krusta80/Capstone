@@ -30,6 +30,7 @@ app.config(function($stateProvider){
 
         $scope.getPages = ChartFactory.getPages;
         $scope.getChart = ChartFactory.getChart;
+        $scope.getOptions = ChartFactory.getOptions;
 
         $scope.toggleActive = function(idx){
           var page = $scope.getPages()[idx];
@@ -64,8 +65,8 @@ app.config(function($stateProvider){
         };
         $scope.saveChart = function(){
           ChartFactory.saveChart()
-          .then(function(chart){
-            console.log(chart);
+          .then(function(msg){
+            $scope.message = msg;
           });
         };
       }
