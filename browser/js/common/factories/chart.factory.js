@@ -60,6 +60,18 @@ app.factory('ChartFactory', function($http, $q) {
         return page;
       });
     },
+    saveChart: function(){
+      chart.pages = [];
+      pages.forEach(function(page){
+        chart.pages.push(JSON.stringify(page));
+      });
+      chart.startDate = JSON.stringify(chart.startDate);
+      chart.endDate = JSON.stringify(chart.endDate);
+      return $http.post('/api/charts', chart)
+      .then(function(res){
+        return res.data;
+      });
+    },
     getOptions:function() {
       return options;
     },

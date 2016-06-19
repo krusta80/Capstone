@@ -25,7 +25,7 @@ router.get('/', ensureAuthenticated, function (req, res){
 	.catch(function(err){
 		console.log("Err:", err);
 		res.status(501).send(err);
-	})
+	});
 });
 
 router.get('/:id', ensureAuthenticated, function(req,res){
@@ -36,11 +36,24 @@ router.get('/:id', ensureAuthenticated, function(req,res){
 });
 
 router.post('/', ensureAuthenticated, function(req,res){
-	req.body.user = req.user;
-	Chart.create(req.body)
-	.then(function(chart){
-		res.send(chart);
-	});
+  Chart.findById(req.body._id)
+  .then(function(chart){
+      if (!chart){
+        Chart.create(req.body)
+      	.then(function(chart){
+      		res.json(chart);
+      	});
+      } else {
+        chart.remove()
+        .then(function(){
+          Chart.create(req.body)
+          .then(function(chart){
+            res.json(chart);
+          });
+        });
+      }
+  });
+
 });
 
 router.put('/:id', ensureAuthenticated, function(req,res){

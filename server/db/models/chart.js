@@ -18,9 +18,7 @@ var chartSchema = new mongoose.Schema({
     	type: mongoose.Schema.Types.ObjectId,
     	ref: 'Job'
   },
-	pages: {
-    	type: [Page]
-  },
+	pages: [String],
 	chartType: {
     	type: String,
     	enum: chartTypes
@@ -37,6 +35,8 @@ var chartSchema = new mongoose.Schema({
     	type: Date,
     	default: Date.now
   },
+	startDate: String,
+	endDate: String,
 	modifiedDate: {
     	type: Date,
     	default: Date.now

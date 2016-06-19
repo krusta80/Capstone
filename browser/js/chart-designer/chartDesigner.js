@@ -62,6 +62,12 @@ app.config(function($stateProvider){
             };
           }).sort();
         };
+        $scope.saveChart = function(){
+          ChartFactory.saveChart()
+          .then(function(chart){
+            console.log(chart);
+          });
+        };
       }
     });
 });

@@ -45,7 +45,7 @@
               <select ng-model="getChart().endDate" ng-change="redrawChart()" ng-options="date.label for date in getDateRange() track by date.value"></select>
           </div>
         </form>
-        <button class="btn btn-default">Save</button>
+        <button class="btn btn-default" ng-click="saveChart()">Save</button>
         <button class="btn btn-default">Publish to dashboard</button>
 
       </div>
