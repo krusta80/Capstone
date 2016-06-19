@@ -41,14 +41,14 @@ router.post('/', ensureAuthenticated, function(req,res){
       if (!chart){
         Chart.create(req.body)
       	.then(function(chart){
-      		res.json(chart);
+      		res.json({msg: 'Saved!'});
       	});
       } else {
         chart.remove()
         .then(function(){
           Chart.create(req.body)
           .then(function(chart){
-            res.json(chart);
+            res.json({msg: 'Updated at ' + new Date(Date.now()).toLocaleTimeString('en-US')});
           });
         });
       }
