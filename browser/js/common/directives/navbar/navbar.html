@@ -39,7 +39,9 @@
   </div>
   <ul class="menu-links" ng-cloak>
     <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
-        <a ui-sref-active="active" ui-sref="{{ item.state }}" icon="md md-blur-on" href="{{ item.state }}">{{ item.label }}</a>
+        <a ui-sref-active="active" ui-sref="{{ item.state }}" icon="md md-blur-on" href="{{ item.state }}">
+          <i class="{{item.icon}} customlineheight"></i> {{ item.label }}
+        </a>
     </li>
 
   </ul>
@@ -61,10 +63,11 @@
     </div>
 
     <ul class="nav navbar-nav navbar-right navbar-right-no-collapse">
-      <li class="pull-right" ng-show="!user" ui-sref="login" title="login">
+      <li class="pull-right pointer" ng-show="!user" ui-sref="login" title="login">
         <button class="pointer btn btn-round-sm btn-link">
           <i class="md md-account-box f20"></i>
         </button>
+        Login
       </li>
     </ul>
   </div>

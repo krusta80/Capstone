@@ -46,6 +46,9 @@ fullstack-logo {
     display: block;
     width: 100%; }
 
+aside.sidebar i.customlineheight {
+  line-height: 30px; }
+
 navbar {
   display: block;
   background: white;
