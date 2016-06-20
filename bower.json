@@ -1,0 +1,22 @@
+{
+  "name": "FullstackGeneratedApp",
+  "description": "A generated project at Fullstack Academy",
+  "main": "server/start.js",
+  "authors": [
+    "antkim003@gmail.com <antkim003@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/krusta80/Capstone",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-bootstrap-toggle-switch": "^0.5.6",
+    "roboto-fontface": "^0.5.0",
+    "font-awesome": "^4.6.3"
+  }
+}

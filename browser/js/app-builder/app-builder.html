@@ -1,4 +1,4 @@
-<div class="container">
+<div class="">
 	<div class="pull-right">
 		<select ng-change="loadApp()" ng-model="selectedApp" ng-options="app.name for app in apps track by app._id">
 			<option value="">-- choose an app --</option>
@@ -15,7 +15,7 @@
 		  <li ng-class="{active: activeSchema._id === schema._id}" ng-repeat="schema in schemas"><a href="#" ng-click="loadSchema(schema)">{{schema.name}}</a></li>
 		  <li ng-class="{active: !activeSchema || activeSchema._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#schemaModal"><span class="glyphicon glyphicon-plus"></span></a></li>
 		</ul>
-    
+
 		<ui-view>
 			<h4 align=center ng-show="selectedApp">Select a schema from the tabs above (or click the + to add new).</h4>
 		</ui-view>
@@ -66,8 +66,3 @@
 	  </div>
 
 </div>
-
-
-
-
-

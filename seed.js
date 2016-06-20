@@ -23,30 +23,30 @@ var chalk = require('chalk');
 var connectToDb = require('./server/db');
 var User = mongoose.model('User'),
   pageData = require('./tests/server/seeds/testPage'),
+  makeHist = require('./tests/server/seeds/chartSeed'),
+  makeProj = require('./tests/server/seeds/jobSeed');
   Page = mongoose.model('Page'),
-  Job = mongoose.model('Job');
+  Job = mongoose.model('Job'),
+  Project = mongoose.model('Project'),
+  ScraperElementHist = mongoose.model('ScraperElementHist');
 
 var wipeCollections = function () {
     var removeUsers = User.remove({});
     return Promise.all([
-        removeUsers, Page.remove({}), Job.remove({})
+        removeUsers, Page.remove({}), Project.remove({}), ScraperElementHist.remove({})
     ]);
 };
 
 var seedUsers = function () {
 
-    var users = [
-        {
-            email: 'testing@fsa.com',
-            password: 'password'
-        },
+    var user =
         {
             email: 'obama@gmail.com',
             password: 'potus'
-        }
-    ];
+        };
 
-    return User.create(users);
+
+    return User.create(user);
 
 };
 
@@ -54,18 +54,33 @@ var seedPages = function(){
   return Page.create(pageData);
 };
 
+var seedHist = function(pages){
+  return Promise.map(pages, function(page){
+    return ScraperElementHist.create(makeHist(page._id, 10));
+
+  });
+};
+
+var seedProject = function(pageId, userId){
+  return Project.create(makeProj(pageId, userId));
+};
+
 connectToDb
     .then(function () {
         return wipeCollections();
     })
-    .then(function () {
-        return Promise.join(seedUsers(), seedPages());
-    })
-    .then(function () {
-        console.log(chalk.green('Seed successful!'));
-        process.kill(0);
-    })
-    .catch(function (err) {
-        console.error(err);
-        process.kill(1);
-    });
+    .then(seedPages)
+    .then(function (pages) {
+        seedUsers()
+        .then(function(user){
+          return Promise.join(seedHist(pages), seedProject(pages, user._id));
+        })
+        .then(function () {
+            console.log(chalk.green('Seed successful!'));
+            process.kill(0);
+        })
+        .catch(function (err) {
+            console.error(err);
+            process.kill(1);
+        });
+      });

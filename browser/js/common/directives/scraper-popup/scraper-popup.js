@@ -39,7 +39,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
             .then(function(){
                 scope.hideAttributes = false;
                 scope.popupactivated = false;
-            });
+              });
           }
 
         }

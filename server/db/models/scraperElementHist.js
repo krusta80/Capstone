@@ -7,6 +7,9 @@ var scraperElementSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ScraperElement'
     },
+    page: {
+      type: mongoose.Schema.Types.ObjectId
+    },
     fields: {
         type: String
         //         field0: {
@@ -19,9 +22,7 @@ var scraperElementSchema = new mongoose.Schema({
         //         }
                 //  this is a JSON representation of a map of columns / fields
     },
-    jobRunTS: {
-        type: Date
-    },
+    jobRunTS: Number,
     createdDate: {
         type: Date,
         default: Date.now
@@ -35,6 +36,17 @@ var scraperElementSchema = new mongoose.Schema({
       default: false
     }
 });
+scraperElementSchema.static.stamp = function(){
+  var ts = Date.now();
+  return this.find({jobRunTS: {$exists: false}})
+  .then(function(elems){
+    return Promise.map(elems, function(elem){
+      elem.jobRunTS = ts;
+      return elem.save();
+    });
+  });
+};
+
 scraperElementSchema.statics.clean = function(){
   return mongoose.model('ScraperElementHist').find({_dup:true})
   .then(function(elems){

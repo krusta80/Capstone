@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var Page = mongoose.model('Page').schema;
 
-var chartTypes = ['Scatter Plot'];
+var chartTypes = ['scatterChart', 'barChart', 'lineChart'];
 
 var chartSchema = new mongoose.Schema({
 	name: {
@@ -12,17 +12,13 @@ var chartSchema = new mongoose.Schema({
   },
 	project: {
     	type: mongoose.Schema.Types.ObjectId,
-    	ref: 'Project', required: true
+    	ref: 'Project'
   },
 	job: {
     	type: mongoose.Schema.Types.ObjectId,
-    	ref: 'Job',
-    	required: true
+    	ref: 'Job'
   },
-	pages: {
-    	type: [Page],
-    	required: true
-  },
+	pages: [String],
 	chartType: {
     	type: String,
     	enum: chartTypes
@@ -31,10 +27,16 @@ var chartSchema = new mongoose.Schema({
     	type: Boolean,
     	default: false
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
 	createdDate: {
     	type: Date,
     	default: Date.now
   },
+	startDate: String,
+	endDate: String,
 	modifiedDate: {
     	type: Date,
     	default: Date.now

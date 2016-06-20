@@ -20,13 +20,13 @@ try {
 	console.log("Running https!");
 
 	// set up a route to redirect http to https
-	httpApp.get('*',function(req,res){  
+	httpApp.get('*',function(req,res){
 	    res.redirect('https://'+req.hostname);
 	})
 
 	require('http').createServer(httpApp).listen(process.env.PORT);
 	process.env.PORT = 443;
-	
+
 }
 catch(err) {
 	console.log(err);

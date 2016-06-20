@@ -1,4 +1,4 @@
-app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
+app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFactory){
   var scrapedFieldObj = {};
   var pageObj;
   var cachedData = {
@@ -27,13 +27,11 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
         }
       });
       var scraperElementSchema = {
-        name: 'test',
+        name: 'target ' + (pageObj.targetElements.length).toString(),
         domSelector: cachedData.raw.selector,
         selectorIndex: cachedData.raw.selectorIndex,
         fields: JSON.stringify(fieldsObj)
       };
-    // console.log("toPost:",scraperElementSchema);
-    // console.log('this is the page', pageObj);
       pageObj.targetElements.push(scraperElementSchema);
     }
     else{
@@ -52,7 +50,15 @@ app.factory('ScraperPopupFactory', function($http, Messenger, PageFactory){
         pageObj.targetElements.push(scraperElementSchema);
       });
     }
-    return PageFactory.update(pageObj);
+    $rootScope.$emit('extract',pageObj);
+    var payload = _.cloneDeep(pageObj);
+    payload.targetElements.forEach(function(targetElement) {
+      targetElement.fields = JSON.stringify(targetElement.fields);
+    });
+    return PageFactory.update(payload).then(function(data) {
+      $rootScope.$emit('extract',data); // need to do it twice to update the data... couldnt find a refactor that worked
+      return data;
+    });
   };
 
   scrapedFieldObj.reset = function() {
