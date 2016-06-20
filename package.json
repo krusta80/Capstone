@@ -5,6 +5,7 @@
   "main": "server/start.js",
   "scripts": {
     "start": "nodemon --watch server -e js,html server/start.js",
+    "prod": "export PORT=80; node server/start.js",
     "postinstall": "gulp build",
     "test-util": "nodemon --exec mocha tests/server/utils/*.js",
     "test-server": "nodemon --exec mocha tests/server/*",
