@@ -37,7 +37,8 @@ app.config(function($stateProvider){
           if (!page.isActive){
             ChartFactory.fetchData(page)
             .then(function(page){
-              page.isActive = true;
+              if (page.data)
+                page.isActive = true;
             });
           }
           page.isActive = false;
@@ -55,7 +56,10 @@ app.config(function($stateProvider){
         };
 
         $scope.getDateRange = function(){
-          return ChartFactory.getPages()[0].data.map(function(d, i){
+          var validPage = ChartFactory.getPages().filter(function(page){
+            return page.data && page.data.length;
+          })[0];
+          return validPage.data.map(function(d, i){
             return {
               label: formatDate(d._time),
               value: d._time,

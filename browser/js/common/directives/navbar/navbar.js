@@ -13,7 +13,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                 // { label: 'Job Manager', state: 'job' , icon: "md md-assignment-turned-in"},
                 //{ label: 'Documentation', state: 'docs' },
                 // { label: 'Members Only', state: 'membersOnly', auth: true , icon: ""},
-                { label: 'Chart', state: 'chart', icon: "md md-insert-chart"},
+                //{ label: 'Chart', state: 'chart', icon: "md md-insert-chart"},
                 { label: 'Dashboard', state: 'dashboard', auth: true , icon: "md md-dashboard"}
             ];
 
