@@ -1,6 +1,18 @@
 app.factory('PageFactory', function ($http) {
     var parseData = function(res) {
-    	return res.data;
+        if (res.data.targetElements) {
+            return jsonifyData(res.data);
+        }
+        return res.data;
+    };
+    var jsonifyData = function(data) {
+        data.targetElements = data.targetElements.map(function(targetElement) {
+            if (typeof targetElement.fields === "string") {
+                targetElement.fields = JSON.parse(targetElement.fields);
+            }
+            return targetElement;
+        });
+        return data;
     };
 
     return {
@@ -17,10 +29,16 @@ app.factory('PageFactory', function ($http) {
     		.then(parseData)
     	},
     	update: function(page) {
-    		return $http.put('/api/pages/' + page._id, page)
-    		.then(parseData)
+            page.targetElements = page.targetElements.map(function(targetElement) {
+                if (typeof targetElement.fields != "string") {
+                    targetElement.fields = JSON.stringify(targetElement.fields);
+                }
+                return targetElement;
+            });
+    		return $http.put('/api/pages/' + page._id, page).then(parseData);
     	},
     	remove: function(id) {
+            console.log("heres delete id: ", id);
     		return $http.delete('/api/pages/' + id)
     		.then(parseData)
     	},

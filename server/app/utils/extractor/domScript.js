@@ -42,8 +42,9 @@ module.exports =
         return {
           selector: selectorPath.selector,
           selectorIndex: selectorPath.selectorIndex,
-          elements: aggregate
-        }
+          elements: aggregate,
+          repeats: selectorPath.repeating
+        };
       }
 
       function dataIndexer(array) {
@@ -113,22 +114,16 @@ module.exports =
         var selector = $(element).first().parentsUntil("html").andSelf().map(function(){
               return this.tagName;
             }).get().join(">");
-
-
-
-        // var id = $(element).attr("id");
-        // if (id) {
-        //   selector += "#"+ id;
-        // }
-        // // TODO : selector index here
-
-
-
-        // var classNames = $(element).attr("class");
-        // if (classNames) {
-        //   selector += "." + $.trim(classNames).replace(/\s/gi, ".");
-        // }
-        return {selector: selector, selectorIndex: $(selector).index(element)};
+        //finding repeating
+        var repeating = $(selector);
+        var repeats = $.map(repeating, function(elem, i){
+            return {
+              selector: selector,
+              selectorIndex: i
+            };
+        });
+        //console.log('repeating', repeating);
+        return {selector: selector, selectorIndex: $(repeating).index(element), repeating: repeats};
       }
 
     });

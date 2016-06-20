@@ -1,0 +1,13 @@
+<div class="">
+    <div class="span">
+        <button type="submit" value="newChart" ng-click="newChart()"> Create New Chart </button><br>
+
+        <div ng-repeat="chart in charts">
+            <p>Chart Name: {{chart.name}}</p>
+            <p>Chart Type: {{chart.chartType}}</p>
+            <a href="localhost:1337/api/charts/"> Right click and open in new tab to see full JSON </a>
+        </div>
+    </div>
+
+    <ui-view></ui-view>
+</div>

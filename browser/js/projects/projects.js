@@ -9,177 +9,263 @@ app.config(function ($stateProvider) {
         },
         controller: 'ProjectsCtrl'
     });
-    $stateProvider.state('projects.job', {
-        url: '/:id',
+    $stateProvider.state('projects.project', {
+        url: '/:projectId',
+        templateUrl: 'js/projects/project.html',
+        resolve: {
+            project: function(ProjectFactory, $stateParams) {
+                return ProjectFactory.fetchById($stateParams.projectId);
+            }
+        },
+        controller: 'ProjectCtrl'
+    });
+    $stateProvider.state('projects.project.job', {
+        url: '/job/:id',
         templateUrl: 'js/projects/job.html',
         resolve: {
-            job: function(JobFactory, $stateParams) {
-                return JobFactory.fetchById($stateParams.id);
+            pages: function(PageFactory, $stateParams) {
+                return PageFactory.fetchByJobId($stateParams.id);
+            },
+            jobId: function($stateParams) {
+                return $stateParams.id;
             }
         },
         controller: 'JobCtrl'
+    });
+    $stateProvider.state('projects.project.jobHistory', {
+      url: '/job/:id/history',
+      templateUrl: 'js/projects/job-history.html',
+      resolve: {
+        project: function($stateParams, ProjectFactory){
+          return ProjectFactory.fetchById($stateParams.projectId);
+        }
+      },
+      controller: function(project, $scope, $stateParams){
+        var job = _.filter(project.jobs, {_id: $stateParams.id});
+
+        $scope.history = job[0].runHistory.map(function(hist){
+          var parsedHist = JSON.parse(hist);
+          parsedHist.pages = Object.keys(parsedHist.pages).map(function(hist){
+            return {
+              id: hist,
+              scraped: parsedHist.pages[hist] ? parsedHist.pages[hist].numElements : 0,
+              success: parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0
+            };
+          });
+          return parsedHist;
+        }).reverse();
+        console.log($scope.history);
+      }
     });
 });
 
 app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
 	$scope.projects = projects;
-    $scope.activeJob = -1;
-    $scope.fromChild = false;
-
-    $scope.loadProject = function() {
-        if($scope.selectedProject)
-            JobFactory.fetchByProjectId($scope.selectedProject._id)
-            .then(function(jobs) {
-                $scope.jobs = jobs;
-                if(!$scope.jobs.length) {
-                    $scope.activeJob = undefined;
-                    $state.go('projects');
-                }
-                else {
-                    if($scope.fromChild)
-                        $scope.loadJob($scope.activeJob);
-                    else
-                        $scope.loadJob(jobs[0]);
-                    $scope.fromChild = false;
-                }
-            })
-        else {
-            $scope.jobs = [];
-            $scope.activeJob = -1;
-            $state.go('projects');
-        }  
-    };
-
-    $scope.loadJobs = function(project) {
-         return JobFactory.fetchByProjectId(project._id)
-        .then(function(jobs) {
-            $scope.jobs = jobs;
-         });   
+    $scope.noProjects = false;
+    if (projects.length > 0) {
+        // select the first product
+        $state.go('projects.project', {projectId: $scope.projects[0]._id})
+        $scope.noProjects = false;
+    } else {
+        $scope.noProjects = true;
     }
 
     $scope.addProject = function() {
         ProjectFactory.create({title: $scope.projectTitle})
         .then(function(project) {
             $scope.projects.push(project);
-            $scope.jobs = [];
-            $scope.project = project;
+            $scope.selectedProject = project;
             $scope.loadProject(project);
         })
     };
+
+    $scope.loadProject = function() {
+        if(!$scope.selectedProject) {
+            $scope.noProjects = true;
+            $state.go('projects');
+        } else {
+            $scope.noProjects = false;
+            $state.go('projects.project', {projectId: $scope.selectedProject._id})
+        }
+
+    };
+
+    $scope.selectProject = function(project) {
+        $scope.selectedProject = project;
+        if (!project) {
+            $scope.noProjects = true;
+        } else {
+            $scope.noProjects = false;
+        }
+    };
+
+    $scope.getClass = function(project) {
+        return $scope.selectedProject._id === project._id;
+    };
+
+});
+
+app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobFactory, $scope, $state) {
+    $scope.saveProject = function(job) {
+        ProjectFactory.update($scope.project)
+        .then(function(project) {
+            $scope.project = project;
+            $scope.$parent.jobs = $scope.project.jobs;
+            if(job) {
+                var jobIndex = JobFactory.findJobIndex($scope.jobs, job._id);
+                if(jobIndex === -1)
+                    jobIndex = $scope.jobs.length - 1;
+                $scope.loadJob($scope.project.jobs[jobIndex]);
+            }
+            else
+                $state.go('projects.project', {projectId: $scope.selectedProject._id})
+        })
+        //console.log("saving project", $scope.selectedProject);
+    }
 
     $scope.addJob = function() {
         $scope.jobs.push({
             title: $scope.jobTitle,
             active: false
         });
-        $scope.selectedProject.jobs = $scope.jobs;
-        
-        ProjectFactory.update($scope.selectedProject)
-        .then(function(project) {
-            $scope.selectedProject = project;
-            $scope.jobIndex = $scope.jobs.length - 1;
-            $scope.loadJob($scope.selectedProject.jobs[$scope.jobIndex]);
+        //$scope.selectedProject.jobs = $scope.jobs;
+        //ProjectFactory.update($scope.selectedProject)
+
+        $scope.saveProject($scope.jobs[$scope.jobs.length-1]);
+    };
+
+    $scope.$parent.loadJob = function(job) {
+        $scope.job = job;
+        //console.log("active job is", job);
+        $state.go('projects.project.job', {id: job._id});
+    };
+
+    $scope.$parent.project = project;
+    console.log("project id is", project._id);
+    $scope.selectProject(project);
+    $scope.$parent.jobs = project.jobs;
+    $scope.job;
+
+    if(project.jobs.length > 0)
+        $scope.loadJob($scope.jobs[0]);
+
+});
+
+app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window) {
+    //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
+    $scope.$parent.$parent.pages = pages;
+
+    if(!$scope.pages)
+        $scope.pages = [];
+
+    if($scope.pages.length > 0)
+        $scope.$parent.$parent.selectedPage = $scope.pages.length - 1;
+
+    $scope.$parent.$parent.addPage = function() {
+        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
+            return;
+        PageFactory.create({
+            title: "new_page_" + Math.random().toString(10).slice(3,8),
+            job: $scope.job._id,
+            url: "http://www.abc.xyz"
+        })
+        .then(function(newPage) {
+            console.log("newPage is", newPage);
+            $scope.pages.push(newPage);
+            $scope.job.pages.push(newPage._id);
+            $scope.$parent.$parent.selectedPage = $scope.pages.length - 1;
+            $scope.saveJob();
+        })
+        .then(function() {
+            console.log("Job saved...");
         })
     };
 
-    $scope.loadJob = function(job) {
-        $scope.activeJob = job;
-        console.log("active job is", job);
-        $state.go('projects.job', {id: job._id});
+    $scope.removeJob = function() {
+        $scope.jobs.splice(JobFactory.findJobIndex($scope.jobs, $scope.job._id),1);
+        if($scope.jobs.length > 0)
+            $scope.saveProject($scope.jobs[0]);
+        else
+            $scope.saveProject();
+        // JobFactory.remove($scope.job._id)
+        // .then(function(removedJob) {
+        //     $state.go('projects.project', {projectId: $scope.selectProject._id})
+        // })
     };
 
-    $scope.switchProject = function(project) {
-        $scope.selectedProject = project;
-        $scope.fromChild = true;
-    };
-});
-
-app.controller('JobCtrl', function(job, ProjectFactory, JobFactory, PageFactory, $scope) {
-    job = $scope.activeJob;
-    // if(!$scope.selectedProject)
-    //     ProjectFactory.fetchById(job.Project)
-    //     .then(function(project) {
-    //         $scope.switchProject(project);
-    //         $scope.loadJob(job);
-    //         return $scope.loadJobs(project);
-    //     })
-    //     .then(function() {
-    //         $scope.loadProject();
-    //     });
-
-    console.log("job is", job);
-    $scope.job = job;
-    $scope.pages = job.pages;
-
-    if($scope.pages.length > 0)
-        $scope.selectedPage = $scope.pages.length - 1;
-
-    $scope.addPage = function() {
-        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
-            return;
-        $scope.pages.push({
-            name: "new_page_" + Math.random().toString(10).slice(3,8), 
-            Job: job,
-            select: true
-        });
-        $scope.selectedPage = $scope.pages.length - 1;
-        $scope.buildEnumString();
-    };
-
-    $scope.setSelected = function(ind) {
+    $scope.$parent.$parent.setSelected = function(ind) {
         console.log("dirty:", $scope.pageForm.$dirty);
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
             return;
-        $scope.selectedPage = ind;
+
+        //  first we save the selectedPage
+        PageFactory.update($scope.pages[$scope.selectedPage])
+        .then(function(updatedPage) {
+            $scope.$parent.$parent.selectedPage = ind;
+        })
     };
 
-    $scope.buildEnumString = function() {
-        if($scope.pages[$scope.selectedPage].enum)
-            $scope.pages[$scope.selectedPage].enumString = $scope.pages[$scope.selectedPage].enum.join(",");
-    };
+    $scope.saveJob = function() {
+        console.log("page to be saved is", $scope.pages[$scope.selectedPage]);
+        console.log("job to be saved is", $scope.job);
 
-    $scope.savePage = function() {
-        if($scope.pageForm.$pristine)
-            return;
-        if($scope.pages[$scope.selectedPage]._id)
+        if($scope.pages.length > 0)
             PageFactory.update($scope.pages[$scope.selectedPage])
-            .then(function(page) {
-                $scope.pages[$scope.selectedPage] = page;
-                $scope.pageForm.$setPristine();
-                $scope.reportSuccess();
-            })
+            .then(function(updatedPage) {
+                console.log("page updated", updatedPage);
+                $scope.$parent.$parent.pages[$scope.selectedPage] = updatedPage;
+                $scope.saveProject($scope.job);
+            });
         else
-            PageFactory.create($scope.pages[$scope.selectedPage])
-            .then(function(page) {
-                $scope.pages[$scope.selectedPage] = page;
-                $scope.pageForm.$setPristine();
-                $scope.reportSuccess();
-            })
+            $scope.saveProject($scope.job);
+    };
+    $scope.savePage = function(){
+      return PageFactory.update($scope.pages[$scope.selectedPage])
+      .then(function(page){
+        $scope.pageSaved = true;
+        console.log('saved:',page);
+      });
     };
 
     $scope.removePage = function() {
+        $scope.job.pages.splice($scope.selectedPage,1);
         if($scope.pages[$scope.selectedPage]._id)
             PageFactory.remove($scope.pages[$scope.selectedPage]._id)
             .then(function(page) {
-                $scope.pages.splice($scope.selectedPage,1);
-                if($scope.pages.length === $scope.selectedPage) {
-                    if($scope.selectedPage > 0)
-                        $scope.selectedPage--;
-                    else
-                        delete $scope.selectedPage;
-                }
-                $scope.pageForm.$setPristine();
-            })
-        else {
-            $scope.pages.splice($scope.selectedPage,1);
-            if($scope.pages.length === $scope.selectedPage) {
+                console.log("Removed page", page);
+                $scope.$parent.$parent.pages.splice($scope.selectedPage,1);
+
                 if($scope.selectedPage > 0)
                     $scope.selectedPage--;
                 else
                     delete $scope.selectedPage;
-            }
-            $scope.pageForm.$setPristine();
+
+                $scope.saveJob();
+                //$scope.pageForm.$setPristine();
+            })
+        else {
+            $scope.pages.splice($scope.selectedPage,1);
+            if($scope.selectedPage > 0)
+                $scope.selectedPage--;
+            else
+                delete $scope.selectedPage;
+
+            $scope.saveJob();
+            //$scope.pageForm.$setPristine();
         }
+
+    };
+
+    $scope.runJob = function() {
+        JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))
+        .then(function(rez) {
+            $window.location.reload();
+            console.log("Results object:", rez);
+        });
+    };
+
+    $scope.viewPage = function() {
+        $state.go('iframe', {pageid: $scope.pages[$scope.selectedPage]._id});
     };
 
     $scope.reportSuccess = function() {
@@ -188,5 +274,22 @@ app.controller('JobCtrl', function(job, ProjectFactory, JobFactory, PageFactory,
             $scope.success = false;
             $scope.$apply();
         }.bind(this), 2000);
+    };
+
+    $scope.newChart = function(){
+      ChartFactory.getNewChart()
+      .then(function(chart){
+        chart.name = "New chart";
+        chart.chartType = "lineChart";
+        chart.job = $scope.job._id;
+        chart.project = $scope.project._id;
+        $scope.newChart = chart;
+      });
+    };
+
+    $scope.goToDesigner = function(jobId){
+      $timeout(function(){ //wait 1 sec for the modal to close
+        $state.go('projects.project.jobChartDesigner', {id: jobId});
+      }, 1000);
     };
 });

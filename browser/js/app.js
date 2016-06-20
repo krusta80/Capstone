@@ -1,5 +1,5 @@
 'use strict';
-window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters']);
+window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters', 'nvd3']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
@@ -22,7 +22,7 @@ app.run(function ($rootScope, AuthService, $state, $window, Messenger) {
     };
 
     // $stateChangeStart is an event fired
-    // whenever the process of changing a state begins.
+    // whenever the procex`ss of changing a state begins.
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
 
         if (!destinationStateRequiresAuth(toState)) {
@@ -55,6 +55,19 @@ app.run(function ($rootScope, AuthService, $state, $window, Messenger) {
 
 });
 
+/**
+ * Description:
+ *     removes white space from text. useful for html values that cannot have spaces
+ * Usage:
+ *   {{some_text | nospace}}
+ */
+app.filter('nospace', function () {
+  return function (value) {
+    return (!value) ? '' : value.replace(/ /g, '');
+  };
+});
+
+
 angular.module('filters', []).
     filter('truncate', function () {
         return function (text, length, end) {
@@ -77,3 +90,9 @@ angular.module('filters', []).
         };
     });
 
+app.controller('MainController', function($scope) {
+
+    $scope.theme = {};
+    $scope.theme.color = "theme-pink";
+    $scope.theme.template = "theme-template-dark";
+});

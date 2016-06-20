@@ -25,9 +25,16 @@ router.get('/', ensureAuthenticated, function (req, res) {
 });
 
 router.get('/:id', ensureAuthenticated, function (req, res) {
-    Project.findById(req.params.id)
+    Project.findById(req.params.id).populate({path: 'jobs.pages'})
     .then(function(project) {
         res.send(project);
+    });
+});
+
+router.get('/:id/jobs', ensureAuthenticated, function (req, res) {
+    Project.findById(req.params.id)
+    .then(function(project) {
+        res.send(project.jobs);
     });
 });
 
@@ -38,14 +45,25 @@ router.post('/', ensureAuthenticated, function (req, res) {
         res.send(project);
     });
 });
+router.post('/:projectId/job/:jobIndex/run', function(req,res,next){
+  Project.findById(req.params.projectId).populate({
+    path: 'jobs.pages'
+   })
+  .then(function(project){
+    return project.jobs[req.params.jobIndex].runJob(project);
+  })
+  .then(function(result){
+    res.json(result);
+  },next);
+});
 
 router.put('/:id', ensureAuthenticated, function (req, res) {
     Project.findById(req.params.id)
     .then(function(fetchedProject) {
         Object.keys(Project.schema.paths).forEach(function(property) {
-            if(req.body[property])
+            if(req.body[property] !== undefined)
                 fetchedProject[property] = req.body[property];
-        })
+        });
         return fetchedProject.save();
     })
     .then(function(project) {

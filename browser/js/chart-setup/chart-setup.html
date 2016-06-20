@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="span">
+        Chart Name: <input type="text" name="name" ng-model="data.name"><br>
+
+        Project: <select id="selectProject"
+            ng-model="data.project"
+            ng-options="project.title for project in projects"
+            ng-change="getJobs()">
+        </select><br>
+
+        Job: <select id="selectJob"
+            ng-model="data.job"
+            ng-options="job.title for job in jobs"
+            ng-change="getPages()">
+        </select><br>
+
+        Pages: <select multiple id="selectPage"
+            ng-model="data.pages"
+            ng-options="page.title for page in pages">
+        </select><br>
+
+        Chart Type: <select id="selectChartType"
+            ng-model="data.chartType"
+            ng-options="chartType for chartType in chartTypes">
+        </select><br>
+
+        <div id="historical">
+            <label> Historical <input type="checkbox" ng-model="data.historical"> </label>
+        </div><br>
+
+        <button type="submit" value="save" ng-click="saveChart()"> Save </button>
+    </div>
+
+</div>

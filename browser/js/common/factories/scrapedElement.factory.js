@@ -1,36 +1,55 @@
 app.factory('ScraperElementFactory', function($http){
   var scrapedFieldObj = {};
-  var cachedData = {
-    data: [],
-    maxAdditionalFields: 0
-  };
+  var cached;
+  var payload;
   scrapedFieldObj.save = function() {
-
+    payload = _.cloneDeep(cached);
+    payload.targetElements.forEach(function(targetElement, idx) {
+      payload.targetElements[idx].fields = JSON.stringify(targetElement.fields);
+    });
+    return $http.put('/api/pages/' + payload._id, payload).then(function(response) {
+      response.data.targetElements.forEach(function(targetElement) {
+        targetElement.fields = JSON.parse(targetElement.fields);
+      });
+      cached = response.data;
+      return cached;
+    });
   };
 
   scrapedFieldObj.reset = function() {
-    cachedData['data'] = [];
-    cachedData['maxAdditionalFields'] = 0;
+    cached.targetElements = [];
+    this.save();
   };
 
-  scrapedFieldObj.remove = function(dataObj) {
-    var index = cachedData.data.indexOf(dataObj);
-    cachedData.data.splice(index,1);
-  };
-
-  scrapedFieldObj.add = function(dataObj) {
-    if (dataObj.content === "Too many elements - narrow your search") { return; }
-    if (dataObj.additionalTargets) {
-      if (cachedData.maxAdditionalFields < dataObj.additionalTargets.length) {
-        cachedData.maxAdditionalFields = dataObj.additionalTargets.length;
-      }    
+  scrapedFieldObj.remove = function(target, key) {
+    let currIndex = _.findIndex(cached.targetElements,{'_id': target._id});
+    let currTarget = cached.targetElements[currIndex];
+    if (Object.keys(currTarget.fields).length == 1) {
+      cached.targetElements.splice(currIndex,1)
+    } else {
+      delete currTarget.fields[key];
     }
-    cachedData['data'].push(dataObj);
+    this.save()
   };
 
-  scrapedFieldObj.get = function() {
-    return cachedData;
+  scrapedFieldObj.update = function(pageObj) {
+    pageObj.targetElements = pageObj.targetElements.map(function(targetElement) {
+        if (typeof targetElement.fields === "string") {
+            targetElement.fields = JSON.parse(targetElement.fields);
+        }
+        return targetElement;
+    });
+    cached = pageObj;
+    return cached;
   };
+
+  scrapedFieldObj.setAndGet = function(pageObj) {
+    cached = pageObj;
+    return cached;
+  };
+  scrapedFieldObj.get = function() {
+    return cached;
+  }
 
   return scrapedFieldObj;
 });

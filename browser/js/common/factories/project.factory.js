@@ -1,6 +1,8 @@
 app.factory('ProjectFactory', function ($http) {
+    var cacheData;
     var parseData = function(res) {
-    	return res.data;
+    	cacheData = res.data;
+        return cacheData;
     };
 
     return {
@@ -23,6 +25,16 @@ app.factory('ProjectFactory', function ($http) {
     	remove: function(id) {
     		return $http.delete('/api/projects/' + id)
     		.then(parseData)
-    	}
+    	},
+        findProjectIndex: function(projects, id) {
+            for(var i = 0; i < projects.length; i++) {
+                if(projects[i]._id === id)
+                    return i;
+            }
+            return -1;
+        },
+        getCacheProjects: function() {
+            return cacheData;
+        }
     }
 });
