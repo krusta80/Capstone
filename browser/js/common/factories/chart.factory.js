@@ -66,8 +66,10 @@ app.factory('ChartFactory', function($http) {
     fetchData: function(page){
       return $http.get('/api/hists/' + page._id )
       .then(function(res){
-        page.data = parseData(res.data);
-        setMinMax(page.data);
+        if (res.data.length){
+          page.data = parseData(res.data);
+          setMinMax(page.data);
+        }
         return page;
       });
     },
