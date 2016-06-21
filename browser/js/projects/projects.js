@@ -158,8 +158,13 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
     if(!$scope.pages)
         $scope.pages = [];
 
-    if($scope.pages.length > 0)
+    if($scope.pages.length > 0){
         $scope.$parent.$parent.selectedPage = $scope.pages.length - 1;
+        var page = $scope.pages[$scope.selectedPage];
+        page._actions = page.actions.map(function(action){
+          return JSON.parse(action);
+        });
+      }
 
     $scope.$parent.$parent.addPage = function() {
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
@@ -220,10 +225,15 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
             $scope.saveProject($scope.job);
     };
     $scope.savePage = function(){
+      var page = $scope.pages[$scope.selectedPage];
+      page.actions = page._actions.map(function(action){
+        return JSON.stringify(action);
+      });
       return PageFactory.update($scope.pages[$scope.selectedPage])
       .then(function(page){
         $scope.pageSaved = true;
         console.log('saved:',page);
+        console.log(page.actions);
       });
     };
 
@@ -291,5 +301,16 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
       $timeout(function(){ //wait 1 sec for the modal to close
         $state.go('projects.project.jobChartDesigner', {id: jobId});
       }, 1000);
+    };
+
+    $scope.addAction = function(){
+      var page = $scope.pages[$scope.selectedPage];
+      if (!page._actions)
+        page._actions = [];
+      if ($scope.pageActions.selected)
+        page._actions.push({fn:$scope.pageActions.selected, params:[]});
+    };
+    $scope.removeAction = function(idx){
+      $scope.pages[$scope.selectedPage]._actions.splice(idx,1);
     };
 });

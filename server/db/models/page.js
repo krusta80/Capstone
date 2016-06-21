@@ -26,7 +26,7 @@ var pageSchema = new mongoose.Schema({
     targetElements: {
         type: [ScraperElement]
     },
-    actions: String,
+    actions: [String],
     paginate:{
       type:Boolean,
       default: false
