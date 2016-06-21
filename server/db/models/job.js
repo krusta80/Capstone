@@ -62,25 +62,29 @@ jobSchema.methods.runJob = function(project){
   this.isRunning = true;
   var results = new Results(this._id);
   var instance = this;
-  return Promise.map(instance.pages, function(page){
-    results.pages[page._id] = null;
-    var scraper = new Scraper(page);
-    return scraper.go(10000, results);
-  })
-  .then(function(){
-    instance.isRunning = false;
-    results.runAt = Date.now();
-    instance.runHistory.push(JSON.stringify(results));
-    instance.lastRun = Date.now();
-    var model = mongoose.model('ScraperElementHist');
-    return Promise.join(project.save(), model.clean(), model.stamp());
-  })
-  .then(function(){
-    return results;
-  })
-  .catch(function(err){
-    console.log(err);
-  });
+  return project.save()
+        .then(function(proj2) {
+          project = proj2;
+          return Promise.map(instance.pages, function(page){
+          results.pages[page._id] = null;
+          var scraper = new Scraper(page);
+          return scraper.go(10000, results);
+          })
+        })
+        .then(function(){
+          instance.isRunning = false;
+          results.runAt = Date.now();
+          instance.runHistory.push(JSON.stringify(results));
+          instance.lastRun = Date.now();
+          var model = mongoose.model('ScraperElementHist');
+          return Promise.join(project.save(), model.clean(), model.stamp());
+        })
+        .then(function(){
+          return results;
+        })
+        .catch(function(err){
+          console.log(err);
+        });
 
 };
 mongoose.model('Job', jobSchema);

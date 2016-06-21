@@ -44,7 +44,8 @@
 					  <div class="form-group">
 					    <label class="col-sm-2 control-label">Last Run</label>
 					    <div class="col-sm-7">
-					      <input type="text" class="form-control" disabled value="{{job.lastRun | date:'medium'}}"/>
+					      <input ng-show="!isJobRunning()" type="text" class="form-control" disabled value="{{job.lastRun | date:'medium'}}"/>
+					      <input ng-show="isJobRunning()" type="text" class="form-control" disabled value="RUNNING NOW!!"/>
 					    </div>
 					  </div>
 						<div class="form-group">

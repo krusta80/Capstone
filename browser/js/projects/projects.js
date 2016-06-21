@@ -297,6 +297,10 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
       });
     };
 
+    $scope.isJobRunning = function() {
+        return window.isRunning;
+    };
+
     $scope.goToDesigner = function(jobId){
       $timeout(function(){ //wait 1 sec for the modal to close
         $state.go('projects.project.jobChartDesigner', {id: jobId});
@@ -313,4 +317,21 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
     $scope.removeAction = function(idx){
       $scope.pages[$scope.selectedPage]._actions.splice(idx,1);
     };
+
+    if(!window.server)
+        window.server = "http://localhost:1337";
+    if(!window.socket) {
+        window.socket = io(server);
+        window.socket.on('acknowledged', function(connection) {
+            console.log("Connected via socket.io (", connection.id, ")");
+        });
+        window.socket.on('jobUpdate', function(update) {
+            console.log("job update:", update);
+            window.isRunning = update.isRunning;
+            $scope.$apply();
+        });
+    }
+    
+    socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
+
 });
