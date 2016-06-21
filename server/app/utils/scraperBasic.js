@@ -84,7 +84,7 @@ function execute(horseman, page, results){
 Scraper.prototype.go = function(timeout,results){
   var page = this.page;
   var horseman = this.horseman;
-  var actions = page.actions ? JSON.parse(page.actions) : [];
+  var actions = page.actions.length ? page.actions.map(action=> JSON.parse(action)) : [];
   actions.unshift({fn: 'open', params: [this.url]});
   actions.unshift({fn: 'userAgent', params: ["Mozilla/5.0 (Windows NT 6.1; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0"]});
   // if (actions.length > 2)

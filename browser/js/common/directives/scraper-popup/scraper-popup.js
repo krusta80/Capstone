@@ -7,6 +7,9 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
     link: function(scope) {
       var paginate = false;
       scope.popupactivated = false;
+      ScraperPopupFactory.getPage()._actions = ScraperPopupFactory.getPage().actions.map(function(action){
+        return JSON.parse(action);
+      });
       scope.addRow = function(obj) {
         ScraperPopupFactory.addRow();
       };
@@ -22,6 +25,23 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
             if (data) {
               scope.popupactivated = false;
             }
+          });
+      };
+      scope.setActionSelector = function(idx){
+        var page = ScraperPopupFactory.getPage();
+        var cached = ScraperPopupFactory.get();
+        var actionSelector = '';
+        cached.data.forEach(function(item){
+          if (item.attr === 'id')
+            actionSelector+= '#' + item.value;
+        });
+        page._actions[idx].params[0] = actionSelector;
+        page.actions = page._actions.map(function(action){
+          return JSON.stringify(action);
+        });
+        PageFactory.update(page)
+        .then(function(){
+            scope.popupactivated = false;
           });
       };
       scope.setPaginator = function(){
