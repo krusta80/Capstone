@@ -4,6 +4,9 @@ var models = require('./db')
 var Job = mongoose.model('Job');
 var Project = mongoose.model('Project');
 
+var port = process.env.PORT || 1337;
+var io = require('socket.io').listen(port);
+
 console.log("Job runner!");
 
 var jobList = [];
