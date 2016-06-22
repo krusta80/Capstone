@@ -10,7 +10,7 @@ app.config(function($stateProvider){
       },
       controller: function(project, ChartFactory, JobFactory, $scope, $rootScope){
         ChartFactory.setPages(project.jobs[JobFactory.findJobIndex(project.jobs, ChartFactory.getChart().job )].pages);
-
+        //console.log(ChartFactory.getChart());
         function formatDate(date){
           var d = new Date(date);
           return d.toLocaleDateString('en-US', {

@@ -78,8 +78,8 @@ app.factory('ChartFactory', function($http) {
       pages.forEach(function(page){
         chart.pages.push(JSON.stringify(page));
       });
-      chart.startDate = JSON.stringify(chart.startDate);
-      chart.endDate = JSON.stringify(chart.endDate);
+      chart.startDate = JSON.stringify(options.startDate);
+      chart.endDate = JSON.stringify(options.endDate);
       return $http.post('/api/charts', chart)
       .then(function(res){
         return res.data;

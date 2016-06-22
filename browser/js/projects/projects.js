@@ -292,6 +292,7 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         chart.name = "New chart";
         chart.chartType = "lineChart";
         chart.job = $scope.job._id;
+        chart.user = $scope.project.user;
         chart.project = $scope.project._id;
         $scope.newChart = chart;
       });
@@ -326,12 +327,12 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
             console.log("Connected via socket.io (", connection.id, ")");
         });
         window.socket.on('jobUpdate', function(update) {
-            console.log("job update:", update);
+            //console.log("job update:", update);
             window.isRunning = update.isRunning;
             $scope.$apply();
         });
     }
-    
+
     socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
 
 });
