@@ -7,6 +7,13 @@ body {
 main {
   padding-top: 68px; }
 
+.btn-round-xs {
+  border-radius: 50% !important;
+  padding: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important; }
+
 #main {
   padding-top: 15px;
   margin: 0 auto; }
@@ -125,13 +132,6 @@ navbar {
   width: auto;
   min-width: 150px;
   margin-right: 20px; }
-
-.btn-round-xs {
-  border-radius: 50% !important;
-  padding: 0 !important;
-  width: 30px !important;
-  height: 30px !important;
-  line-height: 30px !important; }
 
 #home fullstack-logo {
   padding-top: 30px;

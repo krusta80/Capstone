@@ -18,6 +18,14 @@ main {
   padding-top: 68px;
 }
 
+.btn-round-xs {
+  border-radius: 50% !important;
+  padding: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+}
+
 #main {
   padding-top: 15px;
   margin: 0 auto;
