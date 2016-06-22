@@ -1,4 +1,4 @@
-app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFactory){
+app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFactory, Messenger){
   return {
     restric: 'E',
     templateUrl: '/js/common/directives/scraper-popup/scraper-popup.html',
@@ -69,6 +69,12 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         paginate = !paginate;
       };
 
+      scope.cancel = function(index) {
+        scope.popupactivated = false;
+        var iframe = document.getElementById('iframedisplay').contentDocument;
+        iframe.querySelectorAll('.__chosenElement__' + index)[0].remove();
+      };
+
       $rootScope.$on('click', function(evt, data, coordinates){
         console.log("data on click:", data);
         scope.popupactivated = true;
@@ -78,6 +84,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         var cached = ScraperPopupFactory.add(data);
         scope.popupData = cached.data;
         scope.rawData = cached.raw;
+        scope.dataIndex = (Messenger.getScraperFieldObj().targetElements.length + 1);
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
         scope.attributes = scope.popupData;
         scope.selection = [];
