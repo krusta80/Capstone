@@ -17,7 +17,8 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
       savedAttributes.forEach(function(attribute) {
         var obj = {
           attr: attribute['attr'],
-          index: attribute['index']
+          index: attribute['index'],
+          tempVal: attribute['value']
         };
         if (attribute.attr === 'content') {
           fieldsObj[attribute.attr] = obj;
@@ -36,7 +37,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
     else{
       cachedData.raw.repeats.forEach(function(elem){
         var scraperElementSchema = {
-          name: 'test',
+          name: 'Repeating Elements',
           domSelector: elem.selector,
           selectorIndex: elem.selectorIndex,
           fields: JSON.stringify({

@@ -19,7 +19,6 @@ app.factory('ScraperElementFactory', function($http, Messenger){
 
   scrapedFieldObj.reset = function() {
     cached.targetElements = [];
-
     var iframe = document.getElementById('iframedisplay').contentDocument;
     iframe.querySelectorAll('.__chosenElement__').forEach(function(elem) {
       elem.remove();

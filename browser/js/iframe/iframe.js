@@ -41,23 +41,11 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
 
                         $scope.page.targetElements.forEach(function(targetElement, idx) {
                             // iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].className += " __clickActivate";
-                            var rectangle = iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].getBoundingClientRect();
+                            var selectedElement = iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex];
+                            var rectangle = selectedElement.getBoundingClientRect();
                             var div = `<div class="__chosenElement__ __chosenElement__${idx}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0,0,0,0.5); text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElement.name}</div>`
                             iframe.querySelector('body').innerHTML += div
                         });
-                        // var iframecontents = $('#iframedisplay').contents()[0];
-
-                        // var iframebodycontents = $(iframecontents).find('body').find('*');
-                        // $(iframebodycontents).find('*').on('click', function(ev) {
-                        //     //$scope.selector = Messenger.get();
-
-                        //     var selector = Messenger.get();
-                        //     if (selector){
-                        //         debugger;
-                        //       $rootScope.$broadcast('extract', selector);
-                        //       $scope.$evalAsync();
-                        //     }
-                        // });
 
                     };
 
