@@ -12,7 +12,6 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
     return pageObj;
   };
   scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
-
     if (!isRepeating){
       var fieldsObj = {};
       savedAttributes.forEach(function(attribute) {
@@ -27,7 +26,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
         }
       });
       var scraperElementSchema = {
-        name: 'target ' + (pageObj.targetElements.length).toString(),
+        name: 'target ' + (pageObj.targetElements.length + 1).toString(),
         domSelector: cachedData.raw.selector,
         selectorIndex: cachedData.raw.selectorIndex,
         fields: JSON.stringify(fieldsObj)

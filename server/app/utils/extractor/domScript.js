@@ -19,9 +19,19 @@ module.exports =
       $('body').on('click','*', function(ev) {
         ev.preventDefault();
         ev.stopPropagation();
-        $(this).addClass('__clickActivate');
+        // $(this).addClass('__clickActivate');
+        // some error checking here
+        if ($(ev).hasClass('__chosenElement__')) {
+          return;
+        }
         var coordinates = {x: ev.clientX, y: ev.clientY};
         window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
+        var scrapedFieldObj = window.parent.messenger.getScraperFieldObj();
+
+        var targetElementName = `target ${scrapedFieldObj.targetElements.length + 1}`;
+        var rectangle = ev.currentTarget.getBoundingClientRect();
+        var div = `<div class="__chosenElement__" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0,0,0,0.5); text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
+        $('body').append(div);
       });
 
       // data stuff
