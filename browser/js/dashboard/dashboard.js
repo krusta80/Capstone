@@ -16,7 +16,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $state, ChartFactory, DashboardFactory, $timeout) {
+app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $state, ChartFactory, DashboardFactory, $timeout, ngDialog) {
     //console.log('user',user);
     getCharts(user);
     $scope.projects = projects;
@@ -30,10 +30,19 @@ app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $
         });
     }
 
-    $scope.removeChart = function(id, idx){
-      DashboardFactory.removeChart(id)
-      .then(function(){
-        $scope.charts.splice(idx, 1);
+    $scope.removeChart = function(id, idx, charts){
+      ngDialog.open({
+        template: 'js/dashboard/dashboardDialog.html',
+        className: 'ngdialog-theme-default',
+        controller: function($scope,DashboardFactory){
+          $scope.doRemove = function(){
+            DashboardFactory.removeChart(id)
+            .then(function(){
+              charts.splice(idx, 1);
+              ngDialog.close();
+            });
+          };
+        }
       });
     };
 

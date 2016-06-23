@@ -7,7 +7,7 @@
     </div>
     <div id="dash-cont">
       <div class="panel panel-default" id="dash-item" ng-repeat="chart in charts">
-        <i class="glyphicon glyphicon-remove pull-right" ng-click="removeChart(chart._id, $index)" id="remove-btn"></i>
+        <i class="glyphicon glyphicon-remove pull-right" ng-click="removeChart(chart._id, $index, charts)" id="remove-btn"></i>
         <i class="glyphicon glyphicon-pencil pull-right" ng-click="editChart(chart)" id="remove-btn"></i>
         <div class="panel-heading">
           <h3 class="panel-title">{{chart.name}}</h3>
