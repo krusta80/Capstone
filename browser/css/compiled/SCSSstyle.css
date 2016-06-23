@@ -274,3 +274,18 @@ tutorial-section-menu {
 
 .sub-active {
   border: 1px solid black; }
+
+#dash-cont {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding-left: 20px;
+  padding-right: 20px; }
+
+#dash-item {
+  margin: 15px; }
+
+#remove-btn {
+  padding: 10px;
+  font-size: 1.5em;
+  cursor: pointer; }
