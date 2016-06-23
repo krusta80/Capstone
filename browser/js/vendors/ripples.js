@@ -4,7 +4,6 @@
 (function($, window, document, undefined) {
 
   "use strict";
-
   /**
    * Define the name of the plugin
    */

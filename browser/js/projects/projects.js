@@ -59,8 +59,9 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
-	$scope.projects = projects;
+app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state, $rootScope) {
+    $rootScope.$broadcast('sideBarClose', 'collapsed');
+    $scope.projects = projects;
     $scope.noProjects = false;
     if (projects.length > 0) {
         // select the first product
@@ -158,8 +159,13 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
     if(!$scope.pages)
         $scope.pages = [];
 
-    if($scope.pages.length > 0)
+    if($scope.pages.length > 0){
         $scope.$parent.$parent.selectedPage = $scope.pages.length - 1;
+        var page = $scope.pages[$scope.selectedPage];
+        page._actions = page.actions.map(function(action){
+          return JSON.parse(action);
+        });
+      }
 
     $scope.$parent.$parent.addPage = function() {
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
@@ -220,10 +226,15 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
             $scope.saveProject($scope.job);
     };
     $scope.savePage = function(){
+      var page = $scope.pages[$scope.selectedPage];
+      page.actions = page._actions.map(function(action){
+        return JSON.stringify(action);
+      });
       return PageFactory.update($scope.pages[$scope.selectedPage])
       .then(function(page){
         $scope.pageSaved = true;
         console.log('saved:',page);
+        console.log(page.actions);
       });
     };
 
@@ -282,14 +293,47 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         chart.name = "New chart";
         chart.chartType = "lineChart";
         chart.job = $scope.job._id;
+        chart.user = $scope.project.user;
         chart.project = $scope.project._id;
         $scope.newChart = chart;
       });
     };
 
-    $scope.goToDesigner = function(jobId){
+    $scope.isJobRunning = function() {
+        return window.isRunning;
+    };
+
+    $scope.goToDesigner = function(chartId){
       $timeout(function(){ //wait 1 sec for the modal to close
-        $state.go('projects.project.jobChartDesigner', {id: jobId});
+        $state.go('charts', {id: chartId, new: true});
       }, 1000);
     };
+
+    $scope.addAction = function(){
+      var page = $scope.pages[$scope.selectedPage];
+      if (!page._actions)
+        page._actions = [];
+      if ($scope.pageActions.selected)
+        page._actions.push({fn:$scope.pageActions.selected, params:[]});
+    };
+    $scope.removeAction = function(idx){
+      $scope.pages[$scope.selectedPage]._actions.splice(idx,1);
+    };
+
+    if(!window.server)
+        window.server = "http://localhost:1337";
+    if(!window.socket) {
+        window.socket = io(server);
+        window.socket.on('acknowledged', function(connection) {
+            console.log("Connected via socket.io (", connection.id, ")");
+        });
+        window.socket.on('jobUpdate', function(update) {
+            //console.log("job update:", update);
+            window.isRunning = update.isRunning;
+            $scope.$apply();
+        });
+    }
+
+    socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
+
 });

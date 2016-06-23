@@ -1,15 +1,17 @@
 app.config(function($stateProvider){
   $stateProvider
-    .state('projects.project.jobChartDesigner', {
-      url: '/job/:id/designer',
+    .state('charts', {
+      url: '/charts/:id?new',
       templateUrl: 'js/chart-designer/chart-designer.html',
       resolve: {
         project: function(ProjectFactory, ChartFactory){
           return ProjectFactory.fetchById(ChartFactory.getChart().project);
         }
       },
-      controller: function(project, ChartFactory, JobFactory, $scope, $rootScope){
-        ChartFactory.setPages(project.jobs[JobFactory.findJobIndex(project.jobs, ChartFactory.getChart().job )].pages);
+      controller: function(project, ChartFactory, JobFactory, $scope, $rootScope, $timeout, $stateParams){
+        if ($stateParams.new)
+          ChartFactory.setPages(project.jobs[JobFactory.findJobIndex(project.jobs, ChartFactory.getChart().job )].pages);
+
 
         function formatDate(date){
           var d = new Date(date);
@@ -73,6 +75,10 @@ app.config(function($stateProvider){
             $scope.message = msg;
           });
         };
+        if (!$stateParams.new)
+          $timeout(function(){
+            $scope.redrawChart();
+          },500);
       }
     });
 });

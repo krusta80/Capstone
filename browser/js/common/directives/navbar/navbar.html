@@ -17,8 +17,8 @@
 </nav> -->
 
 
-<aside class="sidebar fixed">
-  <a ui-sref="/">
+<aside class="sidebar fixed animate" ng-class="sideBarPosition">
+  <a ui-sref="home">
     <div class="brand-logo">
       <div id="logo">
         <div class="foot1"></div>
@@ -26,28 +26,25 @@
         <div class="foot3"></div>
         <div class="foot4"></div>
       </div>
-      ScreenGrab
+      <span class="showWhenExpanded">ScreenGrab</span>
     </div>
   </a>
-  <div class="user-logged-in" ng-show="user">
-    <div class="content">
-      <div class="user-name">{{ user.email }} <span class="text-muted f9">user</span></div>
-      <div class="user-actions">
-        <a ng-click="logout()">logout</a>
-      </div>
-    </div>
-  </div>
+
   <ul class="menu-links" ng-cloak>
     <li ng-repeat="item in items" ng-show="!item.auth || isLoggedIn()">
         <a ui-sref-active="active" ui-sref="{{ item.state }}" icon="md md-blur-on" href="{{ item.state }}">
-          <i class="{{item.icon}} customlineheight"></i> {{ item.label }}
+          <i class="{{item.icon}} customlineheight"></i> <span class="showWhenExpanded">{{ item.label }}</span>
         </a>
     </li>
 
   </ul>
+
+  <div class="btn-default btn minimizer" ng-click="toggleSideBar()">
+    <i class="md md-keyboard-arrow-left"></i>
+  </div>
 </aside>
 
-<nav class="navbar navbar-default navbar-fixed-top" ng-class="{scroll: (scroll>10)}">
+<nav class="navbar navbar-default navbar-fixed-top expanded" ng-class="{scroll: (scroll>10)}">
   <div class="container-fluid">
     <div class="navbar-header pull-left">
       <button type="button" class="navbar-toggle pull-left m-15" data-activates=".sidebar">
@@ -56,10 +53,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <ul class="breadcrumb">
+      <!-- <ul class="breadcrumb"> -->
         <!-- <li><a ui-sref="/" ui-sref-active="active">Home</a></li> -->
-        <li ng-bind="pageTitle" class="active">Loading..</li>
-      </ul>
+        <!-- <li>{{currentBaseRoute}}</li>
+        <li ng-bind="pageTitle" class="active">Loading..</li> -->
+      <!-- </ul> -->
+      <div class="user-logged-in" ng-show="user" style="line-height: 64px;">
+        <div class="content pull-left">
+          <div class="user-name"> Currently logged in as <strong>{{ user.email }}</strong> <span class="text-muted f9"><i>user</i></span></div>
+          <!-- <div class="user-actions">
+            <a ng-click="logout()">logout</a>
+          </div> -->
+        </div>
+      </div>
     </div>
 
     <ul class="nav navbar-nav navbar-right navbar-right-no-collapse">

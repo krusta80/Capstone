@@ -4,10 +4,14 @@
         reset
     </div>
     <div class="clearfix" ng-repeat="target in scrapedPageObject.targetElements">
-        <h4>{{target.name}}</h4>
+        <h4 style="line-height: 30px;">{{target.name}} <i class="fa fa-times btn btn-round-xs circle-now btn-danger pull-right" ></i></h4>
+
         <div class="clearfix" ng-repeat="(key, value) in target.fields track by $index">
-            <div class="pull-left">{{key}}</div>
-            <div class="btn btn-danger pull-right" ng-click="removeItem(target, key)">Delete</div>
+            <div class="pull-left"><strong>Key:</strong> {{key}}
+                <br/ >
+                <span ng-show="value.tempVal"><strong>Value:</strong> {{value.tempVal | truncate: 40}}</span>
+            </div>
+
         </div>
     </div>
 </div>

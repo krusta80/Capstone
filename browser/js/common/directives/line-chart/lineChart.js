@@ -1,7 +1,10 @@
 app.directive('lineChart', function(){
   return {
+    scope: {
+      chart: '='
+    },
     template: '<nvd3 data="data" options="options"></nvd3>',
-    controller: function($scope, ChartFactory, $rootScope){
+    controller: function($scope, ChartFactory, DashboardFactory, $rootScope){
       $scope.data = [];
       $rootScope.$on('recalc', function(){
         var activePages = ChartFactory.getPages().filter(function(page){
@@ -66,6 +69,36 @@ app.directive('lineChart', function(){
               }
           }
       };
+      if ($scope.chart)
+        build($scope.chart);
+      function build(chart){
+          var activePages = chart.pages.filter(function(page){
+            return page.isActive && (page.selectedX && page.selectedY);
+          });
+          if (activePages.length){
+            $scope.options.chart.xAxis.axisLabel = chart.xLabel;
+            $scope.options.chart.yAxis.axisLabel = chart.yLabel;
+            $scope.options.chart.height = 250;
+            $scope.options.chart.width = 425;
+            $scope.data = activePages.map(function(page){
+              var filteredData = page.data.filter(function(dp){
+                return dp._time >= chart.startDate.value && dp._time <= chart.endDate.value;
+              });
+              return {
+                key: page.title,
+                values: filteredData.map(function(dataPoint){
+                      return [dataPoint[page.selectedX.name], dataPoint[page.selectedY.name]];
+
+                }),
+                mean: page.data.reduce(function(acc,dp){
+                  return acc + dp[page.selectedY.name];
+                },0) / page.data.length
+
+              };
+            });
+          }
+
+      }
 
     }
   };

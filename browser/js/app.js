@@ -13,7 +13,7 @@ app.config(function ($urlRouterProvider, $locationProvider) {
 });
 
 // This app.run is for controlling access to specific states.
-app.run(function ($rootScope, AuthService, $state, $window, Messenger) {
+app.run(function ($rootScope, AuthService, $state, $window, Messenger, $location) {
     // this is setting messenger factory to the window object
     $window.messenger = Messenger;
     // The given state requires an authenticated user.
