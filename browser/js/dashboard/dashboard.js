@@ -7,15 +7,19 @@ app.config(function ($stateProvider) {
         resolve: {
           user: function(AuthService){
             return AuthService.getLoggedInUser();
+          },
+          projects: function(ProjectFactory){
+            return ProjectFactory.fetchAll();
           }
         }
     });
 
 });
 
-app.controller('DashboardCtrl', function (user,$scope, $stateParams, $state, ChartFactory, DashboardFactory) {
+app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $state, ChartFactory, DashboardFactory, $timeout) {
     //console.log('user',user);
     getCharts(user);
+    $scope.projects = projects;
 
     function getCharts(){
         DashboardFactory.getCharts()
@@ -36,6 +40,27 @@ app.controller('DashboardCtrl', function (user,$scope, $stateParams, $state, Cha
     $scope.editChart = function(chart){
       ChartFactory.setChart(chart);
       $state.go('charts', {id: chart._id});
+
+    };
+
+
+    $scope.newChart = function(){
+      ChartFactory.getNewChart()
+      .then(function(chart){
+        chart.name = "New chart";
+        chart.chartType = "lineChart";
+        chart.user = user._id;
+        $scope.newChart = chart;
+      });
+    };
+
+    $scope.goToDesigner = function(){
+      var chart = $scope.newChart;
+      chart.job = chart.job._id;
+      chart.project = chart.project._id;
+      $timeout(function(){
+        $state.go('charts', {id: chart._id, new: true});
+      }, 1000);
 
     };
 
