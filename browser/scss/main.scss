@@ -14,9 +14,23 @@ body {
   }
 
 }
-
 main {
-  padding-top: 68px;
+  padding-top: 63px;
+  transition-timing-function: ease;
+  -webkit-transition: padding 1s; /* Safari */
+  transition: padding 1s;
+
+  &.collapsed {
+    padding-left: 70px !important;
+  }
+}
+
+.btn-round-xs {
+  border-radius: 50% !important;
+  padding: 0 !important;
+  width: 30px !important;
+  height: 30px !important;
+  line-height: 30px !important;
 }
 
 #main {

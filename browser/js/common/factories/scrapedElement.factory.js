@@ -1,4 +1,4 @@
-app.factory('ScraperElementFactory', function($http){
+app.factory('ScraperElementFactory', function($http, Messenger){
   var scrapedFieldObj = {};
   var cached;
   var payload;
@@ -12,12 +12,17 @@ app.factory('ScraperElementFactory', function($http){
         targetElement.fields = JSON.parse(targetElement.fields);
       });
       cached = response.data;
+      Messenger.fromScraperElementFactory(cached);
       return cached;
     });
   };
 
   scrapedFieldObj.reset = function() {
     cached.targetElements = [];
+    var iframe = document.getElementById('iframedisplay').contentDocument;
+    iframe.querySelectorAll('.__chosenElement__').forEach(function(elem) {
+      elem.remove();
+    });
     this.save();
   };
 
@@ -40,11 +45,13 @@ app.factory('ScraperElementFactory', function($http){
         return targetElement;
     });
     cached = pageObj;
+    Messenger.fromScraperElementFactory(cached);
     return cached;
   };
 
   scrapedFieldObj.setAndGet = function(pageObj) {
     cached = pageObj;
+    Messenger.fromScraperElementFactory(cached);
     return cached;
   };
   scrapedFieldObj.get = function() {

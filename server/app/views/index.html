@@ -29,7 +29,7 @@
     <script src="/main.js"></script>
 </head>
 <body ng-controller="MainController" ng-class="[theme.template, theme.color]">
-    <main>
+    <main init-ripples ng-cloak ng-view bs-affix-target>
         <!-- <side-bar></side-bar> -->
         <navbar></navbar>
         <div id="main">

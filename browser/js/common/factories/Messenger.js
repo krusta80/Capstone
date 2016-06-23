@@ -1,5 +1,6 @@
 app.factory('Messenger', function($rootScope){
-  var hoverValue, clickValue, repeating = false;
+  var hoverValue, clickValue, repeating = false,
+  scrapedFieldObj;
   return {
     hover: function(val){
       hoverValue = val;
@@ -14,6 +15,12 @@ app.factory('Messenger', function($rootScope){
         console.log("clickValue", clickValue);
         return clickValue;
       return;
+    },
+    fromScraperElementFactory: function(data) {
+      scrapedFieldObj = data;
+    },
+    getScraperFieldObj: function() {
+      return scrapedFieldObj;
     }
   };
 });
