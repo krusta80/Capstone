@@ -59,8 +59,9 @@ app.config(function ($stateProvider) {
     });
 });
 
-app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state) {
-	$scope.projects = projects;
+app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $scope, $state, $rootScope) {
+    $rootScope.$broadcast('sideBarClose', 'collapsed');
+    $scope.projects = projects;
     $scope.noProjects = false;
     if (projects.length > 0) {
         // select the first product
@@ -331,7 +332,7 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
             $scope.$apply();
         });
     }
-    
+
     socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
 
 });

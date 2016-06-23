@@ -5,7 +5,13 @@ body {
   background: #fdfdfd; }
 
 main {
-  padding-top: 68px; }
+  padding-top: 63px;
+  transition-timing-function: ease;
+  -webkit-transition: padding 1s;
+  /* Safari */
+  transition: padding 1s; }
+  main.collapsed {
+    padding-left: 70px !important; }
 
 .btn-round-xs {
   border-radius: 50% !important;
@@ -56,11 +62,47 @@ fullstack-logo {
 aside.sidebar i.customlineheight {
   line-height: 30px; }
 
+aside.sidebar.animate {
+  transition-timing-function: ease;
+  -webkit-transition: width 1s;
+  /* Safari */
+  transition: width 1s; }
+
+aside.sidebar.collapsed {
+  width: 70px !important; }
+  aside.sidebar.collapsed #logo {
+    margin-left: 9px; }
+  aside.sidebar.collapsed .menu-links a {
+    padding: 15px 0 15px 19px; }
+    aside.sidebar.collapsed .menu-links a i.md {
+      font-size: 30px; }
+  aside.sidebar.collapsed .showWhenExpanded {
+    display: none; }
+
+aside.sidebar .minimizer {
+  padding: 0;
+  background-color: #a1a1a1 !important;
+  border-radius: 20px;
+  position: absolute;
+  top: 50%;
+  right: -19px;
+  margin-top: -17px;
+  z-index: 100; }
+  aside.sidebar .minimizer i {
+    font-size: 39px;
+    line-height: 35px;
+    width: 38px;
+    color: #474747;
+    margin-right: 10px;
+    margin-left: -5px; }
+
 navbar {
   display: block;
   background: white;
   border-bottom: 1px solid black;
   box-shadow: 1px 1px 14px -3px black; }
+  navbar .user-logged-in {
+    font-size: 17px; }
   navbar .container {
     width: 91%;
     max-width: 1340px;
@@ -108,7 +150,7 @@ navbar {
   color: white;
   font-size: 12px;
   padding: 10px;
-  left: 20px;
+  left: 0px;
   word-wrap: break-word; }
 
 .scraperPopup {

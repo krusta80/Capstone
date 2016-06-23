@@ -2,6 +2,51 @@ aside.sidebar i.customlineheight {
   line-height: 30px;
 
 }
+
+
+aside.sidebar {
+  &.animate {
+    transition-timing-function: ease;
+    -webkit-transition: width 1s; /* Safari */
+    transition: width 1s;
+  }
+  &.collapsed {
+    width: 70px !important;
+
+    #logo {
+      margin-left: 9px;
+    }
+    .menu-links a {
+      padding: 15px 0 15px 19px;
+
+      i.md {
+        font-size: 30px;
+      }
+    }
+    .showWhenExpanded {
+      display: none;
+    }
+  }
+
+  .minimizer {
+    padding: 0;
+    background-color: #a1a1a1 !important;
+    border-radius: 20px;
+    position: absolute;
+    top: 50%;
+    right: -19px;
+    margin-top: -17px;
+    z-index: 100;
+    i {
+      font-size: 39px;
+      line-height: 35px;
+      width: 38px;
+      color: #474747;
+      margin-right: 10px;
+      margin-left: -5px;
+    }
+  }
+}
 navbar {
 
   display: block;
@@ -9,6 +54,9 @@ navbar {
   border-bottom: 1px solid black;
   box-shadow: 1px 1px 14px -3px black;
 
+  .user-logged-in {
+    font-size: 17px;
+  }
   .container {
     width: 91%;
     max-width: 1340px;

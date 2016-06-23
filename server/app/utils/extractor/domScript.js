@@ -30,7 +30,7 @@ module.exports =
 
         var targetElementName = `target ${scrapedFieldObj.targetElements.length + 1}`;
         var rectangle = ev.currentTarget.getBoundingClientRect();
-        var div = `<div class="__chosenElement__ __chosenElement__${scrapedFieldObj.targetElements.length+1}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0,0,0,0.5); text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
+        var div = `<div class="__chosenElement__ __chosenElement__${scrapedFieldObj.targetElements.length+1}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0, 110, 190, 0.5); text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
         $('body').append(div);
       });
 

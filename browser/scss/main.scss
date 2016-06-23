@@ -15,7 +15,14 @@ body {
 
 }
 main {
-  padding-top: 68px;
+  padding-top: 63px;
+  transition-timing-function: ease;
+  -webkit-transition: padding 1s; /* Safari */
+  transition: padding 1s;
+
+  &.collapsed {
+    padding-left: 70px !important;
+  }
 }
 
 .btn-round-xs {

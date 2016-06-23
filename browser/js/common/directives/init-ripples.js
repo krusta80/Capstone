@@ -6,12 +6,17 @@ app.directive('initRipples', function() {
         '.btn:not(.withoutripple)',
         '.card-image',
         '.navbar a:not(.withoutripple)',
-        '.dropdown-menu a',
+        'a',
         '.nav-tabs a:not(.withoutripple)',
-        '.withripple'
+        '.withripple',
+        '.menulinks li'
       ].join(',');
 
-      $(element).find(withRipples).ripples();
+      setTimeout(function() {
+        console.log("ripple effect", $(element).find(withRipples));
+        $(element).find(withRipples).ripples();
+      },50)
+
     }
   };
 });

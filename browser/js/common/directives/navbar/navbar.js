@@ -1,11 +1,11 @@
-app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) {
+app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, $location) {
 
     return {
         restrict: 'E',
         scope: {},
         templateUrl: 'js/common/directives/navbar/navbar.html',
         link: function (scope) {
-
+            scope.sideBarPosition = 'expanded';
             scope.items = [
                 { label: 'Home', state: 'home' , icon: "md md-home"},
                 //{ label: 'Iframe', state: 'iframe' , icon: ""},
@@ -16,7 +16,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                 //{ label: 'Chart', state: 'chart', icon: "md md-insert-chart"},
                 { label: 'Dashboard', state: 'dashboard', auth: true , icon: "md md-dashboard"}
             ];
-
+            scope.currentBaseRoute = $location.$$url.split('/')[0];
             scope.user = null;
 
             scope.isLoggedIn = function () {
@@ -28,6 +28,26 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state) 
                    $state.go('home');
                 });
             };
+
+            scope.toggleSideBar = function(action) {
+                if (scope.sideBarPosition === 'collapsed') {
+                    console.log('sideBar is expanded');
+                    scope.sideBarPosition = 'expanded';
+                    angular.element('.navbar-fixed-top').removeClass('collapsed').addClass('expanded');
+                    angular.element('main').removeClass('collapsed').addClass('expanded');
+                } else {
+                    console.log('sideBar is collapsed');
+                    scope.sideBarPosition = 'collapsed';
+                    angular.element('.navbar-fixed-top').addClass('collapsed').removeClass('expanded');
+                    angular.element('main').addClass('collapsed').removeClass('expanded');
+                }
+            };
+
+            $rootScope.$on('sideBarClose', function(ev, action) {
+                scope.sideBarPosition = 'collapsed';
+                angular.element('.navbar-fixed-top').addClass('collapsed').removeClass('expanded');
+                angular.element('main').addClass('collapsed').removeClass('expanded');
+            });
 
             var setUser = function () {
                 AuthService.getLoggedInUser().then(function (user) {
