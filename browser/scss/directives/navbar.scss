@@ -110,5 +110,19 @@ navbar {
       cursor: pointer;
     }
   }
+  #brand-text{
+    font-family: 'Open Sans', sans-serif;
+    color: #e94f3d;
+    font-size: 1.2em;
+    vertical-align: bottom;
+    // text-shadow: 2px 2px #a3382a;
+  }
+  .brand-image{
+    height:75px;
+    width: 75px;
+  }
 
 }
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+@import url(https://fonts.googleapis.com/css?family=Poiret+One);

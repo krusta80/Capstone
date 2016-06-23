@@ -1,3 +1,6 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://fonts.googleapis.com/css?family=Lobster);
+@import url(https://fonts.googleapis.com/css?family=Poiret+One);
 * {
   box-sizing: border-box; }
 
@@ -140,6 +143,14 @@ navbar {
     navbar .welcome a {
       color: #f30046;
       cursor: pointer; }
+  navbar #brand-text {
+    font-family: 'Open Sans', sans-serif;
+    color: #e94f3d;
+    font-size: 1.2em;
+    vertical-align: bottom; }
+  navbar .brand-image {
+    height: 75px;
+    width: 75px; }
 
 .active-col, .grid-col:hover {
   background: green;
@@ -183,6 +194,16 @@ navbar {
 #home h1 {
   margin-top: 40px;
   text-align: center; }
+
+#home .big-crab {
+  position: fixed;
+  height: 500px;
+  width: 500px;
+  opacity: .4;
+  top: 50%;
+  left: 55%;
+  margin-top: -250px;
+  margin-left: -250px; }
 
 #about {
   margin: 0 auto;
