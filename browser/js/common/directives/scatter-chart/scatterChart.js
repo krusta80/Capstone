@@ -1,5 +1,8 @@
 app.directive('scatterChart', function(){
   return {
+    scope:{
+      chart:'='
+    },
     template: '<nvd3 data="data" options="options"></nvd3>',
     controller: function($scope, ChartFactory, $rootScope){
       $scope.data = [];
@@ -68,6 +71,38 @@ app.directive('scatterChart', function(){
                 }
             }
         };
+        if ($scope.chart)
+          build($scope.chart);
+        function build(chart){
+            var activePages = chart.pages.filter(function(page){
+              return page.isActive && (page.selectedX && page.selectedY);
+            });
+            if (activePages.length){
+              $scope.options.chart.xAxis.axisLabel = chart.xLabel;
+              $scope.options.chart.yAxis.axisLabel = chart.yLabel;
+              $scope.options.chart.height = 250;
+              $scope.options.chart.width = 425;
+              $scope.data = activePages.map(function(page){
+                var filteredData = page.data.filter(function(dp){
+                  return dp._time >= chart.startDate.value && dp._time <= chart.endDate.value;
+                });
+                return {
+                  key: page.title,
+                  values: filteredData.map(function(dataPoint){
+                        return {
+                          x: dataPoint[page.selectedX.name],
+                          y: dataPoint[page.selectedY.name],
+                          size: dataPoint[page.selectedR.name],
+                          shape: 'circle'
+                        };
+                  })
+
+                };
+              });
+            }
+
+        }
+
     }
   };
 });

@@ -1,11 +1,24 @@
-<div class="">
-    <div class="span">
-        <button type="submit" value="newChart" ng-click="newChart()"> Create New Chart </button><br>
-
-        <div class="col-lg-5" ng-repeat="chart in charts">
-          <line-chart chart="chart"></line-chart>
-        </div>
+<div>
+    <div style="text-align:center;">
+      <button class="btn btn-success" ng-click="newChart()"> Create New Chart </button>
     </div>
 
-    <ui-view></ui-view>
+    <div id="dash-cont">
+      <div class="panel panel-default" id="dash-item" ng-repeat="chart in charts">
+        <i class="glyphicon glyphicon-remove pull-right" id="remove-btn"></i>
+        <div class="panel-heading">
+          <h3 class="panel-title">{{chart.name}}</h3>
+        </div>
+        <div class="panel-body" style="text-align:center;">
+          <line-chart chart="chart" ng-if="chart.chartType==='lineChart'"></line-chart>
+          <scatter-chart chart="chart" ng-if="chart.chartType==='scatterChart'"></scatter-chart>
+          <button class="btn btn-default">Open</button>
+          <button class="btn btn-default">Edit</button>
+        </div>
+        <div class="panel-footer">
+          <span>Created {{chart.createdDate | date : 'medium'}}</span>
+        </div>
+      </div>
+
+    </div>
 </div>
