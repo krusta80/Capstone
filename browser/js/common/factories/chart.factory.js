@@ -80,6 +80,7 @@ app.factory('ChartFactory', function($http) {
       });
       chart.startDate = JSON.stringify(options.startDate);
       chart.endDate = JSON.stringify(options.endDate);
+      chart.modifiedDate = Date.now();
       return $http.post('/api/charts', chart)
       .then(function(res){
         return res.data;
@@ -97,9 +98,11 @@ app.factory('ChartFactory', function($http) {
     setOptions: function(_options) {
       options = _options;
     },
-    setChart: function(chartName) {
-      this.setOptions(chartTypesMap[chartName].options);
-      this.setData(chartTypesMap[chartName].data);
+    setChart: function(_chart) {
+      pages = _chart.pages;
+      options.startDate = _chart.startDate;
+      options.endDate = _chart.endDate;
+      chart = _chart;
     }
   };
 });

@@ -4,7 +4,7 @@
   <div class="panel panel-default" ng-repeat="page in getPages()">
     <div class="panel-heading">
       <span class="panel-title">{{page.title}}</span>
-      <input ng-click="toggleActive($index)" type="checkbox" class="pull-right" />
+      <input ng-click="toggleActive($index)" ng-checked="page.isActive" type="checkbox" class="pull-right" />
     </div>
     <div class="panel-body" ng-if="page.isActive">
       <div class="form-group">
@@ -50,7 +50,7 @@
               <select ng-model="getOptions().endDate" ng-change="redrawChart()" ng-options="date.label for date in getDateRange() track by date.value"></select>
           </div>
         </form>
-        <div>  
+        <div>
           <button class="btn btn-default">Publish to dashboard</button>
           <button class="btn btn-default" ng-click="saveChart()">Save</button><span> {{message.msg}}</span>
         </div>

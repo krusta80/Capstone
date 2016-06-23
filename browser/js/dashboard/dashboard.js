@@ -13,7 +13,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('DashboardCtrl', function (user,$scope, $stateParams, $state, DashboardFactory) {
+app.controller('DashboardCtrl', function (user,$scope, $stateParams, $state, ChartFactory, DashboardFactory) {
     //console.log('user',user);
     getCharts(user);
 
@@ -25,13 +25,20 @@ app.controller('DashboardCtrl', function (user,$scope, $stateParams, $state, Das
             });
         });
     }
-    $scope.newChart = function(){
-        $state.go('dashboard.chartSetup');
+
+    $scope.removeChart = function(id, idx){
+      DashboardFactory.removeChart(id)
+      .then(function(){
+        $scope.charts.splice(idx, 1);
+      });
     };
 
-    $scope.jsonCharts = function(){
-        res.send($scope.getCharts());
+    $scope.editChart = function(chart){
+      ChartFactory.setChart(chart);
+      $state.go('charts', {id: chart._id});
+
     };
+
 
 
 });

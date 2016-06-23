@@ -71,9 +71,9 @@ router.put('/:id', ensureAuthenticated, function(req,res){
 	});
 });
 
-router.delete('/:id', ensureAuthenticated, function(req,res){
+router.delete('/:id', ensureAuthenticated, function(req,res, next){
 	Chart.findByIdAndRemove(req.params.id)
-	.then(function(chart){
-		res.send(chart);
-	});
+	.then(function(){
+		res.sendStatus(200);
+	}, next);
 });

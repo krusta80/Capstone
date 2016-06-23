@@ -302,9 +302,9 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         return window.isRunning;
     };
 
-    $scope.goToDesigner = function(jobId){
+    $scope.goToDesigner = function(chartId){
       $timeout(function(){ //wait 1 sec for the modal to close
-        $state.go('projects.project.jobChartDesigner', {id: jobId});
+        $state.go('charts', {id: chartId, new: true});
       }, 1000);
     };
 

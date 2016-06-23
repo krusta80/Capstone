@@ -18,6 +18,9 @@ app.factory('DashboardFactory', function($http) {
       chart.endDate = JSON.parse(chart.endDate);
       chart.startDate = JSON.parse(chart.startDate);
       return chart;
+    },
+    removeChart: function(chartId){
+      return $http.delete('/api/charts/' + chartId);
     }
   };
 
