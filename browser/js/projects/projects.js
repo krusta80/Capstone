@@ -155,7 +155,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.$parent.$parent.pages = pages;
-
+    $scope.pageActions = {selected:'type'};
     if(!$scope.pages)
         $scope.pages = [];
 
@@ -296,35 +296,6 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         }
       });
     };
-    // $scope.removePage = function() {
-    //     $scope.job.pages.splice($scope.selectedPage,1);
-    //     if($scope.pages[$scope.selectedPage]._id)
-    //         PageFactory.remove($scope.pages[$scope.selectedPage]._id)
-    //         .then(function(page) {
-    //             console.log("Removed page", page);
-    //             $scope.$parent.$parent.pages.splice($scope.selectedPage,1);
-    //
-    //             if($scope.selectedPage > 0)
-    //                 $scope.selectedPage--;
-    //             else
-    //                 delete $scope.selectedPage;
-    //
-    //             $scope.saveJob();
-    //             //$scope.pageForm.$setPristine();
-    //         })
-    //     else {
-    //         $scope.pages.splice($scope.selectedPage,1);
-    //         if($scope.selectedPage > 0)
-    //             $scope.selectedPage--;
-    //         else
-    //             delete $scope.selectedPage;
-    //
-    //         $scope.saveJob();
-    //         //$scope.pageForm.$setPristine();
-    //     }
-    //
-    // };
-
     $scope.runJob = function() {
         JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))
         .then(function(rez) {

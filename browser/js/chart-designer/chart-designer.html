@@ -22,11 +22,13 @@
     </div>
   </div>
 </div>
-<div class="col-lg-7 col-md-7" ng-if="activePages()">
+<div class="col-lg-9" ng-if="activePages()">
   <h3>{{getChart().name}}</h3>
   <line-chart ng-if="getChart().chartType==='lineChart'"></line-chart>
   <scatter-chart ng-if="getChart().chartType === 'scatterChart'"></scatter-chart>
-  <div class="panel panel-default">
+  <div class="panel panel-primary">
+    <span class="glyphicon glyphicon-remove" uib-tooltip="delete this chart" ng-click="removeChart(getChart()._id)" id="remove-btn"></span>
+    <span class="glyphicon glyphicon-floppy-disk" uib-tooltip="save this chart" ng-click="saveChart()" id="remove-btn"></span>
     <div class="panel-heading">
       <h3 class="panel-title">Chart options</h3></div>
       <div class="panel-body">
@@ -51,8 +53,7 @@
           </div>
         </form>
         <div>
-          <button class="btn btn-default">Publish to dashboard</button>
-          <button class="btn btn-default" ng-click="saveChart()">Save</button><span> {{message.msg}}</span>
+          <span> {{message.msg}}</span>
         </div>
       </div>
     </div>
