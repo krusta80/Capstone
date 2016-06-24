@@ -152,7 +152,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
 });
 
-app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window) {
+app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.$parent.$parent.pages = pages;
 
@@ -184,20 +184,39 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         })
         .then(function() {
             console.log("Job saved...");
-        })
+        });
+    };
+    $scope.removeJob = function(){
+      var scope = $scope;
+      ngDialog.open({
+        template: 'js/projects/remove-dialog.html',
+        className: 'ngdialog-theme-default',
+        controller: function($scope, JobFactory){
+          $scope.job = scope.job;
+          $scope.doRemove = function(){
+            scope.jobs.splice(JobFactory.findJobIndex(scope.jobs, scope.job._id),1);
+            ngDialog.close();
+            if(scope.jobs.length > 0)
+                scope.saveProject(scope.jobs[0]);
+            else
+                scope.saveProject();
+          };
+        }
+
+      });
     };
 
-    $scope.removeJob = function() {
-        $scope.jobs.splice(JobFactory.findJobIndex($scope.jobs, $scope.job._id),1);
-        if($scope.jobs.length > 0)
-            $scope.saveProject($scope.jobs[0]);
-        else
-            $scope.saveProject();
-        // JobFactory.remove($scope.job._id)
-        // .then(function(removedJob) {
-        //     $state.go('projects.project', {projectId: $scope.selectProject._id})
-        // })
-    };
+    // $scope.removeJob = function() {
+    //     $scope.jobs.splice(JobFactory.findJobIndex($scope.jobs, $scope.job._id),1);
+    //     if($scope.jobs.length > 0)
+    //         $scope.saveProject($scope.jobs[0]);
+    //     else
+    //         $scope.saveProject();
+    //     // JobFactory.remove($scope.job._id)
+    //     // .then(function(removedJob) {
+    //     //     $state.go('projects.project', {projectId: $scope.selectProject._id})
+    //     // })
+    // };
 
     $scope.$parent.$parent.setSelected = function(ind) {
         console.log("dirty:", $scope.pageForm.$dirty);
@@ -208,7 +227,7 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
         PageFactory.update($scope.pages[$scope.selectedPage])
         .then(function(updatedPage) {
             $scope.$parent.$parent.selectedPage = ind;
-        })
+        });
     };
 
     $scope.saveJob = function() {
@@ -238,34 +257,73 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
       });
     };
 
-    $scope.removePage = function() {
-        $scope.job.pages.splice($scope.selectedPage,1);
-        if($scope.pages[$scope.selectedPage]._id)
-            PageFactory.remove($scope.pages[$scope.selectedPage]._id)
-            .then(function(page) {
-                console.log("Removed page", page);
-                $scope.$parent.$parent.pages.splice($scope.selectedPage,1);
 
-                if($scope.selectedPage > 0)
-                    $scope.selectedPage--;
-                else
-                    delete $scope.selectedPage;
+    $scope.removePage = function(){
+      var scope = $scope;
+      ngDialog.open({
+        template: 'js/projects/remove-dialog-page.html',
+        className: 'ngdialog-theme-default',
+        controller: function($scope, JobFactory){
+          $scope.doRemove = function() {
+              ngDialog.close();
+              scope.job.pages.splice(scope.selectedPage,1);
+              if(scope.pages[scope.selectedPage]._id)
+                  PageFactory.remove(scope.pages[scope.selectedPage]._id)
+                  .then(function(page) {
+                      console.log("Removed page", page);
+                      scope.$parent.$parent.pages.splice(scope.selectedPage,1);
 
-                $scope.saveJob();
-                //$scope.pageForm.$setPristine();
-            })
-        else {
-            $scope.pages.splice($scope.selectedPage,1);
-            if($scope.selectedPage > 0)
-                $scope.selectedPage--;
-            else
-                delete $scope.selectedPage;
+                      if(scope.selectedPage > 0)
+                          scope.selectedPage--;
+                      else
+                          delete scope.selectedPage;
 
-            $scope.saveJob();
-            //$scope.pageForm.$setPristine();
+                      scope.saveJob();
+                      //scope.pageForm.$setPristine();
+                  });
+              else {
+                  scope.pages.splice(scope.selectedPage,1);
+                  if(scope.selectedPage > 0)
+                      scope.selectedPage--;
+                  else
+                      delete scope.selectedPage;
+
+                  scope.saveJob();
+                  //$scope.pageForm.$setPristine();
+              }
+
+          };
         }
-
+      });
     };
+    // $scope.removePage = function() {
+    //     $scope.job.pages.splice($scope.selectedPage,1);
+    //     if($scope.pages[$scope.selectedPage]._id)
+    //         PageFactory.remove($scope.pages[$scope.selectedPage]._id)
+    //         .then(function(page) {
+    //             console.log("Removed page", page);
+    //             $scope.$parent.$parent.pages.splice($scope.selectedPage,1);
+    //
+    //             if($scope.selectedPage > 0)
+    //                 $scope.selectedPage--;
+    //             else
+    //                 delete $scope.selectedPage;
+    //
+    //             $scope.saveJob();
+    //             //$scope.pageForm.$setPristine();
+    //         })
+    //     else {
+    //         $scope.pages.splice($scope.selectedPage,1);
+    //         if($scope.selectedPage > 0)
+    //             $scope.selectedPage--;
+    //         else
+    //             delete $scope.selectedPage;
+    //
+    //         $scope.saveJob();
+    //         //$scope.pageForm.$setPristine();
+    //     }
+    //
+    // };
 
     $scope.runJob = function() {
         JobFactory.runJob($scope.project._id, JobFactory.findJobIndex($scope.jobs, $scope.job._id))

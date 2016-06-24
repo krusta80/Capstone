@@ -13,6 +13,7 @@
 <div class="col-md-9">
 	<form class="form-horizontal" name="pageForm">
 	<div class="panel panel-default">
+		<i class="glyphicon glyphicon-remove" ng-click="removeJob()" id="remove-btn"></i>
 		<h4 class="panel-heading">Job Details</h4>
 		<div class="panel-body">
 			<div style="margin-left: 50px">
@@ -59,7 +60,7 @@
 			<div class="form-group">
 				<div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px;text-align:center;">
 					 <button ng-click="saveJob()" class="btn btn-primary">Save Job</button>
-					 <button ng-click="removeJob()" class="btn btn-danger">Delete Job</button>
+					 <!-- <button ng-click="removeJob()" class="btn btn-danger">Delete Job</button> -->
 					 <button ng-click="runJob()" ng-disabled="!job.active" class="btn btn-default">Run Job</button>
 					 <button ng-show="job.pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal">New chart</button>
 					 <alert type="success" ng-show="success">
@@ -75,6 +76,7 @@
 	</div>
 	<div ng-show="pages.length > 0">
 		<div class="panel panel-default">
+			<i class="glyphicon glyphicon-remove" id="remove-btn" ng-click="removePage()"></i>
 			<h4 class="panel-heading">Page Details</h4>
 			<div class="panel-body">
 				<div class="form-group">
@@ -149,7 +151,7 @@
 			  <div class="form-group">
 			    <div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 0;text-align:center;">
 			       <button ng-click="viewPage()" class="btn btn-primary">View Page</button>
-			       <button ng-click="removePage()" class="btn btn-danger">Delete Page</button>
+			       <!-- <button ng-click="removePage()" class="btn btn-danger">Delete Page</button> -->
 						 <button ng-click="savePage()" class="btn btn-default">Save Page</button>
 			    </div>
 			  </div>
