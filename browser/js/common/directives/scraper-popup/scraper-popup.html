@@ -1,4 +1,4 @@
-<div class="absolute scraperPopup" ng-if="popupactivated" ng-style="{ left: left + 'px', top: top + 'px'}">
+<div class="absolute scraperPopup" ng-if="popupactivated" ng-style="{ left: left + 'px', top: top + 'px'}" style="max-width: 350px;">
     <div class="panel" style="padding: 20px;">
       <h4>Attributes that can be saved</h4>
       <div ng-show="rawData.repeats.length > 1 && !hideAttributes">
@@ -18,19 +18,21 @@
         </ul>
       </div>
       <form ng-show="!hideAttributes">
-          <div ng-repeat="attribute in attributes">
-            <label name="selectedAttributes[]">
-              <div class="checkbox">
-                <input type="checkbox" name="selectedAttributes[]"
-                  value="{{attribute.value}}"
-                  ng-model="attribute.selected">
-              </div>
+          <div class="scroll-container">
+              <div ng-repeat="attribute in attributes">
+                <label name="selectedAttributes[]">
+                  <div class="checkbox">
+                    <input type="checkbox" name="selectedAttributes[]"
+                      value="{{attribute.value}}"
+                      ng-model="attribute.selected">
+                  </div>
 
-              <div class="inline-block">
-                <div>Name: {{attribute.attributeName || attribute.attr}}</div>
-                <div>Value: {{attribute.value}}</div>
+                  <div class="inline-block">
+                    <div>Name: {{attribute.attributeName || attribute.attr}}</div>
+                    <div>Value: {{attribute.value}}</div>
+                  </div>
+                </label>
               </div>
-            </label>
           </div>
           <div class="row">
             <div class="pull-right">

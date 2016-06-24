@@ -45,7 +45,7 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                             // iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].className += " __clickActivate";
                             var selectedElement = iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex];
                             var rectangle = selectedElement.getBoundingClientRect();
-                            var div = `<div class="__chosenElement__ __chosenElement__${idx}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0, 110, 190, 0.5); text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElement.name}</div>`
+                            var div = `<div class="__chosenElement__ __chosenElement__${idx}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top}px; background-color:rgba(0, 110, 190, 0.5); z-index: 10000; text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElement.name}</div>`
                             iframe.querySelector('body').innerHTML += div
                         });
 

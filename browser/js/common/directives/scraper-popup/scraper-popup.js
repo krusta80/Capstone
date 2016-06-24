@@ -78,8 +78,8 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
       $rootScope.$on('click', function(evt, data, coordinates){
         console.log("data on click:", data);
         scope.popupactivated = true;
-        scope.left = coordinates.x;
-        scope.top = coordinates.y;
+        scope.left = coordinates.x-150;
+        scope.top = coordinates.y-150;
         ScraperPopupFactory.reset();
         var cached = ScraperPopupFactory.add(data);
         scope.popupData = cached.data;

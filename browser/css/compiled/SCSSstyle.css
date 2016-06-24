@@ -170,8 +170,19 @@ navbar {
   font-size: 12px;
   padding: 10px;
   word-wrap: break-word; }
-  .scraperPopup label {
-    margin-left: 20px; }
+  .scraperPopup .checkbox {
+    margin-top: 0;
+    margin-bottom: 0; }
+  .scraperPopup .checkbox input[type=checkbox] {
+    margin-left: 0; }
+  .scraperPopup .inline-block {
+    word-break: break-all;
+    margin-left: 35px; }
+  .scraperPopup .scroll-container {
+    max-height: 350px;
+    overflow-y: scroll;
+    margin-top: 5px;
+    margin-bottom: 5px; }
 
 .inline-block {
   display: inline-block; }

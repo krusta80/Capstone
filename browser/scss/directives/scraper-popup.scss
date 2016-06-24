@@ -15,9 +15,23 @@
   padding: 10px;
   // max-width: 250px;
   word-wrap: break-word;
+  .checkbox {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .checkbox input[type=checkbox] {
+    margin-left: 0;
+  }
+  .inline-block {
+    word-break: break-all;
+    margin-left: 35px;
+  }
 
-  label {
-    margin-left: 20px;
+  .scroll-container {
+    max-height: 350px;
+    overflow-y: scroll;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 .inline-block {
