@@ -358,7 +358,7 @@ tutorial-section-menu {
 
 #dash-cont {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
   padding-left: 20px;
   padding-right: 20px; }
@@ -367,6 +367,7 @@ tutorial-section-menu {
   margin: 15px; }
 
 #remove-btn {
+  float: right;
   padding: 10px;
   font-size: 1.5em;
   cursor: pointer; }
