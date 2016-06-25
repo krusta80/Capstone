@@ -1,4 +1,4 @@
-app.factory('ScraperElementFactory', function($http, Messenger){
+app.factory('ScraperElementFactory', function($http, Messenger, $rootScope){
   var scrapedFieldObj = {};
   var cached;
   var payload;
@@ -12,6 +12,7 @@ app.factory('ScraperElementFactory', function($http, Messenger){
         targetElement.fields = JSON.parse(targetElement.fields);
       });
       cached = response.data;
+      $rootScope.$emit('pageUpdated', cached);
       Messenger.fromScraperElementFactory(cached);
       return cached;
     });

@@ -3,8 +3,15 @@
     <form class="form-group" ng-submit="searchthis(url)">
       <label>Type in the url here - start with http://</label>
       <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com"></input>
-      <button class="btn btn-primary">Submit</button>
+      <button class="btn btn-primary" ng-disabled="scraperElementsExist && isAnnotation">Submit</button>
     </form>
+    <div class="form-group">
+      <label class="control-label normal">Annotate Page <strong ng-if="scraperElementsExist">You cannot turn of annotation because you have scraper elements</strong></label>
+      <div class="switch">
+        <label class="filled"> Off
+          <input type="checkbox" ng-checked="isAnnotation" ng-disabled="scraperElementsExist" ng-model="isAnnotation" ng-click="toggleAnnotate()"> <span class="lever"></span> On </label>
+      </div>
+    </div>
   </div>
 
 </div>
