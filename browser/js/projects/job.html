@@ -1,4 +1,4 @@
-<h2 style="text-align:center;">{{job.title}}</h2>
+<!-- <h2 style="text-align:center;">{{job.title}}</h2> -->
 
 <!-- <div class="col-md-3">
 	<h4 style="margin-left: 5px; display: inline">Pages</h4>
@@ -12,8 +12,11 @@
 
 <div class="col-md-9">
 	<form class="form-horizontal" name="pageForm">
-	<div class="panel panel-default">
-		<i class="glyphicon glyphicon-remove" ng-click="removeJob()" id="remove-btn"></i>
+	<div class="panel panel-primary">
+		<span class="glyphicon glyphicon-remove" uib-tooltip="delete this job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
+		<span class="glyphicon glyphicon-signal" ng-show="job.pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal" uib-tooltip="create chart from job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
+		<span class="glyphicon glyphicon-floppy-disk" ng-click="saveJob()" uib-tooltip="save this job" tooltip-placement="top" id="remove-btn"></span>
+		<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="job.active" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
 		<h4 class="panel-heading">Job Details</h4>
 		<div class="panel-body">
 			<div style="margin-left: 50px">
@@ -38,7 +41,11 @@
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">Frequency</label>
 				    <div class="col-sm-10">
-				      <input type="input" class="form-control" placeholder="Enter number of minutes between runs..." ng-model="job.frequency">
+							<select ng-model="job.frequency" ng-options="item.v as item.d for item in intervalOptions track by item.v">
+							</select>
+							<label style="margin-left:10px;" class="control-label">Custom</label>
+							<input type="checkbox" ng-model="job.showCustom" />
+							<input ng-show="job.showCustom" class="form-control" type="input" ng-model="job.frequency">
 				    </div>
 				  </div>
 					<div ng-show="job.lastRun">
@@ -59,10 +66,10 @@
 			</div>
 			<div class="form-group">
 				<div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px;text-align:center;">
-					 <button ng-click="saveJob()" class="btn btn-primary">Save Job</button>
+					 <!-- <button  class="btn btn-primary">Save Job</button> -->
 					 <!-- <button ng-click="removeJob()" class="btn btn-danger">Delete Job</button> -->
-					 <button ng-click="runJob()" ng-disabled="!job.active" class="btn btn-default">Run Job</button>
-					 <button ng-show="job.pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal">New chart</button>
+					 <!-- <button ng-click="runJob()" ng-disabled="!job.active" class="btn btn-default">Run Job</button> -->
+					 <!-- <button ng-show="job.pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal">New chart</button> -->
 					 <alert type="success" ng-show="success">
 							Job successfully saved!
 					 </alert>
@@ -75,8 +82,10 @@
 		<h4 style="margin-left: 50px">You have not yet defined any pages for this job.</h4>
 	</div>
 	<div ng-show="pages.length > 0">
-		<div class="panel panel-default">
-			<i class="glyphicon glyphicon-remove" id="remove-btn" ng-click="removePage()"></i>
+		<div class="panel panel-primary">
+			<span class="glyphicon glyphicon-remove" id="remove-btn" ng-click="removePage()" uib-tooltip="remove this page" tooltip-placement="top"></span>
+			<span class="glyphicon glyphicon-eye-open" id="remove-btn" ng-click="viewPage()" uib-tooltip="view this page" tooltip-placement="top"></span>
+			<span class="glyphicon glyphicon-floppy-disk" id="remove-btn" ng-click="savePage()" uib-tooltip="save this page" tooltip-placement="top"></span>
 			<h4 class="panel-heading">Page Details</h4>
 			<div class="panel-body">
 				<div class="form-group">
@@ -109,50 +118,62 @@
 			      <toggle-switch style="margin-top: 3px;" ng-model="pages[selectedPage].active" class="switch-small"></toggle-switch>
 			    </div>
 			  </div>
-				<div class="form-group">
-			    <label class="col-sm-2 control-label">Paginate</label>
-			    <div class="col-sm-3">
-			      <toggle-switch style="margin-top: 3px;" ng-model="pages[selectedPage].paginate" class="switch-small"></toggle-switch>
-						<span ng-show="pages[selectedPage].paginateSelector" class="text-success">READY</span>
-						<span ng-show="!pages[selectedPage].paginateSelector" class="text-danger">NO PAGINATOR</span>
-			    </div>
-			  </div>
-				<div class="form-group">
-			    <label class="col-sm-2 control-label">Page count</label>
-			    <div class="col-sm-3">
-			      <input type="text" ng-model="pages[selectedPage].maxPages" />
-			    </div>
-			  </div>
-				<div class="form-group">
-			    <label class="col-sm-2 control-label">Actions</label>
-			    <div class="col-sm-3">
-			      <select ng-model="pageActions.selected">
-							<option value="type">type in a field...</option>
-							<option value="click">click a button...</option>
-						</select>
-						<i ng-click="addAction()" class="glyphicon glyphicon-plus primary"></i>
-			    </div>
-			  </div>
-				<div class="form-group">
-					<div class="col-lg-5" style="left:150px;">
-						<ul class="list-group" ng-repeat="action in pages[selectedPage]._actions">
-							<li class="list-group-item">
-								{{$index + 1}}. <label>{{action.fn}}: </label>
-								<input ng-show="action.fn==='type'" type="input" ng-model="action.params[1]" placeholder="enter a parameter..." />
-								<span ng-show="!action.params[0]" class="text-danger"> NO SELECTOR</span>
-								<span ng-show="action.params[0]" class="text-success"> READY</span>
-								<span class="glyphicon glyphicon-minus" ng-click="removeAction($index)"></span>
-							</li>
-						</ul>
+				<div style="margin-left:105px">
+					<uib-accordion>
+						<uib-accordion-group is-open="pages[selectedPage].showAdvanced">
+							<uib-accordion-heading>
+								<span>Advanced Settings</span><i ng-class="{'glyphicon glyphicon-chevron-down': pages[selectedPage].showAdvanced, 'glyphicon glyphicon-chevron-right': !pages[selectedPage].showAdvanced}"></i>
+							</uib-accordion-heading>
+							<div class="form-group">
+						    <label class="col-sm-2 control-label">Paginate</label>
+						    <div class="col-sm-3">
+						      <toggle-switch style="margin-top: 3px;" ng-model="pages[selectedPage].paginate" class="switch-small" uib-tooltip="activates scraping across multiple pages, like within search results" tooltip-placement="top"></toggle-switch>
+									<span ng-show="pages[selectedPage].paginateSelector" class="text-success">READY</span>
+									<span ng-show="!pages[selectedPage].paginateSelector" class="text-danger">NO PAGINATOR</span>
+						    </div>
+						  </div>
+							<div class="form-group">
+						    <label class="col-sm-2 control-label">Page count</label>
+						    <div class="col-sm-3">
+						      <input type="text" ng-model="pages[selectedPage].maxPages" uib-tooltip="the total number of pages to crawl" tooltip-placement="top" />
+						    </div>
+						  </div>
+							<div class="form-group">
+						    <label class="col-sm-2 control-label">Actions</label>
+						    <div class="col-sm-3">
+						      <select ng-model="pageActions.selected" uib-tooltip="actions that are carried out BEFORE scraping occurs.  Actions execute in the order displayed">
+										<option value="type">type in a field...</option>
+										<option value="click">click a button...</option>
+									</select>
+									<i ng-click="addAction()" class="glyphicon glyphicon-plus primary"></i>
+						    </div>
+						  </div>
+							<div class="form-group">
+								<div class="col-lg-5" style="left:150px;">
+									<ul class="list-group" ng-repeat="action in pages[selectedPage]._actions">
+										<li class="list-group-item">
+											{{$index + 1}}. <label>{{action.fn}}: </label>
+											<input ng-show="action.fn==='type'" type="input" ng-model="action.params[1]" placeholder="enter a parameter..." />
+											<span ng-show="!action.params[0]" class="text-danger"> NO SELECTOR</span>
+											<span ng-show="action.params[0]" class="text-success"> READY</span>
+											<span class="glyphicon glyphicon-minus" ng-click="removeAction($index)"></span>
+										</li>
+									</ul>
 
-					</div>
+								</div>
+							</div>
+						</uib-accordion-group>
+
+					</uib-accordion>
+
 				</div>
+
 
 			  <div class="form-group">
 			    <div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 0;text-align:center;">
-			       <button ng-click="viewPage()" class="btn btn-primary">View Page</button>
+			       <!-- <button ng-click="viewPage()" class="btn btn-primary">View Page</button> -->
 			       <!-- <button ng-click="removePage()" class="btn btn-danger">Delete Page</button> -->
-						 <button ng-click="savePage()" class="btn btn-default">Save Page</button>
+						 <!-- <button ng-click="savePage()" class="btn btn-default">Save Page</button> -->
 			    </div>
 			  </div>
 			</div>

@@ -59,14 +59,14 @@ scraperElementSchema.statics.clean = function(){
   });
 };
 
-scraperElementSchema.pre('save', function(next){
-  var instance = this;
-  mongoose.model('ScraperElementHist').find({scraperElement : instance.scraperElement}).sort('-createdDate')
-  .then(function(elems){
-    if (elems.length && elems[0].fields === instance.fields)
-      instance._dup = true;
-    next();
-  });
-});
+// scraperElementSchema.pre('save', function(next){
+//   var instance = this;
+//   mongoose.model('ScraperElementHist').find({scraperElement : instance.scraperElement}).sort('-createdDate')
+//   .then(function(elems){
+//     if (elems.length && elems[0].fields === instance.fields)
+//       instance._dup = true;
+//     next();
+//   });
+// });
 
 module.exports = mongoose.model('ScraperElementHist', scraperElementSchema);

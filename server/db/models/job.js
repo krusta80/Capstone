@@ -77,7 +77,7 @@ jobSchema.methods.runJob = function(project){
           instance.runHistory.push(JSON.stringify(results));
           instance.lastRun = Date.now();
           var model = mongoose.model('ScraperElementHist');
-          return Promise.join(project.save(), model.clean(), model.stamp());
+          return Promise.join(project.save(), model.stamp());
         })
         .then(function(){
           return results;

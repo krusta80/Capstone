@@ -8,7 +8,7 @@ app.config(function($stateProvider){
           return ProjectFactory.fetchById(ChartFactory.getChart().project);
         }
       },
-      controller: function(project, ChartFactory, JobFactory, $scope, $rootScope, $timeout, $stateParams){
+      controller: function(project, ngDialog, ChartFactory, DashboardFactory, JobFactory, $scope, $rootScope, $timeout, $stateParams, $state){
         if ($stateParams.new)
           ChartFactory.setPages(project.jobs[JobFactory.findJobIndex(project.jobs, ChartFactory.getChart().job )].pages);
 
@@ -75,10 +75,27 @@ app.config(function($stateProvider){
             $scope.message = msg;
           });
         };
+        $scope.removeChart = function(chartId){
+          ngDialog.open({
+            template: 'js/dashboard/dashboardDialog.html',
+            className: 'ngdialog-theme-default',
+            controller: function($scope, DashboardFactory){
+              $scope.doRemove = function(){
+                DashboardFactory.removeChart(chartId)
+                .then(function(){
+                  ngDialog.close();
+                  $state.go('dashboard');
+                });
+              };
+            }
+          });
+        };
+
         if (!$stateParams.new)
           $timeout(function(){
             $scope.redrawChart();
           },500);
+
       }
     });
 });

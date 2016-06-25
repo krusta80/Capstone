@@ -13,6 +13,11 @@
 #remove-btn{
   float: right;
   padding: 10px;
+  color: white;
   font-size: 1.5em;
   cursor: pointer;
+  transition: all .1s;
+}
+#remove-btn:hover{
+  transform: scale(1.5);
 }
