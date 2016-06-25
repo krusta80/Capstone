@@ -168,8 +168,8 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
       }
 
     $scope.$parent.$parent.addPage = function() {
-        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
-            return;
+        // if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
+        //     return;
         PageFactory.create({
             title: "new_page_" + Math.random().toString(10).slice(3,8),
             job: $scope.job._id,
@@ -220,8 +220,8 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
 
     $scope.$parent.$parent.setSelected = function(ind) {
         console.log("dirty:", $scope.pageForm.$dirty);
-        if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
-            return;
+        // if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id || $scope.pageForm.$dirty))
+        //     return;
 
         //  first we save the selectedPage
         PageFactory.update($scope.pages[$scope.selectedPage])
