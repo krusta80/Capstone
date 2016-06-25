@@ -1,6 +1,6 @@
 app.factory('Messenger', function($rootScope){
   var hoverValue, clickValue, repeating = false,
-  scrapedFieldObj;
+  scrapedFieldObj, isAnnotate, currentUrl = "";
   return {
     hover: function(val){
       hoverValue = val;
@@ -16,8 +16,24 @@ app.factory('Messenger', function($rootScope){
         return clickValue;
       return;
     },
+    isAnnotate: function() {
+      return isAnnotate;
+    },
+    setAnnotate: function(action) {
+      if (typeof action != "boolean") {
+        console.error('was not a boolean');
+        return false;
+      }
+      console.log('annotation was set to : ', action);
+      isAnnotate = action;
+      return true;
+    },
     fromScraperElementFactory: function(data) {
       scrapedFieldObj = data;
+    },
+    setUrl: function(url) {
+      currentUrl = url;
+      $rootScope.$broadcast('urlChanged', url);
     },
     getScraperFieldObj: function() {
       return scrapedFieldObj;

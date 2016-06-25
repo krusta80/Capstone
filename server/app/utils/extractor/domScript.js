@@ -2,11 +2,19 @@ module.exports =
   function() {
     $(document).ready(function() {
       // event binders
+      setTimeout(function() {
+        console.log("url: ", $('body').attr('current_url'));
+        window.parent.messenger.setUrl($('body').attr('current_url'));
+      }, 200)
+
+
       function bindMouseEnterEvent() {
         $('body').off('mouseenter').on('mouseenter', '*', function(ev) {
-          $('body').find('*').removeClass('__activate');
-          $(this).addClass('__activate');
-          window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+          if (window.parent.messenger.isAnnotate()) {
+            $('body').find('*').removeClass('__activate');
+            $(this).addClass('__activate');
+            window.parent.messenger.hover(dataCompiler(ev.currentTarget)); // sets to the window messenger object
+          }
         });
       }
 
@@ -17,21 +25,25 @@ module.exports =
       });
 
       $('body').on('click','*', function(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        // $(this).addClass('__clickActivate');
-        // some error checking here
-        if ($(ev).hasClass('__chosenElement__')) {
-          return;
-        }
-        var coordinates = {x: ev.clientX, y: ev.clientY};
-        window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
-        var scrapedFieldObj = window.parent.messenger.getScraperFieldObj();
+        var isAnchor = $(ev.currentTarget).is('a');
+        if (window.parent.messenger.isAnnotate()) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          // true then we just do the regular actions
+          // $(this).addClass('__clickActivate');
+          // some error checking here
+          if ($(ev).hasClass('__chosenElement__')) {
+            return;
+          }
+          var coordinates = {x: ev.clientX, y: ev.clientY};
+          window.parent.messenger.click(dataCompiler(ev.currentTarget),coordinates); // sets to the window messenger object
+          var scrapedFieldObj = window.parent.messenger.getScraperFieldObj();
 
-        var targetElementName = `target ${scrapedFieldObj.targetElements.length + 1}`;
-        var rectangle = ev.currentTarget.getBoundingClientRect();
-        var div = `<div class="__chosenElement__ __chosenElement__${scrapedFieldObj.targetElements.length+1}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left + window.scrollX}px; top: ${rectangle.top + window.scrollY}px; background-color:rgba(0, 110, 190, 0.5); z-index: 10000; text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
-        $('body').append(div);
+          var targetElementName = `target ${scrapedFieldObj.targetElements.length + 1}`;
+          var rectangle = ev.currentTarget.getBoundingClientRect();
+          var div = `<div class="__chosenElement__ __chosenElement__${scrapedFieldObj.targetElements.length+1}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left + window.scrollX}px; top: ${rectangle.top + window.scrollY}px; background-color:rgba(0, 110, 190, 0.5); z-index: 10000; text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
+          $('body').append(div);
+        }
       });
 
       // data stuff
@@ -132,7 +144,6 @@ module.exports =
               selectorIndex: i
             };
         });
-        //console.log('repeating', repeating);
         return {selector: selector, selectorIndex: $(repeating).index(element), repeating: repeats};
       }
 

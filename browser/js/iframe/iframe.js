@@ -16,11 +16,37 @@ app.config(function ($stateProvider) {
 app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page, ScraperPopupFactory) {
     $scope.loaded = false;
     $scope.loading = false;
-    $scope.url ='http://msnbc.com';
     $scope.saved = false;
     $scope.page = page;
 
-    $rootScope.$broadcast('sideBarClose')
+    $rootScope.$on('urlChanged', function(ev,url) {
+        $scope.url = url;
+    });
+    $rootScope.$on('pageUpdated', function(ev, page) {
+        // update page object
+        $scope.page = page;
+    });
+
+    // default setting for annotation
+    if (page.targetElements.length > 0) {
+        $scope.scraperElementsExist = true;
+        $scope.isAnnotation = true;
+    } else {
+        $scope.scraperElementsExist = false;
+        $scope.isAnnotation = false;
+    }
+    Messenger.setAnnotate($scope.isAnnotation);
+
+    $rootScope.$broadcast('sideBarClose');
+
+    $scope.toggleAnnotate = function() {
+        if ($scope.scraperElementsExist) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        Messenger.setAnnotate($scope.isAnnotation);
+    };
 
     $scope.searchthis = function(url) {
         $http.post('/api/scrape/proxy', {proxyurl: url})
