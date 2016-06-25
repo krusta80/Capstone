@@ -95,6 +95,7 @@ app.config(function($stateProvider){
           $timeout(function(){
             $scope.redrawChart();
           },500);
+
       }
     });
 });

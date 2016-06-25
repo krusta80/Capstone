@@ -41,13 +41,11 @@
 				  <div class="form-group">
 				    <label class="col-sm-2 control-label">Frequency</label>
 				    <div class="col-sm-10">
-							<select ng-model="job.frequency">
-								<option value="15">every 15 minutes</option>
-								<option value="60">every hour</option>
-								<option value="1440">every day</option>
-								<option value="Enter number of minutes between runs...">custom...</option>
-				      	<input ng-show="job.frequency==='Enter number of minutes between runs...'" class="form-control" type="input" ng-model="job.frequency">
+							<select ng-model="job.frequency" ng-options="item.v as item.d for item in intervalOptions track by item.v">
 							</select>
+							<label style="margin-left:10px;" class="control-label">Custom</label>
+							<input type="checkbox" ng-model="job.showCustom" />
+							<input ng-show="job.showCustom" class="form-control" type="input" ng-model="job.frequency">
 				    </div>
 				  </div>
 					<div ng-show="job.lastRun">

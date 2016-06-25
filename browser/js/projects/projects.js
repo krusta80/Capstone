@@ -25,9 +25,6 @@ app.config(function ($stateProvider) {
         resolve: {
             pages: function(PageFactory, $stateParams) {
                 return PageFactory.fetchByJobId($stateParams.id);
-            },
-            jobId: function($stateParams) {
-                return $stateParams.id;
             }
         },
         controller: 'JobCtrl'
@@ -152,7 +149,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
 });
 
-app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
+app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
     $scope.$parent.$parent.pages = pages;
     $scope.pageActions = {selected:'type'};
@@ -166,7 +163,11 @@ app.controller('JobCtrl', function($rootScope, jobId, pages, $timeout, ProjectFa
           return JSON.parse(action);
         });
       }
+    $scope.intervalOptions = [{d: 'every 15 minutes', v: 15}, {d:'every hour', v:60}, {d:'every day', v:1440}];
 
+    $scope.convertToInt = function(str){
+      return parseInt(str);
+    };
     $scope.$parent.$parent.addPage = function() {
         if(!isNaN($scope.selectedPage) && (!$scope.pages[$scope.selectedPage]._id))
             return;
