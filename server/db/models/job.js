@@ -69,7 +69,7 @@ jobSchema.methods.runJob = function(project){
           results.pages[page._id] = null;
           var scraper = new Scraper(page);
           return scraper.go(10000, results);
-          })
+        });
         })
         .then(function(){
           instance.isRunning = false;
