@@ -62,7 +62,7 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
     $scope.noProjects = false;
     if (projects.length > 0) {
         // select the first product
-        $state.go('projects.project', {projectId: $scope.projects[0]._id})
+//        $state.go('projects.project', {projectId: $scope.projects[0]._id})
         $scope.noProjects = false;
     } else {
         $scope.noProjects = true;
@@ -134,7 +134,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
     $scope.$parent.loadJob = function(job) {
         $scope.job = job;
-        //console.log("active job is", job);
+        console.log("loading job", job);
         $state.go('projects.project.job', {id: job._id});
     };
 
@@ -143,9 +143,10 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
     $scope.selectProject(project);
     $scope.$parent.jobs = project.jobs;
     $scope.job;
+    $scope.$parent.pages = undefined;
 
-    if(project.jobs.length > 0)
-        $scope.loadJob($scope.jobs[0]);
+    //if(project.jobs.length > 0)
+    //    $scope.loadJob($scope.jobs[0]);
 
 });
 
@@ -351,20 +352,22 @@ app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, Pro
       $scope.pages[$scope.selectedPage]._actions.splice(idx,1);
     };
 
-    // if(!window.server)
-    //     window.server = "http://localhost:1337";
-    // if(!window.socket) {
-    //     window.socket = io(server);
-    //     window.socket.on('acknowledged', function(connection) {
-    //         console.log("Connected via socket.io (", connection.id, ")");
-    //     });
-    //     window.socket.on('jobUpdate', function(update) {
-    //         //console.log("job update:", update);
-    //         window.isRunning = update.isRunning;
-    //         $scope.$apply();
-    //     });
-    // }
-    //
-    // socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
+    console.log("in JobCtrl, $scope.job is", $scope.job);
+
+    if(!window.server)
+        window.server = "http://localhost:1337";
+    if(!window.socket) {
+        window.socket = io(server);
+        window.socket.on('acknowledged', function(connection) {
+            console.log("Connected via socket.io (", connection.id, ")");
+        });
+        window.socket.on('jobUpdate', function(update) {
+            //console.log("job update:", update);
+            window.isRunning = update.isRunning;
+            $scope.$apply();
+        });
+    }
+
+    socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
 
 });

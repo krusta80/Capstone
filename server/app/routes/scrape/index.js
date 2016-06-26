@@ -65,6 +65,7 @@ function convertToUrl(url, obj) {
 // proxy mode
 router.get('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.query.proxyurl);
+  console.log('proxy url: ', req.query.proxyurl);
   var keys = Object.keys(req.query);
   var newurl = keys.reduce(function(url, key) {
     if (key === "proxyurl") {
@@ -80,10 +81,12 @@ router.get('/proxy', function(req, res, next) {
     if (error) { next(error); }
 
     console.log("proxy url");
-
+    html = parseDOM(html);
     // prepends the the sources to have the base url
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
     html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/src="\/?([A-Ga-gI-Zi-z])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+    html = html.replace(/href="\/?([A-Ga-gI-Zi-z])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
 
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
     html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
@@ -96,13 +99,15 @@ router.get('/proxy', function(req, res, next) {
       var href = x[i].attribs.href;
       x[i].attribs.href =  '/api/scrape/proxy?proxyurl=' + href;
     }
+    console.log('body: ', $('body'));
+    $('body').attr('current_url',req.query.proxyurl);
     res.send($.html());
   });
 });
 
 router.post('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.body.proxyurl);
-  console.log('proxy url ', proxyurl, 'reqquery proxyurl', req.query.proxyurl);
+  console.log('reqquery proxyurl', req.body.proxyurl);
 
   request(req.body.proxyurl, function(error, response, html) {    if (error) { next(error); }
     html = parseDOM(html);
@@ -113,7 +118,16 @@ router.post('/proxy', function(req, res, next) {
 
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
     html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
-    res.send(html);
+
+    var $ = cheerio.load(html);
+    var $a = $('a');
+    $a.attr('href',function(i, href) {
+      var newUrl = '/api/scrape/proxy?proxyurl='+href;
+      return newUrl
+    });
+    console.log('body: ', $('body'));
+    $('body').attr('current_url',req.body.proxyurl);
+    res.send($.html());
 
   });
 });
