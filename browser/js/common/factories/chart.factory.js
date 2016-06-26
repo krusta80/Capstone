@@ -28,7 +28,18 @@ app.factory('ChartFactory', function($http) {
   }
 
   function stringToNumber(str){
-    return Number(str.replace(/\D/ig, ""));
+    var foundDot = false;
+    var ret = "";
+    for(var i = 0; i < str.length; i++) {
+      if("1234567890".indexOf(str.slice(i,i+1)) > -1) {
+        ret += str.slice(i,i+1);
+      }
+      else if(!foundDot && str.slice(i,i+1) === '.') {
+        ret += str.slice(i,i+1);
+        foundDot = true;
+      }
+    }
+    return Number(ret);
   }
 
   function scrubPage(page){
