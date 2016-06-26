@@ -26,10 +26,28 @@ var generateProject = function(user){
 	};
 };
 
+var generateProject2 = function(user){
+	return {
+		title: 'Airline Tickets',
+		description: 'Understanding the fluctuation of airline ticket prices over 90 days.',
+		user: user,
+		jobs: [generateJob2(user)]
+	};
+};
+
 var generateJob = function(user){
 	return {
 		title: 'Amazon Job',
 		frequency: 60,
+		user: user,
+		active: true
+	};
+};
+
+var generateJob2 = function(user){
+	return {
+		title: 'Airline Tix Job',
+		frequency: 1440,
 		user: user,
 		active: true
 	};
@@ -43,6 +61,19 @@ var generatePages = function(job){
 			title: brand,
 			job: job,
 			url: 'https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=cameras',
+			active: true
+		};
+	});
+};
+
+var generatePages2 = function(job){
+	var segments = ['NYC-LAX','NYC-MIA','NYC-LHR'];
+	
+	return segments.map(function(segment) {
+		return {
+			title: segment,
+			job: job,
+			url: 'https://www.kayak.com/flights/'+segment+'/2016-07-12/2016-07-26',
 			active: true
 		};
 	});
@@ -68,6 +99,54 @@ var getVal = function(arr){
 		arr.splice(ind, 1);
 	};
 	return itemVal;
+}
+
+var generateFlightPrices = function(pages, reps){
+	var flightPrices = [];
+	var segItineraries = ['NYC-LAX','NYC-MIA','NYC-LHR'];
+	var segPrices = [350, 200, 600]
+	
+	var ts = new Date("March 23, 2016 00:00:00");
+	segItineraries.forEach(function(segment){
+		var priceCalc = segPrices[segItineraries.indexOf(segment)];
+		var day90Price = priceCalc;
+		flightPrices.push({
+			page: pages[segItineraries.indexOf(segment)],
+			jobRunTS: ts,
+			fields: JSON.stringify({
+				day: {index: 0, value: ts.toString()},
+				price: {index: 1, value: priceCalc.toString()}
+			});
+		});
+		for(var i = 1; i<50; i++){
+			var thisDay = new Date(ts.valueOf());
+			priceCalc = priceCalc - .15 * day90Price / (90 - 40) + Math.random() * .06 * priceCalc - .03 * priceCalc;
+			thisDay.setDate(ts.getDate() + i);
+			flightPrices.push({
+				page: pages[segItineraries.indexOf(segment)],
+				jobRunTS: thisDay,
+				fields: JSON.stringify({
+					day: {index: 0, value: thisDay.toString()},
+					price: {index: 1, value: priceCalc.toString()}
+				});
+			});
+		}
+
+		for(var i = 50; i<reps; i++){
+			var thisDay = new Date(ts.valueOf());
+			priceCalc = priceCalc + .5 * day90Price / 40 + Math.random() * .06 * priceCalc - .03 * priceCalc;
+			thisDay.setDate(ts.getDate() + i);
+			flightPrices.push({
+				page: pages[segItineraries.indexOf(segment)],
+				jobRunTS: thisDay,
+				fields: JSON.stringify({
+					day: {index: 0, value: thisDay.toString()},
+					price: {index: 1, value: priceCalc.toString()}
+				});
+			});
+		}
+		return flightPrices;
+	});
 }
 
 var generateCamera = function(xArr, yArr, radArr){
