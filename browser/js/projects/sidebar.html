@@ -15,15 +15,15 @@
           <option value="">-- choose an project --</option>
         </select>
 
-        <div>
+        <div ng-show="hasProject()">
           <span class="sub-header">Jobs</span>
           <span ng-class="{active: !job || job._id === -1}"><a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal"><span class="glyphicon glyphicon-plus"></span></a></span>
           <div class="sub-categories">
-            <div ng-class="{active: jobTab._id === job._id}" ng-repeat="jobTab in jobs"><a href="#" ng-click="loadJob(jobTab)">{{jobTab.title}}</a></div>
+            <div ng-class="{active: jobTab._id === jobTab._id}" ng-repeat="jobTab in jobs"><a href="#" ng-click="loadJob(jobTab)">{{jobTab.title}}</a></div>
           </div>
         </div>
 
-        <div>
+        <div ng-show="hasProjectAndJob()">
           <span class="sub-header">Pages</span>
         	<a style="margin-left: 10px; outline: 0" href="#" ng-click="addPage()">
             	<span class="glyphicon glyphicon-plus"></span>
