@@ -8,6 +8,8 @@
     <link rel="stylesheet" type="text/css" href="/style.css" />
     <link rel="stylesheet" type="text/css" href="/ng-dialog/css/ngDialog.css" />
     <link rel="stylesheet" type="text/css" href="/ng-dialog/css/ngDialog-theme-default.css" />
+    <link rel="stylesheet" type="text/css" href="/ng-toast/dist/ngToast.min.css" />
+    <link rel="stylesheet" type="text/css" href="/ng-toast/dist/ngToast-animations.min.css" />
     <script type="text/javascript" src="/socket.io-client/socket.io.js"></script>
     <!-- <link rel="stylesheet" type="text/css" href="/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" /> -->
 
@@ -24,6 +26,9 @@
     <script src="/angular-ui-bootstrap/ui-bootstrap.js"></script>
     <script src="/angular-ui-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/socket.io-client/socket.io.js"></script>
+    <script src="/angular-animate/angular-animate.min.js"></script>
+    <script src="/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/ng-toast/dist/ngToast.min.js"></script>
     <script src="/d3/d3.js"></script>
     <script src="/nvd3/build/nv.d3.js"></script>
     <script src="/angular-nvd3/dist/angular-nvd3.js"></script>
@@ -36,7 +41,6 @@
         <!-- <side-bar></side-bar> -->
         <navbar></navbar>
         <div id="main">
-
             <ui-view></ui-view>
         </div>
 
@@ -54,5 +58,6 @@
       }
       window.onbeforeunload=goodbye;
     </script> -->
+    <toast></toast>
 </body>
 </html>

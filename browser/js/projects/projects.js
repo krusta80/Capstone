@@ -142,7 +142,7 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
     console.log("project id is", project._id);
     $scope.selectProject(project);
     $scope.$parent.jobs = project.jobs;
-    $scope.job; 
+    $scope.job;
     $scope.$parent.pages = undefined;
 
     //if(project.jobs.length > 0)
@@ -150,8 +150,9 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
 });
 
-app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
+app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog, ngToast) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
+    //ngToast.info("this is a toast message...");
     $scope.$parent.$parent.pages = pages;
     $scope.pageActions = {selected:'type'};
     if(!$scope.pages)
