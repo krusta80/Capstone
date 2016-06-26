@@ -9,4 +9,11 @@ router.get('/:pageId', function(req,res,next){
   }, next);
 });
 
+router.get('/', function(req,res,next) {
+	ScraperElementHist.find({})
+	.then(function(hists) {
+		res.json(hists);
+	})
+})
+
 module.exports = router;

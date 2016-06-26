@@ -35,13 +35,17 @@ var generateJob = function(user){
 	};
 };
 
-var generatePage = function(job){
-	return {
-		title: 'Listings Page',
-		job: job,
-		url: 'https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=cameras',
-		active: true
-	};
+var generatePages = function(job){
+	var brands = ['Olympus','Canon','Nikon','Samsung','Sony','Kodak','Polaroid'];
+	
+	return brands.map(function(brand) {
+		return {
+			title: brand,
+			job: job,
+			url: 'https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords=cameras',
+			active: true
+		};
+	});
 };
 
 var getGroup = function(groupArr){
@@ -66,16 +70,24 @@ var getVal = function(arr){
 	return itemVal;
 }
 
-var generateCamera = function(xArr, yArr, radArr, groupArr){
+var generateCamera = function(xArr, yArr, radArr){
 	return {
-		x: getVal(xArr),
-		y: getVal(yArr),
-		rad: getVal(radArr),
-		group: getGroup(groupArr)
+		Average_Star_Rating: {
+			index: 0,
+			value: getVal(xArr).toString()
+		},
+		Price: {
+			value: getVal(yArr).toString(),
+			index: 1
+		},
+		Number_of_Reviews: {
+			value: getVal(radArr).toString(),
+			index: 2
+		}
 	};
 };
 
-var generateCameraFields = function(reps){
+var generateCameras = function(pages, reps){
 	var cameras = [];
 	var xArr = [
 		{
@@ -185,19 +197,17 @@ var generateCameraFields = function(reps){
 			rem: .05*reps
 		}];
 
+	var brands = ['Olympus','Canon','Nikon','Samsung','Sony','Kodak','Polaroid'];
+	var ts = Date.now();
 	for(var i = 0; i<reps; i++){
-		cameras.push(generateCamera(xArr, yArr, radArr, groupArr));
-	};
+		cameras.push({
+			page: pages[brands.indexOf(getGroup(groupArr))],
+			jobRunTS: ts,
+			fields: JSON.stringify(generateCamera(xArr, yArr, radArr))
+		});
+	}
 
 	return cameras;
-};
-
-var generateCameras = function(page, reps){
-	return {
-		page: page,
-		jobRunTS: Date.now(),
-		fields: JSON.stringify(generateCameraFields(reps))
-	};
 };
 
 var _user;
@@ -219,16 +229,18 @@ connectToDb
     })
     .then(function(project){
     	_project = project;
-    	return Page.create(generatePage(project.jobs[0]));
+    	return Page.create(generatePages(project.jobs[0]));
     })
-    .then(function(page){
-    	_page = page;
+    .then(function(pages){
+    	_pages = pages;
     	_job = _project.jobs[0];
-    	_job.pages = [page];
+    	_job.pages = pages.map(function(page) {
+    		return page._id;
+    	});
     	return _project.save();
     })
     .then(function(project){
-    	return ScraperElementHist.create(generateCameras(_page, 150))
+    	return ScraperElementHist.create(generateCameras(_pages, 150))
     })
     .then(function(scraperElementHists){
     	_scraperElementHists = scraperElementHists;
