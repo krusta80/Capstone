@@ -62,7 +62,7 @@ app.controller('ProjectsCtrl', function(projects, ProjectFactory, JobFactory, $s
     $scope.noProjects = false;
     if (projects.length > 0) {
         // select the first product
-        $state.go('projects.project', {projectId: $scope.projects[0]._id})
+//        $state.go('projects.project', {projectId: $scope.projects[0]._id})
         $scope.noProjects = false;
     } else {
         $scope.noProjects = true;
