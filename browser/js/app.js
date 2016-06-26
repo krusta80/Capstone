@@ -1,5 +1,5 @@
-'use strict';
-window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters', 'nvd3', 'ngDialog']);
+
+window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters', 'nvd3', 'ngDialog', 'ngToast']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
@@ -90,9 +90,27 @@ angular.module('filters', []).
         };
     });
 
-app.controller('MainController', function($scope) {
+app.controller('MainController', function($scope, ngToast) {
 
     $scope.theme = {};
     $scope.theme.color = "theme-pink";
     $scope.theme.template = "theme-template-dark";
+    if(!window.server)
+        window.server = "http://localhost:1337";
+    if(!window.socket) {
+        window.socket = io(server);
+        window.socket.on('acknowledged', function(connection) {
+            console.log("Connected via socket.io (", connection.id, ")");
+        });
+        window.socket.on('jobUpdate', function(update) {
+            console.log("job update:", update);
+            window.isRunning = update.isRunning;
+            if (update.isComplete){
+              ngToast.create(update.message);
+              $scope.$apply();
+            }
+
+        });
+    }
+
 });

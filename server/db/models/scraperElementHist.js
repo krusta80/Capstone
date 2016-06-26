@@ -36,7 +36,7 @@ var scraperElementSchema = new mongoose.Schema({
       default: false
     }
 });
-scraperElementSchema.static.stamp = function(){
+scraperElementSchema.statics.stamp = function(){
   var ts = Date.now();
   return this.find({jobRunTS: {$exists: false}})
   .then(function(elems){

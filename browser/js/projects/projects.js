@@ -149,8 +149,9 @@ app.controller('ProjectCtrl', function($rootScope, project, ProjectFactory, JobF
 
 });
 
-app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog) {
+app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, ProjectFactory, JobFactory, PageFactory, ChartFactory, $scope, $state, $window, ngDialog, ngToast) {
     //$scope.loadJob(JobFactory.findJobIndex($scope.jobs, jobId));
+    //ngToast.info("this is a toast message...");
     $scope.$parent.$parent.pages = pages;
     $scope.pageActions = {selected:'type'};
     if(!$scope.pages)
@@ -350,20 +351,20 @@ app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, Pro
       $scope.pages[$scope.selectedPage]._actions.splice(idx,1);
     };
 
-    if(!window.server)
-        window.server = "http://localhost:1337";
-    if(!window.socket) {
-        window.socket = io(server);
-        window.socket.on('acknowledged', function(connection) {
-            console.log("Connected via socket.io (", connection.id, ")");
-        });
-        window.socket.on('jobUpdate', function(update) {
-            //console.log("job update:", update);
-            window.isRunning = update.isRunning;
-            $scope.$apply();
-        });
-    }
-
-    socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
+    // if(!window.server)
+    //     window.server = "http://localhost:1337";
+    // if(!window.socket) {
+    //     window.socket = io(server);
+    //     window.socket.on('acknowledged', function(connection) {
+    //         console.log("Connected via socket.io (", connection.id, ")");
+    //     });
+    //     window.socket.on('jobUpdate', function(update) {
+    //         //console.log("job update:", update);
+    //         window.isRunning = update.isRunning;
+    //         $scope.$apply();
+    //     });
+    // }
+    //
+    // socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
 
 });
