@@ -6,6 +6,7 @@ var Project = mongoose.model('Project');
 var socketio = require('socket.io');
 var io = null;
 var socketHash = {};
+var swig = require('swig');
 
 module.exports = function (server) {
 
@@ -50,10 +51,29 @@ module.exports = function (server) {
                   isComplete = true;
                 wasRunning[job._id] = job.isRunning;
                 var message = null;
-
-                if (isComplete)
-                  message = 'job ' + job.title + ' of project ' + project.title + ' was completed at ' + new Date(Date.now()).toLocaleTimeString('en-US');
-								socket.socket.emit('jobUpdate', {projectId: project._id, jobId: job._id, isRunning: job.isRunning, isComplete: isComplete, message: message });
+                var status = 'none';
+                if (isComplete){
+                  var lastResult = JSON.parse(job.runHistory[job.runHistory.length -1]);
+                  var jobResult = Object.keys(lastResult.pages).every(function(page){
+                    return lastResult.pages[page].numSuccess >= lastResult.pages[page].numElements;
+                  });
+                  if (jobResult)
+                    status = 'success';
+                  else {
+                    status = 'failed';
+                  }
+                  //console.log('last result is', lastResult);
+                var template = swig.renderFile('./server/io/toast-template.html', {status: status, completed: new Date(Date.now()).toLocaleTimeString('en-US'), job: job });
+                //console.log('template', template);
+								socket.socket.emit('jobUpdate', {
+                  projectId: project._id,
+                  jobId: job._id,
+                  isRunning: job.isRunning,
+                  isComplete: isComplete,
+                  status: status,
+                  template: template
+                });
+              }
 						});
 					}
 				});

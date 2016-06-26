@@ -11,6 +11,12 @@ app.config(function ($urlRouterProvider, $locationProvider) {
         window.location.reload();
     });
 });
+app.config(['ngToastProvider', function(ngToastProvider) {
+  ngToastProvider.configure({
+    animation: 'slide' // or 'fade'
+  });
+}]);
+
 
 // This app.run is for controlling access to specific states.
 app.run(function ($rootScope, AuthService, $state, $window, Messenger, $location) {
@@ -90,8 +96,14 @@ angular.module('filters', []).
         };
     });
 
-app.controller('MainController', function($scope, ngToast) {
+app.controller('MainController', function($scope, ngToast, $timeout) {
+  $timeout(function(){
+    // ngToast.create({
+    //   className: 'danger',
+    //   content: '<p>Test toast!</p>'
+    // });
 
+  }, 2000);
     $scope.theme = {};
     $scope.theme.color = "theme-pink";
     $scope.theme.template = "theme-template-dark";
@@ -105,10 +117,11 @@ app.controller('MainController', function($scope, ngToast) {
         window.socket.on('jobUpdate', function(update) {
             console.log("job update:", update);
             window.isRunning = update.isRunning;
-            if (update.isComplete){
-              ngToast.create(update.message);
-              $scope.$apply();
-            }
+            ngToast.create({
+              className: update.status === 'success' ? 'success' : 'danger',
+              content: update.template
+            });
+            $scope.$apply();
 
         });
     }

@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/ng-dialog/css/ngDialog.css" />
     <link rel="stylesheet" type="text/css" href="/ng-dialog/css/ngDialog-theme-default.css" />
     <link rel="stylesheet" type="text/css" href="/ng-toast/dist/ngToast.min.css" />
+    <link rel="stylesheet" type="text/css" href="/ng-toast/dist/ngToast-animations.min.css" />
     <script type="text/javascript" src="/socket.io-client/socket.io.js"></script>
     <!-- <link rel="stylesheet" type="text/css" href="/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css" /> -->
 
@@ -36,7 +37,6 @@
     <script src="/main.js"></script>
 </head>
 <body ng-controller="MainController" ng-class="[theme.template, theme.color]">
-  <toast></toast>
     <main init-ripples ng-cloak ng-view bs-affix-target>
         <!-- <side-bar></side-bar> -->
         <navbar></navbar>
@@ -58,5 +58,6 @@
       }
       window.onbeforeunload=goodbye;
     </script> -->
+    <toast></toast>
 </body>
 </html>
