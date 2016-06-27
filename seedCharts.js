@@ -104,63 +104,69 @@ var getVal = function(arr){
 var generateFlightPrices = function(pages, reps){
 	var flightPrices = [];
 	var segItineraries = ['NYC-LAX','NYC-MIA','NYC-LHR'];
-	var segPrices = [350, 200, 600]
+	var segPrices = [350, 200, 600];
 	
 	var ts = new Date("March 23, 2016 00:00:00");
 	segItineraries.forEach(function(segment){
-		var priceCalc = segPrices[segItineraries.indexOf(segment)];
+		var priceCalc = Math.round(segPrices[segItineraries.indexOf(segment)]*100)/100;
 		var day90Price = priceCalc;
 		flightPrices.push({
 			page: pages[segItineraries.indexOf(segment)],
-			jobRunTS: ts,
+			jobRunTS: ts.getTime(),
 			fields: JSON.stringify({
 				day: {index: 0, value: ts.toString()},
 				price: {index: 1, value: priceCalc.toString()}
-			});
+			})
 		});
+
 		for(var i = 1; i<50; i++){
 			var thisDay = new Date(ts.valueOf());
 			priceCalc = priceCalc - .15 * day90Price / (90 - 40) + Math.random() * .06 * priceCalc - .03 * priceCalc;
+			priceCalc = Math.round(priceCalc*100)/100;
 			thisDay.setDate(ts.getDate() + i);
 			flightPrices.push({
 				page: pages[segItineraries.indexOf(segment)],
-				jobRunTS: thisDay,
+				jobRunTS: thisDay.getTime(),
 				fields: JSON.stringify({
 					day: {index: 0, value: thisDay.toString()},
 					price: {index: 1, value: priceCalc.toString()}
-				});
+				})
 			});
 		}
 
 		for(var i = 50; i<reps; i++){
 			var thisDay = new Date(ts.valueOf());
 			priceCalc = priceCalc + .5 * day90Price / 40 + Math.random() * .06 * priceCalc - .03 * priceCalc;
+			priceCalc = Math.round(priceCalc*100)/100;
 			thisDay.setDate(ts.getDate() + i);
 			flightPrices.push({
 				page: pages[segItineraries.indexOf(segment)],
-				jobRunTS: thisDay,
+				jobRunTS: thisDay.getTime(),
 				fields: JSON.stringify({
 					day: {index: 0, value: thisDay.toString()},
 					price: {index: 1, value: priceCalc.toString()}
-				});
+				})
 			});
 		}
-		return flightPrices;
 	});
+	return flightPrices;
 }
 
 var generateCamera = function(xArr, yArr, radArr){
+	var aveStar = Math.round(getVal(xArr)*10)/10;
+	var avePrice = Math.round(getVal(yArr)*100)/100;
+	var numReviews = Math.round(getVal(radArr));
 	return {
 		Average_Star_Rating: {
 			index: 0,
-			value: getVal(xArr).toString()
+			value: aveStar.toString()
 		},
 		Price: {
-			value: getVal(yArr).toString(),
+			value: avePrice.toString(),
 			index: 1
 		},
 		Number_of_Reviews: {
-			value: getVal(radArr).toString(),
+			value: numReviews.toString(),
 			index: 2
 		}
 	};
@@ -290,9 +296,9 @@ var generateCameras = function(pages, reps){
 };
 
 var _user;
-var _project;
-var _page;
-var _job;
+var _project; var _project2;
+var _pages; var _pages2;
+var _job; var _job2;
 var _scraperElementHists;
 
 connectToDb
@@ -308,7 +314,11 @@ connectToDb
     })
     .then(function(project){
     	_project = project;
-    	return Page.create(generatePages(project.jobs[0]));
+    	return Project.create(generateProject2(_user));
+    })
+    .then(function(project2) {
+    	_project2 = project2;
+    	return Page.create(generatePages(project2.jobs[0]));
     })
     .then(function(pages){
     	_pages = pages;
@@ -319,10 +329,24 @@ connectToDb
     	return _project.save();
     })
     .then(function(project){
+    	return Page.create(generatePages2(_project2.jobs[0]))
+    })
+    .then(function(pages) {
+    	_pages2 = pages;
+    	_job2 = _project2.jobs[0];
+    	_job2.pages = pages.map(function(page) {
+    		return page._id;
+    	});
+    	return _project2.save();
+    })
+    .then(function(project) {
     	return ScraperElementHist.create(generateCameras(_pages, 150))
     })
     .then(function(scraperElementHists){
     	_scraperElementHists = scraperElementHists;
+    	return ScraperElementHist.create(generateFlightPrices(_pages2, 90));
+    })
+    .then(function(scraperElementHists2) {
     	console.log(chalk.green('Seed successful!'));
     	process.kill(0);
     })
