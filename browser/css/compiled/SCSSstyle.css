@@ -356,6 +356,12 @@ tutorial-section-menu {
 .sub-active {
   border: 1px solid black; }
 
+.histrow-success {
+  background-color: lightgreen; }
+
+.histrow-fail {
+  background-color: lightpink; }
+
 #dash-cont {
   display: flex;
   justify-content: space-around;
