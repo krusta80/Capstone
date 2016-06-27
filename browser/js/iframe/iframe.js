@@ -13,7 +13,7 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page, ScraperPopupFactory) {
+app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, page, ScraperPopupFactory, PageFactory) {
     $scope.loaded = false;
     $scope.loading = false;
     $scope.saved = false;
@@ -25,6 +25,13 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
     $rootScope.$on('pageUpdated', function(ev, page) {
         // update page object
         $scope.page = page;
+        // default setting for annotation
+        if (page.targetElements.length > 0) {
+            $scope.scraperElementsExist = true;
+        } else {
+            $scope.scraperElementsExist = false;
+        }
+        Messenger.setAnnotate($scope.isAnnotation);
     });
 
     // default setting for annotation
@@ -49,6 +56,8 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
     };
 
     $scope.searchthis = function(url) {
+        page.url = url;
+        PageFactory.update(page);
         $http.post('/api/scrape/proxy', {proxyurl: url})
             .then(function(response) {
                 $scope.loading = true;

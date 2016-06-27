@@ -7,14 +7,16 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
       page: '='
     },
     link: function(scope, attr, link) {
-      console.log('scrapedElement page: ', scope.page)
       scope.scrapedPageObject = ScraperElementFactory.setAndGet(scope.page);
       scope.scrapedPageObject.targetElements.forEach(function(targetElem) {
         if (typeof targetElem.fields === 'string') {
           targetElem.fields = JSON.parse(targetElem.fields);
         }
-
       });
+      scope.savePage = function() {
+        // ScraperElementFactory.update(scope.page);
+        ScraperElementFactory.save();
+      }
       scope.getNumber = function(num) {
         return new Array(num);
       };

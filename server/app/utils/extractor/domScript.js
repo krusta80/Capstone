@@ -5,7 +5,7 @@ module.exports =
       setTimeout(function() {
         console.log("url: ", $('body').attr('current_url'));
         window.parent.messenger.setUrl($('body').attr('current_url'));
-      }, 200)
+      }, 100)
 
 
       function bindMouseEnterEvent() {

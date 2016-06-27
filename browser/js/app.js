@@ -1,5 +1,5 @@
 
-window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters', 'nvd3', 'ngDialog', 'ngToast']);
+window.app = angular.module('FullstackGeneratedApp', ['fsaPreBuilt', 'ui.router', 'ui.bootstrap', 'ngAnimate', 'toggle-switch', 'filters', 'nvd3', 'ngDialog', 'ngToast', 'xeditable']);
 
 app.config(function ($urlRouterProvider, $locationProvider) {
     // This turns off hashbang urls (/#about) and changes it to something normal (/about)
@@ -19,13 +19,14 @@ app.config(['ngToastProvider', function(ngToastProvider) {
 
 
 // This app.run is for controlling access to specific states.
-app.run(function ($rootScope, AuthService, $state, $window, Messenger, $location) {
+app.run(function ($rootScope, AuthService, $state, $window, Messenger, $location, editableOptions) {
     // this is setting messenger factory to the window object
     $window.messenger = Messenger;
     // The given state requires an authenticated user.
     var destinationStateRequiresAuth = function (state) {
         return state.data && state.data.authenticate;
     };
+    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 
     // $stateChangeStart is an event fired
     // whenever the procex`ss of changing a state begins.
