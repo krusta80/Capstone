@@ -76,6 +76,7 @@ function execute(horseman, page, results){
     //console.log(fieldHists);
     var nSucceeded = fieldHists.filter(i=>i.fields !== JSON.stringify({}));
     results.pages[page._id] = {numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
+    fieldHists.forEach(hist=>hist.runId=results.runId);
       return mongoose.model('ScraperElementHist').create(fieldHists);
         //TO DO: Populate additional fields
   });

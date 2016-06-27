@@ -49,6 +49,7 @@ function Results(id){
 }
 
 jobSchema.methods.runJob = function(project){
+  var runId = mongoose.Types.ObjectId();
   var dd = new Date(this.lastRun);
   console.log("Attempting to run job id", this._id, "(", Date.now(), ")");
   console.log("   -> Is running:",this.isRunning);
@@ -61,6 +62,7 @@ jobSchema.methods.runJob = function(project){
   }
   this.isRunning = true;
   var results = new Results(this._id);
+  results.runId= runId;
   var instance = this;
   return project.save()
         .then(function(proj2) {

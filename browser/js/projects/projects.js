@@ -37,21 +37,31 @@ app.config(function ($stateProvider) {
           return ProjectFactory.fetchById($stateParams.projectId);
         }
       },
-      controller: function(project, $scope, $stateParams){
+      controller: function(project, $scope, $stateParams, HistFactory){
         var job = _.filter(project.jobs, {_id: $stateParams.id});
 
         $scope.history = job[0].runHistory.map(function(hist){
           var parsedHist = JSON.parse(hist);
           parsedHist.pages = Object.keys(parsedHist.pages).map(function(hist){
+            var scraped = parsedHist.pages[hist] ? parsedHist.pages[hist].numElements : 0;
+            var success = parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0;
             return {
               id: hist,
-              scraped: parsedHist.pages[hist] ? parsedHist.pages[hist].numElements : 0,
-              success: parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0
+              scraped: scraped,
+              success: success,
+              succeeded: success >= scraped
             };
           });
           return parsedHist;
         }).reverse();
-        console.log($scope.history);
+
+        $scope.getData = function(run){
+          HistFactory.fetchByRunId(run.runId)
+          .then(function(data){
+            console.log(data);
+            $scope.hist = HistFactory.getDataGrid(data);
+          });
+        };
       }
     });
 });
@@ -354,20 +364,20 @@ app.controller('JobCtrl', function($rootScope,$stateParams, pages, $timeout, Pro
 
     console.log("in JobCtrl, $scope.job is", $scope.job);
 
-    if(!window.server)
-        window.server = "http://localhost:1337";
-    if(!window.socket) {
-        window.socket = io(server);
-        window.socket.on('acknowledged', function(connection) {
-            console.log("Connected via socket.io (", connection.id, ")");
-        });
-        window.socket.on('jobUpdate', function(update) {
-            //console.log("job update:", update);
-            window.isRunning = update.isRunning;
-            $scope.$apply();
-        });
-    }
-
-    socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
+    // if(!window.server)
+    //     window.server = "http://localhost:1337";
+    // if(!window.socket) {
+    //     window.socket = io(server);
+    //     window.socket.on('acknowledged', function(connection) {
+    //         console.log("Connected via socket.io (", connection.id, ")");
+    //     });
+    //     window.socket.on('jobUpdate', function(update) {
+    //         //console.log("job update:", update);
+    //         window.isRunning = update.isRunning;
+    //         $scope.$apply();
+    //     });
+    // }
+    //
+    // socket.emit('jobInfo', {projectId: $scope.project._id, jobId: $scope.job._id});
 
 });
