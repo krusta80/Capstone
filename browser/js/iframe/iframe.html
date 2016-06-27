@@ -1,18 +1,30 @@
-<div class="iframecontainer">
+<div class="iframecontainer col-md-10">
   <div style="margin-left:20px;">
+
     <form class="form-group" ng-submit="searchthis(url)">
       <label>Type in the url here - start with http://</label>
-      <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com"></input>
-      <button class="btn btn-primary" ng-disabled="isAnnotation">Submit</button>
-    </form>
-    <div class="form-group">
-      <label class="control-label normal">Annotate Page <strong ng-if="scraperElementsExist">You cannot turn of annotation because you have scraper elements</strong></label>
-      <div class="switch">
-        <label class="filled"> Off
-          <input type="checkbox" ng-checked="isAnnotation" ng-disabled="scraperElementsExist" ng-model="isAnnotation" ng-click="toggleAnnotate()"> <span class="lever"></span> On </label>
+      <div class="input-group">
+        <input type="text" class="form-control" ng-model="url" placeholder="http://www.example.com" style="padding: 4px;"></input>
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-primary" ng-disabled="isAnnotation">Submit</button>
+        </span>
       </div>
+    </form>
+    <div class="form-group clearfix">
+      <div class="input-group pull-left">
+          <label class="control-label normal">Annotate Page:</label>
+          &nbsp;&nbsp;
+          <div class="switch" style="display: inline-block;">
+            <label class="filled"> Off
+              <input type="checkbox" ng-checked="isAnnotation" ng-disabled="scraperElementsExist" ng-model="isAnnotation" ng-click="toggleAnnotate()"> <span class="lever"></span> On </label>
+          </div>
+          &nbsp;&nbsp;
+          <strong class="text-danger" ng-if="scraperElementsExist">You cannot turn off annotation because you have scraper elements</strong>
+      </div>
+      <button type="button" class="btn btn-default pull-right" ui-sref="projects">Back to Projects</button>
     </div>
   </div>
+</div>
 
 </div>
 <div class="clearfix">
