@@ -10,13 +10,7 @@ app.config(function($stateProvider){
       templateUrl: 'js/control/control.projects.html',
       resolve: {
         projects: function(ControlFactory){
-          return ControlFactory.fetchAllProjects();
-        },
-        currentProject: function(ControlFactory){
-          return ControlFactory.fetchCurrentProject();
-        },
-        currentJob: function(ControlFactory){
-          return ControlFactory.fetchCurrentJob();
+          return ControlFactory.init();
         }
       },
       controller: function(projects,$stateParams, $scope, ControlFactory, $timeout){
@@ -26,7 +20,7 @@ app.config(function($stateProvider){
           ControlFactory.saveProject();
         };
         $scope.showCustom = function(){
-          return [15,60,1440].indexOf(ControlFactory.getCurrentJob().frequency) === -1;
+          return ['15','60','1440'].indexOf(ControlFactory.getCurrentJob().frequency) === -1;
         };
       }
     });

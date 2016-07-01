@@ -1,51 +1,48 @@
 app.factory('ControlFactory', function($http, ProjectFactory, $q){
-  var projects, jobs, pages, currentProject, currentJob, currentPage;
+  var projects, jobs, pages, currentProject, currentJobIdx, currentPage;
 
 
   function setCurrentJob(jobId){
-    return currentProject.jobs.filter(function(job){
-      return job._id === jobId;
-    })[0];
+    currentJobIdx = currentProject.jobs.map(function(job){
+      return job._id;
+    }).indexOf(jobId);
+  }
+
+  function setCurrentProject(projectId){
+    var idx = projects.map(function(pj){
+      return pj._id;
+    }).indexOf(projectId);
+    currentProject = projects[idx];
+  }
+
+  function _init(){
+    return $http.get('/api/projects') // all projects
+    .then(function(res){
+      projects = res.data;
+      return $http.get('/api/projects/getCurrent'); //current project
+    })
+    .then(function(res){
+      setCurrentProject(res.data);
+      return $http.get('/api/jobs/getCurrent'); //current job
+    })
+    .then(function(res){
+      if (res.data && currentProject && currentProject.jobs.length) //if currentJob exists
+        setCurrentJob(res.data);
+      else if (!res.data && currentProject && currentProject.jobs.length) //if no currentJob
+        currentJobIdx = 0;
+    });
   }
   return {
-    setProjects: function(_projects){
-      projects = _projects;
-    },
+    init: _init,
     getProjects: function(){
       return projects;
     },
-    setCurrentProject: function(_currentProject){
-      currentProject = _currentProject;
-      return $http.post('/api/projects/setCurrent/' + _currentProject._id);
+    setCurrentProject: function(currentProject){
+      setCurrentProject(currentProject._id);
+      return $http.post('/api/projects/setCurrent/' + currentProject._id);
     },
     getCurrentProject: function(){
       return currentProject;
-    },
-    fetchAllProjects: function(){
-      return $http.get('/api/projects')
-      .then(function(res){
-        projects = res.data;
-      });
-    },
-    fetchCurrentProject: function(){
-      console.log('fetch current project');
-      return $http.get('/api/projects/getCurrent')
-      .then(function(res){
-        currentProject = res.data;
-      });
-    },
-    fetchCurrentJob: function(){
-      console.log('fetch current job');
-      return $http.get('/api/jobs/getCurrent')
-      .then(function(res){
-        if (res.data && currentProject && currentProject.jobs.length)
-          currentJob = setCurrentJob(res.data);
-        else if (!res.data && currentProject && currentProject.jobs.length)
-          currentJob = currentProject.jobs[0];
-        if (currentJob)
-          currentJob._frequency = currentJob.frequency.toString();
-        console.log('currentJob', currentJob);
-      });
     },
     setPages: function(_pages){
       pages = _pages;
@@ -53,13 +50,14 @@ app.factory('ControlFactory', function($http, ProjectFactory, $q){
     getPages: function(){
       return pages;
     },
-    setCurrentJob: function(_job){
-      currentJob = setCurrentJob(_job._id);
-      currentJob._frequency = currentJob.frequency.toString();
-      return $http.post('/api/jobs/setCurrent/' + currentJob._id);
+    setCurrentJob: function(job){
+      setCurrentJob(job._id);
+      return $http.post('/api/jobs/setCurrent/' + job._id);
     },
     getCurrentJob: function(){
-      return currentJob;
+      if (currentProject.jobs.length)
+        return currentProject.jobs[currentJobIdx];
+      return;
     },
     getCurrentPage: function(){
       return currentPage;
@@ -68,13 +66,9 @@ app.factory('ControlFactory', function($http, ProjectFactory, $q){
       currentPage = page;
     },
     saveProject: function(){
-      currentJob.frequency = parseInt(currentJob._frequency);
       return ProjectFactory.update(currentProject)
       .then(function(res){
-        console.log(res);
         currentProject = res;
-        currentJob = setCurrentJob(currentJob._id);
-        currentJob._frequency = currentJob.frequency.toString();
       });
       }
   };

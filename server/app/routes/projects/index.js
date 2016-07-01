@@ -22,16 +22,12 @@ router.get('/', ensureAuthenticated, function (req, res) {
     .catch(function(err) {
         console.log("Err:", err);
         res.status(501).send(err);
-    })
+    });
 });
 
 router.post('/setCurrent/:projectId', ensureAuthenticated, function(req,res,next){
-  Project.findById(req.params.projectId)
-  .then(function(project){
-    if (project)
-      req.session.currentProject = project;
+    req.session.currentProject = req.params.projectId;
     res.sendStatus(200);
-  });
 });
 
 router.get('/getCurrent', ensureAuthenticated, function(req,res){
