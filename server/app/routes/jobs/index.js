@@ -24,6 +24,16 @@ router.get('/', ensureAuthenticated, function (req, res) {
     })
 });
 
+router.post('/setCurrent/:jobId', ensureAuthenticated, function(req,res){
+  if (req.session.currentProject)
+    req.session.currentJob = req.params.jobId;
+  res.sendStatus(201);
+});
+
+router.get('/getCurrent', ensureAuthenticated, function(req,res){
+  res.json(req.session.currentJob);
+});
+
 //note: Schema does not currently support this route
 router.get('/byProject/:projectId', ensureAuthenticated, function (req, res) {
     Job.find({Project: req.params.projectId})

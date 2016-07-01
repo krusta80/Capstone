@@ -9,10 +9,9 @@
 		<a class="list-group-item" ng-class="{active: $index === selectedPage}" ng-repeat="page in pages" ng-click="setSelected($index)">{{ page.title }}</a>
 	</div>
 </div> -->
-<control-sidebar></control-sidebar>
 <div class="col-md-9">
 	<div ng-if="getCurrentJob()">
-		<form class="form-horizontal" name="pageForm">
+		<form class="form-horizontal" name="jobForm">
 			<div class="panel panel-primary">
 				<span class="glyphicon glyphicon-remove" uib-tooltip="delete this job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
 				<span class="glyphicon glyphicon-signal" ng-show="getPages().pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal" uib-tooltip="create chart from job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
@@ -24,48 +23,52 @@
 						  <div class="form-group">
 						    <label class="col-sm-2 control-label">Job Title</label>
 						    <div class="col-sm-10">
-						      <input type="input" class="form-control" placeholder="Enter job title..." ng-model="getCurrentJob().title">
+						      <input type="input" class="form-control" placeholder="Enter job title..." ng-model="getCurrentJob().title" ng-blur="saveProject()">
 						    </div>
 						  </div>
 						  <div class="form-group">
 						    <label class="col-sm-2 control-label">Active Job</label>
 						    <div class="col-sm-3">
-						      <toggle-switch style="margin-top: 3px;" ng-model="job.active" class="switch-small"></toggle-switch>
+						      <toggle-switch style="margin-top: 3px;" ng-model="getCurrentJob().active" class="switch-small" ng-change="saveProject()"></toggle-switch>
 						    </div>
 						  </div>
 						  <div class="form-group">
 						    <label class="col-sm-2 control-label">Frequency</label>
 						    <div class="col-sm-10">
-									<select ng-model="getCurrentJob().frequency" ng-options="item.v as item.d for item in intervalOptions track by item.v">
+									<select ng-model="getCurrentJob()._frequency" ng-change="saveProject()" ng-click="toggled=false">
+										<option value="15">every 15 minutes</option>
+										<option value="60">every hour</option>
+										<option value="1440">every day</option>
 									</select>
 									<label style="margin-left:10px;" class="control-label">Custom</label>
-									<input type="checkbox" ng-model="getCurrentJob().showCustom" />
-									<input ng-show="getCurrentJob().showCustom" class="form-control" type="input" ng-model="getCurrentJob().frequency">
+									<input type="checkbox" ng-model="toggled" ng-checked="showCustom()" />
+									<input ng-show="toggled" ng-blur="saveProject()" class="form-control" type="input" ng-model="getCurrentJob()._frequency">
 						    </div>
 						  </div>
 							<div ng-show="getCurrentJob().lastRun">
 							  <div class="form-group">
 							    <label class="col-sm-2 control-label">Last Run</label>
 							    <div class="col-sm-7">
-							      <input ng-show="!isJobRunning()" type="text" class="form-control" disabled value="{{job.lastRun | date:'medium'}}"/>
+							      <input ng-show="!isJobRunning()" type="text" class="form-control" disabled value="{{getCurrentJob().lastRun | date:'medium'}}"/>
 							      <input ng-show="isJobRunning()" type="text" class="form-control" disabled value="RUNNING NOW!!"/>
 							    </div>
 							  </div>
 								<div class="form-group">
 							    <label class="col-sm-2 control-label">Times Run</label>
 							    <div class="col-sm-7">
-							      <input type="input" class="form-control" disabled ng-model="job.runHistory.length"><a ng-show="job.runHistory.length" ui-sref="projects.project.jobHistory({id:job._id})">View run history...</a>
+							      <input type="input" class="form-control" disabled ng-model="getCurrentJob().runHistory.length">
+										<a ng-show="getCurrentJob().runHistory.length" ui-sref="projects.project.jobHistory({id:getCurrentJob()._id})">View run history...</a>
 							    </div>
 							  </div>
 							</div>
 					</div>
-					<div class="form-group">
+					<!-- <div class="form-group">
 						<div class="col-sm-12" style="margin-left: 15px; padding-left: 25px; padding-bottom: 15px;text-align:center;">
 							 <alert type="success" ng-show="success">
 									Job successfully saved!
 							 </alert>
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 		</form>

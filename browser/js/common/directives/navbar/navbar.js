@@ -9,7 +9,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
             scope.items = [
                 { label: 'Home', state: 'home' , icon: "md md-home"},
                 //{ label: 'Iframe', state: 'iframe' , icon: ""},
-                { label: 'Projects', state: 'projects' , icon: "md md-list"},
+                { label: 'Projects', state: 'control.projects' , icon: "md md-list"},
                 // { label: 'Job Manager', state: 'job' , icon: "md md-assignment-turned-in"},
                 //{ label: 'Documentation', state: 'docs' },
                 // { label: 'Members Only', state: 'membersOnly', auth: true , icon: ""},

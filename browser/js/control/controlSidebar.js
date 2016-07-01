@@ -3,6 +3,7 @@ app.directive('controlSidebar', function(){
     restrict: 'E',
     templateUrl: 'js/control/control-sidebar.html',
     controller: function($scope, $rootScope, ControlFactory, PageFactory){
+      $scope.selectedProject = ControlFactory.getCurrentProject();
       $scope.getProjects = ControlFactory.getProjects;
       $scope.getPages = ControlFactory.getPages;
       $scope.getCurrentJob = ControlFactory.getCurrentJob;
@@ -19,10 +20,12 @@ app.directive('controlSidebar', function(){
       };
       $scope.getCurrentProject = ControlFactory.getCurrentProject;
       $scope.loadJob = function(selectedJob){
-        ControlFactory.setCurrentJob(selectedJob);
-        PageFactory.fetchByJobId(selectedJob._id)
-        .then(function(pages){
-          ControlFactory.setPages(pages);
+        ControlFactory.setCurrentJob(selectedJob)
+        .then(function(){
+          return PageFactory.fetchByJobId(selectedJob._id);
+          })
+          .then(function(pages){
+            ControlFactory.setPages(pages);
         });
       };
     }

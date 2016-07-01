@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var Project = mongoose.model('Project');
 var Job = mongoose.model('Job');
 module.exports = router;
+var UPDATE_FIELDS = ['title', 'jobs'];
 
 var ensureAuthenticated = function (req, res, next) {
     if (req.isAuthenticated()) {
@@ -22,6 +23,19 @@ router.get('/', ensureAuthenticated, function (req, res) {
         console.log("Err:", err);
         res.status(501).send(err);
     })
+});
+
+router.post('/setCurrent/:projectId', ensureAuthenticated, function(req,res,next){
+  Project.findById(req.params.projectId)
+  .then(function(project){
+    if (project)
+      req.session.currentProject = project;
+    res.sendStatus(200);
+  });
+});
+
+router.get('/getCurrent', ensureAuthenticated, function(req,res){
+  res.json(req.session.currentProject);
 });
 
 router.get('/:id', ensureAuthenticated, function (req, res) {
@@ -61,13 +75,14 @@ router.put('/:id', ensureAuthenticated, function (req, res) {
     Project.findById(req.params.id)
     .then(function(fetchedProject) {
         Object.keys(Project.schema.paths).forEach(function(property) {
-            if(req.body[property] !== undefined)
+            if(UPDATE_FIELDS.indexOf(property) > -1){
                 fetchedProject[property] = req.body[property];
+            }
         });
         return fetchedProject.save();
     })
     .then(function(project) {
-        res.send(project);
+        res.json(project);
     });
 });
 

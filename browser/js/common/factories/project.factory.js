@@ -8,7 +8,7 @@ app.factory('ProjectFactory', function ($http) {
     return {
     	fetchAll: function() {
     		return $http.get('/api/projects')
-    		.then(parseData)
+    		.then(parseData);
     	},
     	fetchById: function(id) {
     		return $http.get('/api/projects/' + id)
