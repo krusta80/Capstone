@@ -15,9 +15,9 @@
 		<form class="form-horizontal" name="jobForm">
 			<div class="panel panel-primary">
 				<span class="glyphicon glyphicon-remove" uib-tooltip="delete this job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
-				<span class="glyphicon glyphicon-signal" ng-show="getPages().pages.length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal" uib-tooltip="create chart from job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
-				<span class="glyphicon glyphicon-floppy-disk" ng-click="saveJob()" uib-tooltip="save this job" tooltip-placement="top" id="remove-btn"></span>
-				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="job.active" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
+				<span class="glyphicon glyphicon-signal" ng-show="getPages().length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal" uib-tooltip="create chart from job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
+				<!-- <span class="glyphicon glyphicon-floppy-disk" ng-click="saveJob()" uib-tooltip="save this job" tooltip-placement="top" id="remove-btn"></span> -->
+				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="getCurrentJob().active" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
 				<h4 class="panel-heading">Job Details</h4>
 				<div class="panel-body">
 					<div style="margin-left: 50px">
@@ -82,7 +82,7 @@
 		<form class="form-horizontal">
 			<div class="panel panel-primary">
 				<span class="glyphicon glyphicon-remove" id="remove-btn" ng-click="removePage()" uib-tooltip="remove this page" tooltip-placement="top"></span>
-				<span class="glyphicon glyphicon-floppy-disk" id="remove-btn" ng-click="savePage()" uib-tooltip="save this page" tooltip-placement="top"></span>
+				<!-- <span class="glyphicon glyphicon-floppy-disk" id="remove-btn" ng-click="savePage()" uib-tooltip="save this page" tooltip-placement="top"></span> -->
 				<span class="glyphicon glyphicon-eye-open" id="remove-btn" ng-click="viewPage()" uib-tooltip="view this page" tooltip-placement="top"></span>
 				<h4 class="panel-heading">Page Details</h4>
 				<div class="panel-body">

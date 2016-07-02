@@ -42,6 +42,9 @@ app.factory('PageFactory', function ($http) {
     		return $http.delete('/api/pages/' + id)
     		.then(parseData)
     	},
+      removeByJob: function(jobId){
+        return $http.delete('/api/pages/byJob/'+ jobId);
+      },
         getTypes: function() {
             return $http.get('/api/pages/pageTypes')
             .then(parseData)

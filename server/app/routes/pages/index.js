@@ -21,6 +21,12 @@ router.get('/byJob/:jobId', ensureAuthenticated, function (req, res) {
         res.send(pages);
     });
 });
+router.delete('/byJob/:jobId', ensureAuthenticated, function(req,res){
+  Page.remove({job: req.params.jobId})
+  .then(function(){
+    res.sendStatus(200);
+  });
+});
 
 router.post('/setCurrent/:pageId', ensureAuthenticated, function(req,res){
   req.session.currentPage = req.params.pageId;

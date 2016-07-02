@@ -1,4 +1,4 @@
-app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $rootScope){
+app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $rootScope, $q, JobFactory){
   var projects, jobs, pages, currentProject, currentJobIdx, currentPageIdx;
 
 
@@ -16,9 +16,11 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
   }
 
   function setCurrentPage(pageId){
-    currentPageIdx = pages.map(function(page){
-      return page._id;
-    }).indexOf(pageId);
+    if (pageId){
+      currentPageIdx = pages.map(function(page){
+        return page._id;
+      }).indexOf(pageId);
+    }
   }
 
   function _init(){
@@ -78,7 +80,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       return;
     },
     getCurrentPage: function(){
-      if (pages.length && currentPageIdx)
+      if (pages && pages.length && currentPageIdx !== undefined)
         return pages[currentPageIdx];
     },
     setCurrentPage: function(pageId){
@@ -102,7 +104,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
     addJob: function(jobTitle){
       if (!currentProject.jobs)
         currentProject.jobs = [];
-      currentProject.jobs.push({title: jobTitle, active: false});
+      currentProject.jobs.push({title: jobTitle, active: false, pages: []});
       return ProjectFactory.update(currentProject)
       .then(function(project){
         var newJobId = project.jobs[project.jobs.length - 1]._id;
@@ -119,7 +121,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       }).indexOf(jobId);
       currentProject.jobs.splice(idx,1);
       pages = [];
-      return ProjectFactory.update(currentProject)
+      return $q.all([ProjectFactory.update(currentProject), PageFactory.removeByJob(jobId)]) //delete associated pages from db
       .then(function(){
         if (currentProject.jobs.length)
           setCurrentJob(currentProject.jobs[currentProject.jobs.length - 1]._id);
@@ -149,6 +151,10 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
         });
       }
       return PageFactory.update(page);
-    }
+    },
+    runJob: function() {
+        return JobFactory.runJob(currentProject._id, currentJobIdx);
+      }
+
   };
 });
