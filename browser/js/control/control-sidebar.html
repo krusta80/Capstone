@@ -19,7 +19,7 @@
               <span class="glyphicon glyphicon-plus"></span>
             </a>
           <ul style="cursor:pointer;" class="list-group">
-              <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in selectedProject.jobs" ng-click="loadJob(jobTab)">{{jobTab.title}}</li>
+              <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">{{jobTab.title}}</li>
           </ul>
         </div>
 
@@ -29,7 +29,7 @@
             	<span class="glyphicon glyphicon-plus"></span>
           </a>
         	<ul style="cursor:pointer;" class="list-group">
-        		<li class="list-group-item" ng-class="{active:  getCurrentPage()._id === page._id }" ng-repeat="page in getPages()" ng-click="setCurrentPage(page)">{{ page.title }}</li>
+        		<li class="list-group-item" ng-class="{active:  getCurrentPage()._id === page._id }" ng-repeat="page in getPages()" ng-click="setCurrentPage(page._id)">{{ page.title }}</li>
         	</ul>
         </div>
       </div>

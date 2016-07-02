@@ -3,12 +3,16 @@ app.directive('controlSidebar', function(){
     restrict: 'E',
     templateUrl: 'js/control/control-sidebar.html',
     controller: function($scope, $rootScope, ControlFactory, PageFactory){
+      $rootScope.$on('goToProject', function(evt,project){
+        $scope.selectedProject = project;
+      });
       $scope.selectedProject = ControlFactory.getCurrentProject();
       $scope.getProjects = ControlFactory.getProjects;
       $scope.getPages = ControlFactory.getPages;
       $scope.getCurrentJob = ControlFactory.getCurrentJob;
       $scope.getCurrentPage = ControlFactory.getCurrentPage;
       $scope.setCurrentPage = ControlFactory.setCurrentPage;
+
 
       $scope.callRefresh = function(type){
         $rootScope.emit('refresh', {type: type});
@@ -27,6 +31,9 @@ app.directive('controlSidebar', function(){
           .then(function(pages){
             ControlFactory.setPages(pages);
         });
+      };
+      $scope.addPage = function(){
+        ControlFactory.addPage();
       };
     }
   };

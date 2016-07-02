@@ -22,6 +22,15 @@ router.get('/byJob/:jobId', ensureAuthenticated, function (req, res) {
     });
 });
 
+router.post('/setCurrent/:pageId', ensureAuthenticated, function(req,res){
+  req.session.currentPage = req.params.pageId;
+  res.sendStatus(200);
+});
+
+router.get('/getCurrent', ensureAuthenticated, function(req,res){
+  res.json(req.session.currentPage);
+});
+
 router.get('/:id', ensureAuthenticated, function (req, res) {
     Page.findById(req.params.id)
     .then(function(page) {
