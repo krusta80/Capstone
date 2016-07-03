@@ -1,5 +1,5 @@
 app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $rootScope, $q, JobFactory){
-  var projects, jobs, pages, currentProject, currentJobIdx, currentPageIdx;
+  var projects, pages, currentProject, currentJobIdx, currentPageIdx;
 
 
   function setCurrentJob(jobId){
@@ -12,7 +12,8 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
     var idx = projects.map(function(pj){
       return pj._id;
     }).indexOf(projectId);
-    currentProject = projects[idx];
+    if (idx > -1)
+      currentProject = projects[idx];
   }
 
   function setCurrentPage(pageId){
@@ -20,6 +21,15 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       currentPageIdx = pages.map(function(page){
         return page._id;
       }).indexOf(pageId);
+    }
+  }
+
+  function parseActions(){
+    var page = pages[currentPageIdx];
+    if (!page._actions && page.actions && page.actions.length){
+      page._actions = page.actions.map(function(action){
+        return JSON.parse(action);
+      });
     }
   }
 
@@ -46,6 +56,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
             return $http.get('/api/pages/getCurrent')
             .then(function(res){
               setCurrentPage(res.data);
+              parseActions();
             });
           }
         });
@@ -59,6 +70,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
     },
     setCurrentProject: function(currentProject){
       setCurrentProject(currentProject._id);
+      currentPageIdx = pages = undefined;
       return $http.post('/api/projects/setCurrent/' + currentProject._id);
     },
     getCurrentProject: function(){
@@ -75,7 +87,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       return $http.post('/api/jobs/setCurrent/' + job._id);
     },
     getCurrentJob: function(){
-      if (currentProject.jobs && currentProject.jobs.length)
+      if (currentProject && currentProject.jobs && currentProject.jobs.length)
         return currentProject.jobs[currentJobIdx];
       return;
     },
@@ -85,6 +97,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
     },
     setCurrentPage: function(pageId){
       setCurrentPage(pageId);
+      parseActions();
       return $http.post('/api/pages/setCurrent/' + pageId);
     },
     saveProject: function(){
@@ -98,6 +111,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       .then(function(project){
         projects.push(project);
         setCurrentProject(project._id);
+        pages = currentPageIdx = undefined;
         $rootScope.$broadcast('goToProject', project);
       });
     },
@@ -158,6 +172,43 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
         });
       }
       return PageFactory.update(page);
+    },
+    removePage: function(){
+      var page = pages[currentPageIdx];
+      var pageId = page._id;
+      return PageFactory.remove(page._id) //remove pg from db
+      .then(function(){
+        pages.splice(currentPageIdx, 1); //remove pg from client
+        var job = currentProject.jobs[currentJobIdx];
+        job.pages.splice(job.pages.indexOf(pageId),1); //remove pg from job
+        return ProjectFactory.update(currentProject); // update job in db
+      })
+      .then(function(){
+        if (currentPageIdx){
+          currentPageIdx--;
+          parseActions();
+          var pageId = pages[currentPageIdx]._id;
+          return $http.post('/api/pages/setCurrent/' + pageId);
+        }
+      });
+    },
+    removeProject: function(){
+      var pRemovePages = $q.all(currentProject.jobs.map(function(job){
+        return PageFactory.removeByJob(job._id);
+      }));
+      return $q.all([pRemovePages, ProjectFactory.remove(currentProject._id)])
+      .then(function(){
+        projects.splice(projects.indexOf(currentProject),1);
+        if (projects.length){
+          var project = projects[projects.length - 1];
+          setCurrentProject(project._id);
+          $rootScope.$broadcast('goToProject', project);
+          return $http.post('/api/projects/setCurrent/' + project._id);
+        }
+        else {
+          currentProject = currentPageIdx = pages = currentJobIdx = undefined;
+        }
+      });
     },
     runJob: function() {
         return JobFactory.runJob(currentProject._id, currentJobIdx);

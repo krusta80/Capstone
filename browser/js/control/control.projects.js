@@ -16,6 +16,7 @@ app.config(function($stateProvider){
       controller: function(projects,$stateParams, $scope, ControlFactory, ProjectFactory,ChartFactory, ngDialog, $state, $timeout, $window, $rootScope){
         //ControlFactory.setProjects(projects);
         $rootScope.$broadcast('sideBarClose', 'collapsed');
+        $scope.getProjects = ControlFactory.getProjects;
         $scope.getCurrentJob = ControlFactory.getCurrentJob;
         $scope.getCurrentPage = ControlFactory.getCurrentPage;
         $scope.getPages = ControlFactory.getPages;
@@ -35,7 +36,7 @@ app.config(function($stateProvider){
         $scope.removeJob = function(){
           var job = ControlFactory.getCurrentJob();
           ngDialog.open({
-            template: 'js/projects/remove-dialog.html',
+            template: 'js/control/dialogs/remove-dialog-job.html',
             className: 'ngdialog-theme-default',
             controller: function($scope, ControlFactory){
               $scope.job = job;
@@ -108,6 +109,21 @@ app.config(function($stateProvider){
           }
           return false;
         };
+        $scope.removePage = function(){
+          ngDialog.open({
+            template: 'js/control/dialogs/remove-dialog-page.html',
+            className: 'ngdialog-theme-default',
+            controller: function($scope,ControlFactory){
+              $scope.doRemove = function(){
+                ControlFactory.removePage()
+                .then(function(){
+                  ngDialog.close();
+                });
+              };
+            }
+          });
+        };
+
 
 
       }
