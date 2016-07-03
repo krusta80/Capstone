@@ -28,7 +28,7 @@ var jobSchema = mongoose.Schema({
     default: false
   },
   frequency: {
-    type: Number
+    type: String
   },
   isRunning: {
     type: Boolean,

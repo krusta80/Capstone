@@ -16,8 +16,9 @@ app.config(function ($stateProvider) {
 
 });
 
-app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $state, ChartFactory, DashboardFactory, $timeout, ngDialog) {
+app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $state, ChartFactory, DashboardFactory, $timeout, ngDialog, $rootScope) {
     //console.log('user',user);
+    $rootScope.$emit('sideBarOpen');
     getCharts(user);
     $scope.projects = projects;
 

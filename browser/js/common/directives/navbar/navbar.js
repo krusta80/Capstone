@@ -9,7 +9,7 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
             scope.items = [
                 { label: 'Home', state: 'home' , icon: "md md-home"},
                 //{ label: 'Iframe', state: 'iframe' , icon: ""},
-                { label: 'Projects', state: 'projects' , icon: "md md-list"},
+                { label: 'Projects', state: 'control.projects' , icon: "md md-list"},
                 // { label: 'Job Manager', state: 'job' , icon: "md md-assignment-turned-in"},
                 //{ label: 'Documentation', state: 'docs' },
                 // { label: 'Members Only', state: 'membersOnly', auth: true , icon: ""},
@@ -47,6 +47,11 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
                 scope.sideBarPosition = 'collapsed';
                 angular.element('.navbar-fixed-top').addClass('collapsed').removeClass('expanded');
                 angular.element('main').addClass('collapsed').removeClass('expanded');
+            });
+            $rootScope.$on('sideBarOpen', function(ev, action) {
+                scope.sideBarPosition = 'expanded';
+                angular.element('.navbar-fixed-top').removeClass('collapsed').addClass('expanded');
+                angular.element('main').removeClass('collapsed').addClass('expanded');
             });
 
             var setUser = function () {

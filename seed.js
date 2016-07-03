@@ -75,6 +75,13 @@ connectToDb
         .then(function(user){
           return Promise.join(seedHist(pages), seedProject(pages, user._id));
         })
+        .then(function(resolved){
+          var jobId = resolved[1].jobs[0]._id;
+          return Promise.map(pages, function(page){
+            page.job = jobId;
+            return page.save();
+          });
+        })
         .then(function () {
             console.log(chalk.green('Seed successful!'));
             process.kill(0);

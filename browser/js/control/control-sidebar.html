@@ -1,4 +1,4 @@
-<div class="col-md-2">
+<div class="col-lg-3">
   <div class="panel panel-default">
     <div class="panel-body">
 
@@ -8,9 +8,12 @@
             <span class="glyphicon glyphicon-plus"></span>
           </a>
         </div>
-        <select ng-model="selectedProject" class="form-control" ng-options="project.title for project in getProjects() track by project._id">
+        <select ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
           <option value="">-- choose an project --</option>
         </select>
+        <a ng-show="selectedProject" style="margin-left: 10px;" href="#" ng-click="removeProject()">
+          <span class="glyphicon glyphicon-minus"></span>
+        </a>
 
         <div>
           <span class="sub-header">Jobs</span>
@@ -18,9 +21,9 @@
             <a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal">
               <span class="glyphicon glyphicon-plus"></span>
             </a>
-          <div style="cursor:pointer;" class="list-group">
-              <a class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in selectedProject.jobs" ng-click="loadJob(jobTab)">{{jobTab.title}}</a>
-          </div>
+          <ul style="cursor:pointer;" class="list-group">
+              <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">{{jobTab.title}}</li>
+          </ul>
         </div>
 
         <div>
@@ -28,9 +31,9 @@
         	<a style="margin-left: 10px; outline: 0" href="#" ng-click="addPage()">
             	<span class="glyphicon glyphicon-plus"></span>
           </a>
-        	<div style="cursor:pointer;" class="list-group">
-        		<a class="list-group-item" ng-class="{active:  getCurrentPage()._id === page._id }" ng-repeat="page in getPages()" ng-click="setCurrentPage(page)">{{ page.title }}</a>
-        	</div>
+        	<ul style="cursor:pointer;" class="list-group">
+        		<li class="list-group-item" ng-class="{active:  getCurrentPage()._id === page._id }" ng-repeat="page in getPages()" ng-click="setCurrentPage(page._id)">{{ page.title }}</li>
+        	</ul>
         </div>
       </div>
     </div>

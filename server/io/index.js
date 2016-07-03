@@ -34,15 +34,15 @@ module.exports = function (server) {
     });
     var wasRunning = {};
     setInterval(function() {
-    	console.log(Object.keys(socketHash));
+    	//console.log(Object.keys(socketHash));
     	Project.find()
 		.then(function(projects) {
 			projects.forEach(function(project) {
 				Object.keys(socketHash).forEach(function(socketId) {
 					var socket = socketHash[socketId];
-					console.log("socket.id is", socketId);
-					console.log("socket.projectId is", socket.userId);
-					console.log("project._id is", project.user);
+					// console.log("socket.id is", socketId);
+					// console.log("socket.projectId is", socket.userId);
+					// console.log("project._id is", project.user);
 					if(socket.userId == project.user) {
 						//console.log("project id match")
 						project.jobs.forEach(function(job) {
