@@ -104,7 +104,12 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
     addJob: function(jobTitle){
       if (!currentProject.jobs)
         currentProject.jobs = [];
-      currentProject.jobs.push({title: jobTitle, active: false, pages: []});
+      currentProject.jobs.push({
+        title: jobTitle,
+        active: false,
+        pages: [],
+        frequency: "1440"
+      });
       return ProjectFactory.update(currentProject)
       .then(function(project){
         var newJobId = project.jobs[project.jobs.length - 1]._id;
@@ -113,6 +118,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
         pages = [];
         job._id = newJobId;
         setCurrentJob(job._id);
+        return $http.post('/api/jobs/setCurrent/' + job._id);
       });
     },
     removeJob: function(jobId){
@@ -123,8 +129,10 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       pages = [];
       return $q.all([ProjectFactory.update(currentProject), PageFactory.removeByJob(jobId)]) //delete associated pages from db
       .then(function(){
-        if (currentProject.jobs.length)
+        if (currentProject.jobs.length){
           setCurrentJob(currentProject.jobs[currentProject.jobs.length - 1]._id);
+          return $http.post('/api/jobs/setCurrent/' + job._id);
+        }
       });
     },
     addPage : function(){
@@ -139,8 +147,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
           pages = [];
         pages.push(page);
         setCurrentPage(page._id);
-        return ProjectFactory.update(currentProject);
-
+        return $q.all([ProjectFactory.update(currentProject), $http.post('/api/pages/setCurrent/' + page._id)]);
       });
     },
     savePage: function(){

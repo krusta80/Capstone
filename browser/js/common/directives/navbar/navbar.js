@@ -48,6 +48,11 @@ app.directive('navbar', function ($rootScope, AuthService, AUTH_EVENTS, $state, 
                 angular.element('.navbar-fixed-top').addClass('collapsed').removeClass('expanded');
                 angular.element('main').addClass('collapsed').removeClass('expanded');
             });
+            $rootScope.$on('sideBarOpen', function(ev, action) {
+                scope.sideBarPosition = 'expanded';
+                angular.element('.navbar-fixed-top').removeClass('collapsed').addClass('expanded');
+                angular.element('main').removeClass('collapsed').addClass('expanded');
+            });
 
             var setUser = function () {
                 AuthService.getLoggedInUser().then(function (user) {

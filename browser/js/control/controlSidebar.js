@@ -2,7 +2,7 @@ app.directive('controlSidebar', function(){
   return {
     restrict: 'E',
     templateUrl: 'js/control/control-sidebar.html',
-    controller: function($scope, $rootScope, ControlFactory, PageFactory){
+    controller: function($scope, $rootScope, ControlFactory, PageFactory, $state){
       $rootScope.$on('goToProject', function(evt,project){
         $scope.selectedProject = project;
       });
@@ -30,6 +30,8 @@ app.directive('controlSidebar', function(){
           })
           .then(function(pages){
             ControlFactory.setPages(pages);
+            if (!($state.is('control.projects')));
+              $state.go('control.projects');
         });
       };
       $scope.addPage = function(){

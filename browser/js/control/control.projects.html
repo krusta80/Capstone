@@ -58,7 +58,7 @@
 							    <label class="col-sm-2 control-label">Times Run</label>
 							    <div class="col-sm-7">
 							      <input type="input" class="form-control" disabled ng-model="getCurrentJob().runHistory.length">
-										<a ng-show="getCurrentJob().runHistory.length" ui-sref="projects.project.jobHistory({id:getCurrentJob()._id})">View run history...</a>
+										<a ng-show="getCurrentJob().runHistory.length" ui-sref="control.history">View run history...</a>
 							    </div>
 							  </div>
 							</div>
@@ -78,7 +78,10 @@
 	<div ng-show="!getPages().length">
 		<h4 style="margin-left: 50px">You have not yet defined any pages for this job.</h4>
 	</div>
-	<div ng-show="getPages().length">
+	<div ng-show="getPages().length && !getCurrentPage()">
+		<h4 style="margin-left: 50px">Choose a page from the left pane to begin...</h4>
+	</div>
+	<div ng-show="getPages().length && getCurrentPage()">
 		<form class="form-horizontal">
 			<div class="panel panel-primary">
 				<span class="glyphicon glyphicon-remove" id="remove-btn" ng-click="removePage()" uib-tooltip="remove this page" tooltip-placement="top"></span>
@@ -114,7 +117,7 @@
 						<uib-accordion>
 							<uib-accordion-group is-open="getCurrentPage().showAdvanced">
 								<uib-accordion-heading>
-									<span>Advanced Settings</span><i ng-class="{'glyphicon glyphicon-chevron-down': pages[selectedPage].showAdvanced, 'glyphicon glyphicon-chevron-right': !pages[selectedPage].showAdvanced}"></i>
+									<span>Advanced Settings</span><i ng-class="{'glyphicon glyphicon-chevron-down': getCurrentPage().showAdvanced, 'glyphicon glyphicon-chevron-right': !getCurrentPage().showAdvanced}"></i>
 								</uib-accordion-heading>
 								<div class="form-group">
 							    <label class="col-sm-2 control-label">Paginate</label>
@@ -130,10 +133,10 @@
 							      <input type="text" ng-model="getCurrentPage().maxPages" ng-blur="savePage()" uib-tooltip="the total number of pages to crawl" tooltip-placement="top" />
 							    </div>
 							  </div>
-								<div class="form-group">
+								<div class="form-group" ng-init="parseActions()">
 							    <label class="col-sm-2 control-label">Actions</label>
 							    <div class="col-sm-3">
-							      <select ng-model="pageActions.selected" uib-tooltip="actions that are carried out BEFORE scraping occurs.  Actions execute in the order displayed">
+							      <select ng-model="getCurrentPage().newAction" uib-tooltip="actions that are carried out BEFORE scraping occurs.  Actions execute in the order displayed">
 											<option value="type">type in a field...</option>
 											<option value="click">click a button...</option>
 										</select>
@@ -145,7 +148,7 @@
 										<ul class="list-group" ng-repeat="action in getCurrentPage()._actions">
 											<li class="list-group-item">
 												{{$index + 1}}. <label>{{action.fn}}: </label>
-												<input ng-show="action.fn==='type'" type="input" ng-model="action.params[1]" placeholder="enter a parameter..." />
+												<input ng-show="action.fn==='type'" type="input" ng-model="action.params[1]" placeholder="enter a parameter..." ng-blur="savePage()" />
 												<span ng-show="!action.params[0]" class="text-danger"> NO SELECTOR</span>
 												<span ng-show="action.params[0]" class="text-success"> READY</span>
 												<span class="glyphicon glyphicon-minus" ng-click="removeAction($index)"></span>

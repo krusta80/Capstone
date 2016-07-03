@@ -13,8 +13,9 @@ app.config(function($stateProvider){
           return ControlFactory.init();
         }
       },
-      controller: function(projects,$stateParams, $scope, ControlFactory, ProjectFactory,ChartFactory, ngDialog, $state, $timeout, $window){
+      controller: function(projects,$stateParams, $scope, ControlFactory, ProjectFactory,ChartFactory, ngDialog, $state, $timeout, $window, $rootScope){
         //ControlFactory.setProjects(projects);
+        $rootScope.$broadcast('sideBarClose', 'collapsed');
         $scope.getCurrentJob = ControlFactory.getCurrentJob;
         $scope.getCurrentPage = ControlFactory.getCurrentPage;
         $scope.getPages = ControlFactory.getPages;
@@ -75,6 +76,37 @@ app.config(function($stateProvider){
                 $window.location.reload();
                 console.log("Results object:", res);
             });
+        };
+        $scope.addAction = function(){
+          var page = ControlFactory.getCurrentPage();
+          if (!page._actions)
+            page._actions = [];
+          if (page.newAction){
+            page._actions.push({fn:page.newAction, params:[]});
+            ControlFactory.savePage();
+          }
+        };
+        $scope.removeAction = function(idx){
+          ControlFactory.getCurrentPage()._actions.splice(idx,1);
+          ControlFactory.savePage();
+        };
+        $scope.parseActions = function(){
+          var page = ControlFactory.getCurrentPage();
+          if (!page._actions && page.actions && page.actions.length){
+            page._actions = page.actions.map(function(action){
+              return JSON.parse(action);
+            });
+          }
+        };
+        $scope.showAdvanced = function(){
+          var page = ControlFactory.getCurrentPage();
+          if (page.hasOwnProperty('showAdvanced'))
+            return page.showAdvanced;
+          if ((page.actions && page.actions.length) || page.paginate){
+            page.showAdvanced = true;
+            return true;
+          }
+          return false;
         };
 
 

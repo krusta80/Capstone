@@ -1,0 +1,55 @@
+<h4>Run history</h4>
+<div class="col-lg-9">
+  <div ng-repeat="run in history" class="panel panel-default">
+      <div class="panel-heading">
+          <h3 class="panel-title">Completed: {{(run.runAt | date: 'medium') || 'NO DATE'}}</h3>
+      </div>
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Page Id</th>
+                          <th>Scraped Elements</th>
+                          <th>Successful Elements</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="page in run.pages" ng-class="{'histrow-success':page.succeeded, 'histrow-fail':!page.succeeded}">
+                          <td>{{page.id}}</td>
+                          <td>{{page.scraped}}</td>
+                          <td>{{page.success}}</td>
+                          <td><button ng-click="getData(run)" data-toggle="modal" data-target="#histModal" class="btn btn-xs btn-primary">View data...</button></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="modal fade" id="histModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Job data</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table table-bordered table-striped">
+          <thead>
+            <th ng-repeat="fieldName in hist.fields">{{fieldName}}</th>
+          </thead>
+          <tbody>
+            <tr ng-repeat="row in hist.rows">
+              <td ng-repeat="value in row">{{value}}</td>
+            </tr>
+          </tbody>
+        </table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
