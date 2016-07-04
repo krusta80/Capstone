@@ -52,7 +52,6 @@ router.post('/download', function (req, res, next) {
 
 function convertToUrl(url, obj) {
   var str = '';
-  console.log('whats the obj', obj);
   for (var key in obj) {
       if (str === '') {
           str += "&";
@@ -65,7 +64,7 @@ function convertToUrl(url, obj) {
 // proxy mode
 router.get('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.query.proxyurl);
-  console.log('proxy url: ', req.query.proxyurl);
+  console.log('GET proxy url: ', req.query.proxyurl);
   var keys = Object.keys(req.query);
   var newurl = keys.reduce(function(url, key) {
     if (key === "proxyurl") {
@@ -79,8 +78,6 @@ router.get('/proxy', function(req, res, next) {
 
   request(newurl, function(error, response, html) {
     if (error) { next(error); }
-
-    console.log("proxy url");
     html = parseDOM(html);
     // prepends the the sources to have the base url
     html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
@@ -95,19 +92,19 @@ router.get('/proxy', function(req, res, next) {
     var $ = cheerio.load(html);
     var x = $('a');
     for (var i = 0; i < x.length; i++) {
-      console.log('x', x[i]);
       var href = x[i].attribs.href;
       x[i].attribs.href =  '/api/scrape/proxy?proxyurl=' + href;
     }
-    console.log('body: ', $('body'));
-    $('body').attr('current_url',req.query.proxyurl);
+    $('body').attr('current_url',newurl);
+    $('body').attr('proxy_protocol', proxyurl.protocol);
+    $('body').attr('proxy_hostname', proxyurl.hostname);
     res.send($.html());
   });
 });
 
 router.post('/proxy', function(req, res, next) {
   var proxyurl = url.parse(req.body.proxyurl);
-  console.log('reqquery proxyurl', req.body.proxyurl);
+  console.log('POST reqquery proxyurl', req.body.proxyurl);
 
   request(req.body.proxyurl, function(error, response, html) {    if (error) { next(error); }
     html = parseDOM(html);
@@ -125,8 +122,9 @@ router.post('/proxy', function(req, res, next) {
       var newUrl = '/api/scrape/proxy?proxyurl='+href;
       return newUrl
     });
-    console.log('body: ', $('body'));
     $('body').attr('current_url',req.body.proxyurl);
+    $('body').attr('proxy_protocol', proxyurl.protocol);
+    $('body').attr('proxy_hostname', proxyurl.hostname);
     res.send($.html());
 
   });

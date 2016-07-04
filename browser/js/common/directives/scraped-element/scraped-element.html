@@ -4,14 +4,18 @@
         reset
     </div>
     <div class="clearfix" ng-repeat="target in scrapedPageObject.targetElements">
-        <h4 style="line-height: 30px;"><a href="#" editable-text="target.name" onaftersave="savePage()">{{target.name || "empty"}}</a><i class="fa fa-times btn btn-round-xs circle-now btn-danger pull-right" ></i></h4>
+        <h4 style="line-height: 30px;"><a href="#" editable-text="target.name" onaftersave="savePage()">{{target.name || "empty"}}</a></h4>
 
         <div class="clearfix" ng-repeat="(key, value) in target.fields track by $index">
-            <div class="pull-left"><strong>Key:</strong> {{key}}
-                <br/ >
-                <span ng-show="value.tempVal"><strong>Value:</strong> {{value.tempVal | truncate: 120}}</span>
+            <div class="pull-left" style="max-width: 130px;" >
+                <div>
+                    <strong>Key:</strong> {{key}}
+                </div>
+                <div ng-show="value.tempVal">
+                    <strong>Value:</strong> {{value.tempVal | truncate: 120}}
+                </div>
             </div>
-
+            <i class="fa fa-times btn btn-round-xs circle-now btn-danger pull-right" ng-click="removeItem(target, key)"></i>
         </div>
     </div>
 </div>

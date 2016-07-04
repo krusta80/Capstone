@@ -1,4 +1,4 @@
-app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFactory){
+app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFactory, ScraperElementFactory){
   var scrapedFieldObj = {};
   var pageObj;
   var cachedData = {
@@ -12,6 +12,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
     return pageObj;
   };
   scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
+     pageObj = ScraperElementFactory.get();
     if (!isRepeating){
       var fieldsObj = {};
       savedAttributes.forEach(function(attribute) {

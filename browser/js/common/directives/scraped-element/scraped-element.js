@@ -14,7 +14,11 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
         }
       });
       scope.savePage = function() {
-        // ScraperElementFactory.update(scope.page);
+        var iframe = document.getElementById('iframedisplay').contentDocument;
+        scope.scrapedPageObject.targetElements.forEach(function(targetElement, idx) {
+            var selectedElement = iframe.querySelectorAll('.__chosenElement__' + idx);
+            $(selectedElement).html(targetElement.name);
+        });
         ScraperElementFactory.save();
       }
       scope.getNumber = function(num) {

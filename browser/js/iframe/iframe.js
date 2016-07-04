@@ -32,6 +32,7 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
             $scope.scraperElementsExist = false;
         }
         Messenger.setAnnotate($scope.isAnnotation);
+
     });
 
     // default setting for annotation
@@ -75,7 +76,6 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
                         $scope.$apply();
 
                         var iframe = document.getElementById('iframedisplay').contentDocument;
-
                         $scope.page.targetElements.forEach(function(targetElement, idx) {
                             // iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].className += " __clickActivate";
                             var selectedElement = iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex];

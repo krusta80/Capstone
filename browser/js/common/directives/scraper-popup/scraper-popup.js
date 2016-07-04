@@ -88,7 +88,7 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         scope.currentContent = ScraperPopupFactory.getContent(scope.popupData);
         scope.attributes = scope.popupData;
         scope.selection = [];
-        scope.selectedAttributes = function selectedAttribuets(repeating) {
+        scope.selectedAttributes = function selectedAttributes(repeating) {
           var output = [];
           if (repeating)
             output = output.concat(scope.rawData.repeats);

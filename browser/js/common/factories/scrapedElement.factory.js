@@ -35,6 +35,9 @@ app.factory('ScraperElementFactory', function($http, Messenger, $rootScope){
     } else {
       delete currTarget.fields[key];
     }
+    let iframe = document.getElementById('iframedisplay').contentDocument;
+    let chosenElements = $(iframe).find('.__chosenElement__');
+    $(chosenElements[currIndex]).remove();
     this.save()
   };
 

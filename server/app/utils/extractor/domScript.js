@@ -7,7 +7,6 @@ module.exports =
         window.parent.messenger.setUrl($('body').attr('current_url'));
       }, 100)
 
-
       function bindMouseEnterEvent() {
         $('body').off('mouseenter').on('mouseenter', '*', function(ev) {
           if (window.parent.messenger.isAnnotate()) {
@@ -25,10 +24,10 @@ module.exports =
       });
 
       $('body').on('click','*', function(ev) {
-        var isAnchor = $(ev.currentTarget).is('a');
+        var isAnchor = $(ev.target).is('a');
+        ev.preventDefault();
+        ev.stopPropagation();
         if (window.parent.messenger.isAnnotate()) {
-          ev.preventDefault();
-          ev.stopPropagation();
           // true then we just do the regular actions
           // $(this).addClass('__clickActivate');
           // some error checking here
@@ -43,6 +42,20 @@ module.exports =
           var rectangle = ev.currentTarget.getBoundingClientRect();
           var div = `<div class="__chosenElement__ __chosenElement__${scrapedFieldObj.targetElements.length+1}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left + window.scrollX}px; top: ${rectangle.top + window.scrollY}px; background-color:rgba(0, 110, 190, 0.5); z-index: 10000; text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElementName}</div>`
           $('body').append(div);
+        } else {
+          if (isAnchor) {
+            // interceptor
+            var protocol = $('body').attr('proxy_protocol');
+            var hostname = $('body').attr('proxy_hostname');
+            var $anchor = $(ev.target);
+            var re = /proxyurl/i;
+            var found = $anchor.attr('href').match(re);
+            if (!found) {
+              var newUrl = '/api/scrape/proxy?proxyurl=' + protocol + '//' + hostname + $anchor.attr('href');
+              $anchor.attr('href', newUrl);
+            }
+            window.location.href = ev.target.href
+          }
         }
       });
 
