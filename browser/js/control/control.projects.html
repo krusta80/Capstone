@@ -17,7 +17,10 @@
 				<span class="glyphicon glyphicon-remove" uib-tooltip="delete this job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
 				<span class="glyphicon glyphicon-signal" ng-show="getPages().length" class="btn btn-default" data-toggle="modal" ng-click="newChart()" data-target="#chartModal" uib-tooltip="create chart from job" tooltip-placement="top" ng-click="removeJob()" id="remove-btn"></span>
 				<!-- <span class="glyphicon glyphicon-floppy-disk" ng-click="saveJob()" uib-tooltip="save this job" tooltip-placement="top" id="remove-btn"></span> -->
-				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="getCurrentJob().active" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
+				<div class="loader-holder" ng-show="isRunning">
+					<div class="loader">Loading...</div>
+				</div>
+				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="getCurrentJob().active && !isRunning" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
 				<h4 class="panel-heading">Job Details</h4>
 				<div class="panel-body">
 					<div style="margin-left: 50px">
