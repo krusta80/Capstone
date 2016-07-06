@@ -13,8 +13,9 @@ app.config(function($stateProvider){
           return ControlFactory.init();
         }
       },
-      controller: function(projects,$stateParams, $scope, ControlFactory, ProjectFactory,ChartFactory, ngDialog, $state, $timeout, $window, $rootScope){
+      controller: function(projects,$stateParams, $scope, ControlFactory, ProjectFactory,ChartFactory, JobFactory, ngDialog, $state, $timeout, $rootScope){
         //ControlFactory.setProjects(projects);
+        $scope.isRunning = false;
         $rootScope.$broadcast('sideBarClose', 'collapsed');
         $scope.getProjects = ControlFactory.getProjects;
         $scope.getCurrentJob = ControlFactory.getCurrentJob;
@@ -72,10 +73,13 @@ app.config(function($stateProvider){
           }, 1000);
         };
         $scope.runJob = function() {
+            $scope.isRunning = true;
             ControlFactory.runJob()
             .then(function(res) {
-                $window.location.reload();
-                console.log("Results object:", res);
+              return JobFactory.fetchByProjectId(ControlFactory.getCurrentProject()._id);
+            })
+            .then(function(){
+              $scope.isRunning = false;
             });
         };
         $scope.addAction = function(){

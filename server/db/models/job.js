@@ -56,7 +56,7 @@ jobSchema.methods.runJob = function(project){
   console.log("   -> Last RunTS:",dd);
   console.log("   -> Frequency :",this.frequency);
 
-  if(this.isRunning || Date.now() - dd < this.frequency*60000) {
+  if(this.isRunning || Date.now() - dd < parseInt(this.frequency)*60000) {
     console.log("JOB EITHER RUNNING OR RUN TOO RECENTLY!!");
     return;
   }

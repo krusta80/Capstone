@@ -211,7 +211,16 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       });
     },
     runJob: function() {
-        return JobFactory.runJob(currentProject._id, currentJobIdx);
+        return JobFactory.runJob(currentProject._id, currentJobIdx)
+        .then(function(){
+          return JobFactory.fetchByProjectId(currentProject._id);
+        })
+        .then(function(jobs){
+          var job = currentProject.jobs[currentJobIdx];
+          var updated = jobs[currentJobIdx];
+          job.runHistory = updated.runHistory;
+          job.lastRun = updated.lastRun;
+        });
       }
 
   };
