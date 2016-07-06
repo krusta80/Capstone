@@ -79,7 +79,7 @@ module.exports = function (server) {
 				});
 			});
 		});
-    }, 15000);
+    }, 1000);
 
     return io;
 
