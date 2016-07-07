@@ -25,12 +25,12 @@ module.exports =
 
       $('body').on('click','*', function(ev) {
         var isAnchor = $(ev.target).is('a');
-        ev.preventDefault();
-        ev.stopPropagation();
         if (window.parent.messenger.isAnnotate()) {
           // true then we just do the regular actions
           // $(this).addClass('__clickActivate');
           // some error checking here
+          ev.preventDefault();
+          ev.stopPropagation();
           if ($(ev).hasClass('__chosenElement__')) {
             return;
           }
@@ -56,6 +56,7 @@ module.exports =
             }
             window.location.href = ev.target.href
           }
+
         }
       });
 

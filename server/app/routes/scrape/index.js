@@ -63,7 +63,16 @@ function convertToUrl(url, obj) {
 
 // proxy mode
 router.get('/proxy', function(req, res, next) {
-  var proxyurl = url.parse(req.query.proxyurl);
+  let proxyurl;
+  if (!req.query.proxyurl) {
+    proxyurl = req.session.proxyurl;
+    console.log('proxyurl', proxyurl);
+  } else {
+    proxyurl = url.parse(req.query.proxyurl);
+  }
+
+
+  req.session.proxyurl = proxyurl;
   console.log('GET proxy url: ', req.query.proxyurl);
   var keys = Object.keys(req.query);
   var newurl = keys.reduce(function(url, key) {
@@ -87,14 +96,20 @@ router.get('/proxy', function(req, res, next) {
 
     html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
     html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
+    // html = html.replace(/<script/g, '<noscript');
+    // html = html.replace(/<\/script>/g, '</noscript>');
 
     // cheerio to modify all a tags with the proxy
-    var $ = cheerio.load(html);
-    var x = $('a');
-    for (var i = 0; i < x.length; i++) {
-      var href = x[i].attribs.href;
+    let $ = cheerio.load(html);
+    let x = $('a');
+    for (let i = 0; i < x.length; i++) {
+      let href = x[i].attribs.href;
       x[i].attribs.href =  '/api/scrape/proxy?proxyurl=' + href;
     }
+    // let $forms = $('form');
+    // $forms.attr('action', function(z, action) {
+    //   return '/api/scrape/proxy?proxyurl=' + action;
+    // });
     $('body').attr('current_url',newurl);
     $('body').attr('proxy_protocol', proxyurl.protocol);
     $('body').attr('proxy_hostname', proxyurl.hostname);
@@ -103,31 +118,52 @@ router.get('/proxy', function(req, res, next) {
 });
 
 router.post('/proxy', function(req, res, next) {
-  var proxyurl = url.parse(req.body.proxyurl);
-  console.log('POST reqquery proxyurl', req.body.proxyurl);
-
-  request(req.body.proxyurl, function(error, response, html) {    if (error) { next(error); }
-    html = parseDOM(html);
-    html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
-    html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
-    html = html.replace(/src="\/?([A-Ga-gI-Zi-z])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
-    html = html.replace(/href="\/?([A-Ga-gI-Zi-z])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
-
-    html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
-    html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
-
-    var $ = cheerio.load(html);
-    var $a = $('a');
-    $a.attr('href',function(i, href) {
-      var newUrl = '/api/scrape/proxy?proxyurl='+href;
-      return newUrl
+  if (req.query.proxyurl) {
+    var proxyurl = url.parse(req.query.proxyurl);
+  } else {
+    var proxyurl = url.parse(req.body.proxyurl);
+  }
+  let _url = req.body.proxyurl || req.query.proxyurl;
+  req.session.proxyurl = proxyurl;
+  if (req.body.appAction) {
+    request.post({url: req.query.proxyurl, method: 'POST'}, function(error, response, html) {
+      res.send(html);
     });
-    $('body').attr('current_url',req.body.proxyurl);
-    $('body').attr('proxy_protocol', proxyurl.protocol);
-    $('body').attr('proxy_hostname', proxyurl.hostname);
-    res.send($.html());
+  } else {
+    console.log('POST reqquery proxyurl', _url);
 
-  });
+    request(_url, function(error, response, html) {    if (error) { next(error); }
+      html = parseDOM(html);
+      html = html.replace(/src="\/([a-zA-z0-9])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+      html = html.replace(/href="\/([a-zA-z0-9])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+      html = html.replace(/src="\/?([A-Ga-gI-Zi-z])/g, 'src="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+      html = html.replace(/href="\/?([A-Ga-gI-Zi-z])/g, 'href="' + proxyurl.protocol + "//" + proxyurl.hostname + '/$1');
+
+      html = html.replace(/src="\/\/"/g, 'src="' + proxyurl.protocol + '//');
+      html = html.replace(/href="\/\/"/g, 'href="' + proxyurl.protocol + '//');
+
+      // html = html.replace(/<script/g, '<noscript');
+      // html = html.replace(/<\/script>/g, '</noscript>');
+
+      let $ = cheerio.load(html);
+      let $a = $('a');
+      $a.attr('href',function(i, href) {
+        let newUrl = '/api/scrape/proxy?proxyurl='+href;
+        return newUrl
+      });
+      // let $forms = $('form');
+      // $forms.attr('action', function(z, action) {
+      //   return '/api/scrape/proxy?proxyurl=' + action;
+      // });
+      $('body').attr('current_url',req.body.proxyurl);
+      $('body').attr('proxy_protocol', proxyurl.protocol);
+      $('body').attr('proxy_hostname', proxyurl.hostname);
+      res.send($.html());
+
+    });
+  }
+
+
 });
 
 module.exports = router;
