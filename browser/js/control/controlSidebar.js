@@ -12,6 +12,9 @@ app.directive('controlSidebar', function(){
       $scope.getCurrentJob = ControlFactory.getCurrentJob;
       $scope.getCurrentPage = ControlFactory.getCurrentPage;
       $scope.setCurrentPage = ControlFactory.setCurrentPage;
+      $scope.saveProject = function(){
+        ControlFactory.saveProject();
+      };
 
 
       $scope.callRefresh = function(type){

@@ -26,7 +26,7 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
 
   function parseActions(){
     var page = pages[currentPageIdx];
-    if (!page._actions && page.actions && page.actions.length){
+    if (page && !page._actions && page.actions && page.actions.length){
       page._actions = page.actions.map(function(action){
         return JSON.parse(action);
       });
@@ -144,8 +144,9 @@ app.factory('ControlFactory', function($http, ProjectFactory, PageFactory, $root
       return $q.all([ProjectFactory.update(currentProject), PageFactory.removeByJob(jobId)]) //delete associated pages from db
       .then(function(){
         if (currentProject.jobs.length){
-          setCurrentJob(currentProject.jobs[currentProject.jobs.length - 1]._id);
-          return $http.post('/api/jobs/setCurrent/' + job._id);
+          var newJobId = currentProject.jobs[currentProject.jobs.length - 1]._id;
+          setCurrentJob(newJobId);
+          return $http.post('/api/jobs/setCurrent/' + newJobId);
         }
       });
     },

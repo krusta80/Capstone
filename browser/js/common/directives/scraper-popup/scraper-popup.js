@@ -32,6 +32,8 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         var cached = ScraperPopupFactory.get();
         var actionSelector = '';
         cached.data.forEach(function(item){
+          if (item.attr === 'class')
+            actionSelector += '.' + item.value;
           if (item.attr === 'id')
             actionSelector+= '#' + item.value;
         });

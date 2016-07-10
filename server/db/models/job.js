@@ -48,7 +48,7 @@ function Results(id){
   this.pageCount = 1;
 }
 
-jobSchema.methods.runJob = function(project){
+jobSchema.methods.runJob = function(project, override){
   var runId = mongoose.Types.ObjectId();
   var dd = new Date(this.lastRun);
   console.log("Attempting to run job id", this._id, "(", Date.now(), ")");
@@ -56,7 +56,7 @@ jobSchema.methods.runJob = function(project){
   console.log("   -> Last RunTS:",dd);
   console.log("   -> Frequency :",this.frequency);
 
-  if(this.isRunning || Date.now() - dd < parseInt(this.frequency)*60000) {
+  if(!override && (this.isRunning || Date.now() - dd < parseInt(this.frequency)*60000)) {
     console.log("JOB EITHER RUNNING OR RUN TOO RECENTLY!!");
     return;
   }
