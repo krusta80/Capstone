@@ -20,7 +20,7 @@
 				<div class="loader-holder" ng-show="isRunning">
 					<div class="loader">Loading...</div>
 				</div>
-				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="getCurrentJob().active && !isRunning" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
+				<span class="glyphicon glyphicon-off" ng-click="runJob()" class="bg-success" ng-show="getCurrentJob().pages.length && !getCurrentJob().active && !isRunning" uib-tooltip="run this job once" tooltip-placement="top" id="remove-btn"></span>
 				<h4 class="panel-heading">Job Details</h4>
 				<div class="panel-body">
 					<div style="margin-left: 50px">
