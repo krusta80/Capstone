@@ -3,24 +3,31 @@
     <div class="panel-body">
 
         <div>
-          <span class="sub-header">Projects</span>
-          <a style="margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
-            <span class="glyphicon glyphicon-plus"></span>
-          </a>
-        </div>
-        <select ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
-          <option value="">-- choose an project --</option>
-        </select>
-        <a ng-show="selectedProject" style="margin-left: 10px;" href="#" ng-click="removeProject()">
-          <span class="glyphicon glyphicon-minus"></span>
-        </a>
-
-        <div>
-          <span class="sub-header">Jobs</span>
-          <span>
-            <a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin;" href="#" data-toggle="modal" data-target="#jobModal">
+          <div class="clearfix">
+            <span class="pull-left sub-header">Projects</span>
+            <a class="pull-right" style="margin-bottom: 9px; margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
               <span class="glyphicon glyphicon-plus"></span>
             </a>
+          </div>
+        </div>
+        <div class="clearfix">
+          <select class="pull-left" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
+            <option value="">-- choose an project --</option>
+          </select>
+          <a class="pull-right" ng-show="selectedProject" style="margin-left: 10px; margin-bottom: 9px;" href="#" ng-click="removeProject()">
+            <span class="glyphicon glyphicon-minus" style="margin-bottom: 9px;"></span>
+          </a>
+        </div>
+
+        <div>
+          <div class="clearfix">
+            <span class="pull-left sub-header">Jobs</span>
+            <span class="pull-right">
+              <a style="cursor:pointer; outline: 0; background-color: white; border-bottom: thin; margin-top: 9px;" href="#" data-toggle="modal" data-target="#jobModal">
+                <span class="glyphicon glyphicon-plus"></span>
+              </a>
+            </span>
+          </div>
           <ul style="cursor:pointer;" class="list-group">
               <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">
                 {{jobTab.title}}
@@ -30,10 +37,12 @@
         </div>
 
         <div>
-          <span class="sub-header">Pages</span>
-        	<a style="margin-left: 10px; outline: 0" href="#" ng-click="addPage()">
-            	<span class="glyphicon glyphicon-plus"></span>
-          </a>
+          <div class="clearfix">
+            <span class="sub-header pull-left">Pages</span>
+          	<a class="pull-right" style="margin-left: 10px; outline: 0" href="#" ng-click="addPage()">
+              	<span style="margin-top: 9px;" class="glyphicon glyphicon-plus"></span>
+            </a>
+          </div>
         	<ul style="cursor:pointer;" class="list-group">
         		<li class="list-group-item" ng-class="{active:  getCurrentPage()._id === page._id }" ng-repeat="page in getPages()" ng-click="setCurrentPage(page._id)">{{ page.title }}</li>
         	</ul>
