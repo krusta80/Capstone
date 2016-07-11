@@ -21,6 +21,8 @@ app.controller('IframeCtrl', function ($scope, $http, Messenger, $rootScope, pag
 
     $rootScope.$on('urlChanged', function(ev,url) {
         $scope.url = url;
+        $scope.page.url = url;
+        PageFactory.updateURL($scope.page);
     });
     $rootScope.$on('pageUpdated', function(ev, page) {
         // update page object

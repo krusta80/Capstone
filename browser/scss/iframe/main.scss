@@ -1,3 +1,21 @@
+.overlayMaster {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: -34px;
+  z-index: 10000;
+
+  .centeredMaster {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    margin-top: -22.75px;
+    margin-left: -142px;
+  }
+}
+
 #iframedisplay {
   width: 100%;
   height: calc(100vh - 180px);

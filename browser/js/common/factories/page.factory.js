@@ -8,6 +8,7 @@ app.factory('PageFactory', function ($http) {
     var jsonifyData = function(data) {
         data.targetElements = data.targetElements.map(function(targetElement) {
             if (typeof targetElement.fields === "string") {
+
                 targetElement.fields = JSON.parse(targetElement.fields);
             }
             return targetElement;
@@ -37,13 +38,16 @@ app.factory('PageFactory', function ($http) {
             });
     		return $http.put('/api/pages/' + page._id, page).then(parseData);
     	},
+        updateURL: function(page) {
+            return $http.put('/api/pages/' + page._id, page.url).then(parseData);
+        },
     	remove: function(id) {
             console.log("heres delete id: ", id);
     		return $http.delete('/api/pages/' + id)
     		.then(parseData)
     	},
         removeByJob: function(jobId){
-        return $http.delete('/api/pages/byJob/'+ jobId);
+            return $http.delete('/api/pages/byJob/'+ jobId);
         },
         getTypes: function() {
             return $http.get('/api/pages/pageTypes')

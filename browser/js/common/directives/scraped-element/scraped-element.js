@@ -35,6 +35,15 @@ app.directive('scrapedElements', function($rootScope, ScraperElementFactory){
         ScraperElementFactory.remove(target, key);
       };
       $rootScope.$on('extract', function(event,value) {
+        var iframe = document.getElementById('iframedisplay').contentDocument;
+        var scrollTop = iframe.body.scrollTop;
+        value.targetElements.forEach(function(targetElement, idx) {
+            // iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex].className += " __clickActivate";
+            var selectedElement = iframe.querySelectorAll(targetElement.domSelector)[targetElement.selectorIndex];
+            var rectangle = selectedElement.getBoundingClientRect();
+            var div = `<div class="__chosenElement__ __chosenElement__${idx}" style="width: ${rectangle.width}px; height: ${rectangle.height}px; position: absolute; left: ${rectangle.left}px; top: ${rectangle.top + scrollTop}px; background-color:rgba(0, 110, 190, 0.5); z-index: 10000; text-align: center; line-height: ${rectangle.height}px; color: white; font-weight: bold; pointer-events: none;">${targetElement.name}</div>`
+            iframe.querySelector('body').innerHTML += div
+        });
         scope.scrapedPageObject = ScraperElementFactory.update(value);
       });
     }

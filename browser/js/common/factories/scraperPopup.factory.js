@@ -12,6 +12,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
     return pageObj;
   };
   scrapedFieldObj.save = function(savedAttributes, cache, isRepeating) {
+    // $rootScope.$emit('masterLoader', true);
      pageObj = ScraperElementFactory.get();
     if (!isRepeating){
       var fieldsObj = {};
@@ -35,29 +36,33 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
       };
       pageObj.targetElements.push(scraperElementSchema);
     }
-    else{
-      cachedData.raw.repeats.forEach(function(elem){
+    else {
+      cachedData.raw.repeats.forEach(function(elem, idx){
+        var iframe = document.getElementById('iframedisplay').contentDocument;
+        var selectedElement = iframe.querySelectorAll(elem.selector)[elem.selectorIndex];
         var scraperElementSchema = {
-          name: 'Repeating Elements',
+          name: 'Repeating '+(idx+1),
           domSelector: elem.selector,
           selectorIndex: elem.selectorIndex,
           fields: JSON.stringify({
-              field0:{
+              content:{
                 attr: 'content',
-                index: -1
+                index: -1,
+                tempVal: selectedElement.innerHTML
             }
           })
         };
         pageObj.targetElements.push(scraperElementSchema);
       });
     }
-    $rootScope.$emit('extract',pageObj);
     var payload = _.cloneDeep(pageObj);
+    $rootScope.$emit('extract', pageObj);
     payload.targetElements.forEach(function(targetElement) {
       targetElement.fields = JSON.stringify(targetElement.fields);
     });
     return PageFactory.update(payload).then(function(data) {
-      $rootScope.$emit('extract',data); // need to do it twice to update the data... couldnt find a refactor that worked
+      // $rootScope.$emit('extract',data); // need to do it twice to update the data... couldnt find a refactor that worked
+      $rootScope.$emit('masterLoader', false);
       return data;
     });
   };

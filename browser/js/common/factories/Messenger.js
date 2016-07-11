@@ -33,6 +33,7 @@ app.factory('Messenger', function($rootScope){
     },
     setUrl: function(url) {
       currentUrl = url;
+      console.log('scrapedFieldObj setUrl fired', scrapedFieldObj);
       $rootScope.$broadcast('urlChanged', url);
     },
     getScraperFieldObj: function() {

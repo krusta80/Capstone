@@ -61,5 +61,10 @@
       window.onbeforeunload=goodbye;
     </script> -->
     <toast></toast>
+    <div class="overlayMaster" ng-show="masterLoader">
+        <button class="btn btn-lg btn-warning centeredMaster" ng-show="masterLoader">
+          <span class="glyphicon glyphicon-refresh spinning"></span> This may take awhile...
+        </button>
+    </div>
 </body>
 </html>

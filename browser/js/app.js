@@ -97,7 +97,7 @@ angular.module('filters', []).
         };
     });
 
-app.controller('MainController', function($scope, ngToast, $timeout) {
+app.controller('MainController', function($scope, ngToast, $timeout, $rootScope) {
   $timeout(function(){
     // ngToast.create({
     //   className: 'danger',
@@ -105,6 +105,10 @@ app.controller('MainController', function($scope, ngToast, $timeout) {
     // });
 
   }, 2000);
+    $scope.masterLoader = false;
+    $rootScope.$on('masterLoader', function(event, boolean) {
+      $scope.masterLoader = boolean;
+    });
     $scope.theme = {};
     $scope.theme.color = "theme-pink";
     $scope.theme.template = "theme-template-dark";

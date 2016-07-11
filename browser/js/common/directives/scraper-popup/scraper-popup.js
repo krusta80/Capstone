@@ -17,13 +17,23 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
       scope.getContent = function(arrayOfObj) {
         return getContent(arrayOfObj);
       };
-
+      scope.saveDataWrapper = function(attributes, isRepeating) {
+        $rootScope.masterLoader = true;
+        if (isRepeating) {
+          var iframe = document.getElementById('iframedisplay').contentDocument;
+          iframe.querySelector('.__chosenElement__' + (scope.getPage().targetElements.length+1)).remove();
+        }
+        setTimeout(function() {
+            scope.saveData(attributes, isRepeating);
+        },0);
+      }
       scope.saveData = function(attributes, isRepeating) {
         var cachedData = ScraperPopupFactory.get();
         ScraperPopupFactory.save(attributes, cachedData, isRepeating)
           .then(function(data) {
             if (data) {
               scope.popupactivated = false;
+              $rootScope.masterLoader = false;
             }
           });
       };
@@ -89,9 +99,11 @@ app.directive('scraperPopup', function($rootScope, ScraperPopupFactory, PageFact
         scope.attributes = scope.popupData;
         scope.selection = [];
         scope.selectedAttributes = function selectedAttributes(repeating) {
+          $rootScope.$emit('masterLoader', true);
           var output = [];
           if (repeating)
             output = output.concat(scope.rawData.repeats);
+            // output = scope.rawData.repeats
           else {
             scope.attributes.forEach(function(attribute) {
               if (attribute.selected) {
