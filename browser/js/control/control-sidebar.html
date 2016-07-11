@@ -22,7 +22,10 @@
               <span class="glyphicon glyphicon-plus"></span>
             </a>
           <ul style="cursor:pointer;" class="list-group">
-              <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">{{jobTab.title}}</li>
+              <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">
+                {{jobTab.title}}
+                <toggle-switch style="margin-top: 3px;" ng-show="jobTab.pages.length" uib-tooltip="change to active to schedule this job to run" ng-model="jobTab.active" class="switch-small pull-right" ng-change="saveProject()"></toggle-switch>
+              </li>
           </ul>
         </div>
 

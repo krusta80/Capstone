@@ -60,7 +60,7 @@ router.post('/:projectId/job/:jobIndex/run', function(req,res,next){
     path: 'jobs.pages'
    })
   .then(function(project){
-    return project.jobs[req.params.jobIndex].runJob(project);
+    return project.jobs[req.params.jobIndex].runJob(project, true); //override for frequency check
   })
   .then(function(result){
     res.json(result);
