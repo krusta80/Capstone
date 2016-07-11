@@ -21,7 +21,18 @@ app.controller('DashboardCtrl', function (user, projects, $scope,$stateParams, $
     $rootScope.$emit('sideBarOpen');
     getCharts(user);
     $scope.projects = projects;
+    $scope.jobs = aggregate(projects, 'jobs');
+    $scope.pages = aggregate($scope.jobs, 'pages');
+    $scope.activeJobs = $scope.jobs.filter(function(job){
+      return job.active;
+    }).length;
 
+    function aggregate(arr, val){
+      return Array.prototype.reduce.call(arr, function(ac, item){
+        ac = ac.concat(item[val]);
+        return ac;
+      }, []);
+    }
     function getCharts(){
         DashboardFactory.getCharts()
         .then(function(charts){

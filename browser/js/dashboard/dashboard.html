@@ -1,9 +1,27 @@
 <div>
     <div style="text-align:center;">
+      <div class="tiles-holder">
+        <div class="dashboard-tile">
+          <h3>{{projects.length}}</h3>
+          <h4>Projects</h4>
+        </div>
+        <div class="dashboard-tile">
+          <h3>{{jobs.length}}</h3>
+          <h4>Jobs</h4>
+        </div>
+        <div class="dashboard-tile">
+          <h3>{{activeJobs}}</h3>
+          <h4>Active jobs</h4>
+        </div>
+        <div class="dashboard-tile">
+          <h3>{{pages.length}}</h3>
+          <h4>Pages</h4>
+        </div>
+      </div>
       <button class="btn btn-success" data-toggle="modal" data-target="#chartModal" ng-click="newChart()"> Create New Chart </button>
     </div>
-    <div class="well" ng-show="!charts.length">
-      <h3>You haven't created any charts yet!</h3>
+    <div ng-show="!charts.length" style="text-align:center;">
+      <h4>You haven't created any charts yet!</h4>
     </div>
     <div id="dash-cont">
       <div class="panel panel-primary" id="dash-item" ng-repeat="chart in charts">
@@ -47,7 +65,7 @@
 					<label for="chartStyle">Chart Style</label>
 					<select ng-model="newChart.chartType" id="chartStyle">
 						<option value="lineChart">Line chart</option>
-						<option value="barChart">Bar chart</option>
+						<!-- <option value="barChart">Bar chart</option> -->
 						<option value="scatterChart">Scatter chart</option>
 					</select>
 				</div>

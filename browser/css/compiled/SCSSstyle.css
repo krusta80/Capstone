@@ -440,3 +440,8 @@ tutorial-section-menu {
 
 #remove-btn:hover {
   transform: scale(1.5); }
+
+.tiles-holder {
+  display: flex;
+  justify-content: space-around;
+  text-align: center; }
