@@ -80,6 +80,9 @@
 	<div ng-show="!getProjects() || !getProjects().length">
 		<h4 style="margin-left: 50px">Create a new project to begin...</h4>
 	</div>
+	<div ng-show="getCurrentProject() && !getCurrentProject().jobs.length">
+		<h4 style="margin-left: 50px">Add a job to your project...</h4>
+	</div>
 	<div ng-show="!getPages().length && getCurrentProject()">
 		<h4 style="margin-left: 50px">You have not yet defined any pages for this job.</h4>
 	</div>
@@ -197,7 +200,7 @@
 					<label for="chartStyle">Chart Style</label>
 					<select ng-model="newChart.chartType" id="chartStyle">
 						<option value="lineChart">Line chart</option>
-						<option value="barChart">Bar chart</option>
+						<!-- <option value="barChart">Bar chart</option> -->
 						<option value="scatterChart">Scatter chart</option>
 					</select>
 				</div>
