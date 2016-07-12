@@ -5,17 +5,17 @@
         <div>
           <div class="clearfix">
             <span class="pull-left sub-header">Projects</span>
-            <a class="pull-right" style="margin-bottom: 9px; margin-left: 10px; outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
+            <a class="pull-right" style="margin-bottom: 9px;margin-right: 1px;outline: 0" href="#" data-toggle="modal" data-target="#projectModal">
               <span class="glyphicon glyphicon-plus"></span>
             </a>
           </div>
         </div>
         <div class="clearfix">
-          <select class="pull-left" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
+          <select class="pull-left col-sm-11" style="padding: 9px;" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
             <option value="">-- choose an project --</option>
           </select>
-          <a class="pull-right" ng-show="selectedProject" style="margin-left: 10px; margin-bottom: 9px;" href="#" ng-click="removeProject()">
-            <span class="glyphicon glyphicon-minus" style="margin-bottom: 9px;"></span>
+          <a class="pull-right" ng-show="selectedProject" style="margin-top: 8px;margin-right: 2px;" href="#" ng-click="removeProject()">
+            <span class="glyphicon glyphicon-minus"></span>
           </a>
         </div>
 
@@ -31,7 +31,13 @@
           <ul style="cursor:pointer;" class="list-group">
               <li class="list-group-item" ng-class="{active: getCurrentJob()._id === jobTab._id}" ng-repeat="jobTab in getCurrentProject().jobs" ng-click="loadJob(jobTab)">
                 {{jobTab.title}}
-                <toggle-switch style="margin-top: 3px;" ng-show="jobTab.pages.length" uib-tooltip="change to active to schedule this job to run" ng-model="jobTab.active" class="switch-small pull-right" ng-change="saveProject()"></toggle-switch>
+                <!-- <toggle-switch style="margin-top: 3px;" ng-show="jobTab.pages.length" uib-tooltip="change to active to schedule this job to run" ng-model="jobTab.active" class="switch-small pull-right" ng-change="saveProject()"></toggle-switch> -->
+                <div class="pull-right">
+                  <div class="switch" ng-show="jobTab.pages.length" style="display: inline-block;" uib-tooltip="Activate Job by toggling to the right">
+                    <label class="filled">
+                      <input type="checkbox" ng-model="jobTab.active" ng-change="saveProject()"> <span class="lever"></span></label>
+                  </div>
+                </div>
               </li>
           </ul>
         </div>

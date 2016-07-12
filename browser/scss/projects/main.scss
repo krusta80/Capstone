@@ -4,7 +4,10 @@
   /* May want to do this if there is risk the container may be narrower than the element inside */
   white-space: nowrap;
 }
-
+.panel-primary>.panel-heading {
+  // background-color: #969696 !important;
+  // border-color: #969696 !important;
+}
 /* The ghost, nudged to maintain perfect centering */
 .block:before {
   content: '';
@@ -74,6 +77,8 @@
   transform: translateZ(0);
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
+  top: -20px;
+  left: 13px;
 }
 .loader:before {
   left: -3.5em;
