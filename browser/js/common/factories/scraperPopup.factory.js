@@ -58,7 +58,7 @@ app.factory('ScraperPopupFactory', function($rootScope, $http, Messenger, PageFa
     var payload = _.cloneDeep(pageObj);
     $rootScope.$emit('extract', pageObj);
     payload.targetElements.forEach(function(targetElement) {
-      targetElement.fields = JSON.stringify(targetElement.fields);
+      targetElement.fields = targetElement.fields;
     });
     return PageFactory.update(payload).then(function(data) {
       // $rootScope.$emit('extract',data); // need to do it twice to update the data... couldnt find a refactor that worked

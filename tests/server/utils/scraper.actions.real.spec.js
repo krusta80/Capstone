@@ -7,7 +7,7 @@ var chai = require('chai').expect,
   ScraperElem = mongoose.model('ScraperElement'),
   Promise = require('bluebird');
 
-describe('run job with pre-actions', function(){
+xdescribe('run job with pre-actions', function(){
   this.timeout(60000);
   var job;
   before(function(done){
