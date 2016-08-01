@@ -1,5 +1,5 @@
 <h4>Run history</h4>
-<div class="col-lg-9">
+<div class="col-lg-9" id="project-panes">
   <div ng-repeat="run in history" class="panel panel-default">
       <div class="panel-heading">
           <h3 class="panel-title">Completed: {{(run.runAt | date: 'medium') || 'NO DATE'}}</h3>
@@ -9,17 +9,24 @@
               <table class="table table-bordered">
                   <thead>
                       <tr>
+                          <th>Status</th>
                           <th>Page Id</th>
+                          <th>Url</th>
                           <th>Scraped Elements</th>
                           <th>Successful Elements</th>
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="page in run.pages" ng-class="{'histrow-success':page.succeeded, 'histrow-fail':!page.succeeded}">
+                      <tr ng-repeat="page in run.pages">
+                          <td>
+                              <span ng-show="page.succeeded" class="glyphicon glyphicon-ok" style="color:green;"></span>
+                              <span ng-show="!page.succeeded" class="glyphicon glyphicon-remove" style="color:red;"></span>
+                          </td>
                           <td>{{page.id}}</td>
+                          <td>{{page.url}}</td>
                           <td>{{page.scraped}}</td>
                           <td>{{page.success}}</td>
-                          <td><button ng-click="getData(run)" data-toggle="modal" data-target="#histModal" class="btn btn-xs btn-primary">View data...</button></td>
+                          <td><button ng-click="getData(run, page.id)" data-toggle="modal" data-target="#histModal" class="btn btn-xs btn-primary">View data...</button></td>
                       </tr>
                   </tbody>
               </table>

@@ -329,6 +329,9 @@ tutorial-section-menu {
       margin-top: -22.75px;
       margin-left: -68.425px; }
 
+#project-panes {
+  padding-right: 100px; }
+
 /* This parent can be any width and height */
 .block {
   text-align: center;
