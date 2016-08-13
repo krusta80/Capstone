@@ -1,0 +1,19 @@
+<form id="login-form" name="newUserForm" autocomplete="false" ng-submit="newUserForm.$valid && !exists && addUser()">
+
+    <alert type="danger" ng-show="error">
+        {{ error }}
+    </alert>
+
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" autocomplete="false" ng-model="newUser.email" class="form-control" name="email" placeholder="Enter email" ng-blur="checkEmail()" required>
+        <p class="text-danger" ng-show="!newUserForm.email.$valid && newUserForm.email.$touched">Please enter a valid email address</p>
+				<p class="text-danger" ng-show="exists">Email address is already registered</p>
+
+    </div>
+    <div class="form-group">
+        <label for="login-password">Password</label>
+        <input type="password" name="password" autocomplete="false" ng-model="newUser.password" class="form-control" id="login-password" placeholder="Password" required>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+</form>

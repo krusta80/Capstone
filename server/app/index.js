@@ -42,7 +42,7 @@ app.use(function (req, res, next) {
 });
 
 app.get('/*', function (req, res, next) {
-    let frontEndRoutes = ['control', 'api','charts','login', 'session', 'projects', 'iframe'];
+    let frontEndRoutes = ['control', 'api','charts','login', 'session', 'projects', 'iframe', 'signup'];
     let url = _.compact(req.url.split('/'));
     console.log("url: ", url);
     if (_.includes(frontEndRoutes, url[0]) || url.length === 0) {
