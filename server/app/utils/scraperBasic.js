@@ -75,8 +75,11 @@ function execute(horseman, page, results){
   return p.then(function(fieldHists){
     //console.log(fieldHists);
     var nSucceeded = fieldHists.filter(i=>i.fields !== JSON.stringify({}));
-    results.pages[page._id] = {numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
-    fieldHists.forEach(hist=>hist.runId=results.runId);
+    results.pages[page._id] = {url: page.url, numElements: page.targetElements.length, numSuccess: nSucceeded.length  };
+    fieldHists.forEach(hist=>{
+      hist.runId=results.runId;
+      hist.page = page._id;
+    });
       return mongoose.model('ScraperElementHist').create(fieldHists);
         //TO DO: Populate additional fields
   });

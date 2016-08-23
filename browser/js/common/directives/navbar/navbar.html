@@ -65,6 +65,10 @@
     </div>
 
     <ul class="nav navbar-nav navbar-right navbar-right-no-collapse">
+      <li class="pull-right pointer" ng-show="!user" ui-sref="signup" title="signup">
+        <button class="pointer btn btn-round-sm btn-link"></button>
+        Signup
+      </li>
       <li class="pull-right pointer" ng-show="!user" ui-sref="login" title="login">
         <button class="pointer btn btn-round-sm btn-link">
           <i class="md md-account-box f20"></i>

@@ -18,6 +18,10 @@
             <span class="glyphicon glyphicon-minus"></span>
           </a>
         </div>
+        <select style="width:75%;" ng-show="getProjects().length" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id"></select>
+        <a ng-show="selectedProject" style="margin-left: 10px;" href="#" ng-click="removeProject()">
+          <span class="glyphicon glyphicon-minus"></span>
+        </a>
 
         <div>
           <div class="clearfix">

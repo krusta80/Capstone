@@ -16,6 +16,7 @@ app.config(function($stateProvider){
           var success = parsedHist.pages[hist] ? parsedHist.pages[hist].numSuccess : 0;
           return {
             id: hist,
+            url: parsedHist.pages[hist].url,
             scraped: scraped,
             success: success,
             succeeded: success >= scraped
@@ -24,10 +25,10 @@ app.config(function($stateProvider){
         return parsedHist;
       }).reverse();
 
-      $scope.getData = function(run){
+      $scope.getData = function(run, pageId){
         HistFactory.fetchByRunId(run.runId)
         .then(function(data){
-          console.log(data);
+          data = data.filter(d=>d.page===pageId);
           $scope.hist = HistFactory.getDataGrid(data);
         });
       };
