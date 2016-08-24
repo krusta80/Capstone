@@ -12,7 +12,7 @@
           </a>
         </div>
         <select ng-change="loadProject()" ng-model="selectedProject" class="form-control" ng-options="project.title for project in projects track by project._id">
-          <option value="">-- choose an project --</option>
+          <option value="">-- choose a project --</option>
         </select>
 
         <div ng-show="hasProject()">

@@ -1,10 +1,12 @@
 <form id="login-form" name="newUserForm" autocomplete="false" ng-submit="newUserForm.$valid && !exists && addUser()">
-
+    <h3>Sign up</h3>
+    
     <alert type="danger" ng-show="error">
         {{ error }}
     </alert>
 
     <div class="form-group">
+
         <label for="email">Email address</label>
         <input type="email" autocomplete="false" ng-model="newUser.email" class="form-control" name="email" placeholder="Enter email" ng-blur="checkEmail()" required>
         <p class="text-danger" ng-show="!newUserForm.email.$valid && newUserForm.email.$touched">Please enter a valid email address</p>

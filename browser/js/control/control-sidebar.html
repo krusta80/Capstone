@@ -12,16 +12,16 @@
         </div>
         <div class="clearfix">
           <select class="pull-left col-sm-11" style="padding: 9px;" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id">
-            <option value="">-- choose an project --</option>
+            <option value="">-- choose a project --</option>
           </select>
           <a class="pull-right" ng-show="selectedProject" style="margin-top: 8px;margin-right: 2px;" href="#" ng-click="removeProject()">
             <span class="glyphicon glyphicon-minus"></span>
           </a>
         </div>
-        <select style="width:75%;" ng-show="getProjects().length" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id"></select>
+        <!-- <select style="width:75%;" ng-show="getProjects().length" ng-model="selectedProject" ng-change="loadProject(project)" ng-options="project.title for project in getProjects() track by project._id"></select>
         <a ng-show="selectedProject" style="margin-left: 10px;" href="#" ng-click="removeProject()">
           <span class="glyphicon glyphicon-minus"></span>
-        </a>
+        </a> -->
 
         <div>
           <div class="clearfix">

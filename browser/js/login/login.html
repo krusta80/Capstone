@@ -1,10 +1,11 @@
 <form id="login-form" name="loginForm" ng-submit="loginForm.$valid && sendLogin(login)">
-
+    <h3>Login</h3>
     <alert type="danger" ng-show="error">
         {{ error }}
     </alert>
 
     <div class="form-group">
+
         <label for="email">Email address</label>
         <input type="text" ng-model="login.email" class="form-control" id="email" placeholder="Enter email">
     </div>
